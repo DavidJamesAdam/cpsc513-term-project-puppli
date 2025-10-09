@@ -4,16 +4,19 @@
 https://fastapi.tiangolo.com/
 
 ### To Run
-activate Python virtual environment from root folder
+Setup own virtual environment if not set up already
+
+activate Python virtual environment
 - In console enter ./.venv/Scripts/activate
 
-Once virtual environment is activated, cd into /backend
+Once virtual environment is activated, run in console fastapi dev main.py from backend folder
 
 Once in backend folder, run in console fastapi dev main.py
 
 ## Frontend
 https://react.dev/learn/creating-a-react-app
 https://mui.com/material-ui/
+https://tanstack.com/query/latest/docs/framework/react/installation
 https://react-hook-form.com/get-startednpm
 https://zod.dev/
 
