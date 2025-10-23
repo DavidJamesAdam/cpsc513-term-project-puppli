@@ -28,3 +28,5 @@ Testing a commit and merge
 One more test
 
 Another test to check proper commit history
+
+Final test
