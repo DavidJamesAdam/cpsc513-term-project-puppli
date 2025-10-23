@@ -24,3 +24,5 @@ Run npm install if first time
 in console, run npm run dev
 
 Testing a commit and merge
+
+One more test
