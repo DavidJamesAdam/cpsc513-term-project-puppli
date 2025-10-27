@@ -40,24 +40,28 @@ export default function Header() {
           display: "flex",
         }}
       >
-        <p>Puppli</p>
+        <h1 style={{fontSize: '54px', color: 'var(--font-color)'}}>Puppli</h1>
       </div>
 
+      { /* Notification Bell */ }
       <div
         data-property-1="Default"
         style={{
           width: 73,
           height: 55,
-          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
         }}
       >
-        <div className="dropdown"
-          style={{ position: 'absolute'}}
-        >
-          <img src="app\icons\mdi_arrow-down-drop.svg" />
-        </div>
-        <div style={{}}>
+        {/* Bell wrapper is relative so the arrow can be positioned relative to the bell */}
+        <div style={{ position: "relative", display: "inline-block" }}>
           <img src="app\icons\Notification Bell.svg" />
+          {/* Arrow positioned bottom-left relative to the bell image */}
+          <img
+            src="app\icons\mdi_arrow-down-drop.svg"
+            style={{ position: "absolute", left: -12, bottom: -12 }}
+          />
         </div>
       </div>
     </div>

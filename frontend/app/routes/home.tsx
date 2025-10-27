@@ -9,5 +9,12 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <Header />;
+  return (
+    <>
+    <Header />
+      <main style={{ backgroundColor: 'var{--bg-color}'}}>
+
+      </main>
+    </>
+);
 }

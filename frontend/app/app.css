@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -5,9 +6,29 @@
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+/* Global CSS variables */
+:root {
+  --bg-color: rgba(245, 240, 234, 1);
+  --font-color: rgba(103, 88, 68, 1)
+}
+
+.dark {
+  --bg-color: #0f172a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #0f172a;
+  }
+}
+
 html,
 body {
   @apply bg-white dark:bg-gray-950;
+
+  background-color: var(--bg-color);
+
+  font-family: 'Itim', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
