@@ -1,15 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Itim&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Itim", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    "Itim", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 /* Global CSS variables */
 :root {
   --bg-color: rgba(245, 240, 234, 1);
-  --font-color: rgba(103, 88, 68, 1)
+  --font-color: rgba(103, 88, 68, 1);
 }
 
 .dark {
@@ -22,13 +23,49 @@
   }
 }
 
+.menu .MuiMenuItem-root{
+  width: 421;
+  height: 436;
+  background-color: #FFC2CF;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.navLink {
+  width: 60%;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  font-size: clamp(1rem, 2.5vw, 3rem);
+}
+
+/* .navLink p {
+  size: auto;
+} */
+
 html,
 body {
   @apply bg-white dark:bg-gray-950;
 
   background-color: var(--bg-color);
 
-  font-family: 'Itim', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family:
+    "Itim",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    "Noto Color Emoji";
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;

@@ -13,7 +13,6 @@ export default function Home() {
     <>
     <Header />
       <main style={{ backgroundColor: 'var{--bg-color}'}}>
-
       </main>
     </>
 );
