@@ -4,12 +4,16 @@
 https://fastapi.tiangolo.com/
 
 ### To Run
-Setup own virtual environment if not set up already
+### On first setup
+1. Setup own virtual environment
+2. In console enter ./.venv/Scripts/activate (In VSCode, Pycharm might be different)
+3. Once virtual environment is running, run pip install "fastapi[standard]"
 
-activate Python virtual environment
+### After initial setup
+1. activate Python virtual environment
 - In console enter ./.venv/Scripts/activate (In VSCode, Pycharm might be different)
-
-Once virtual environment is activated, run in console fastapi dev main.py from backend folder
+2. CD into /backend
+3. Once virtual environment is activated, run in console fastapi dev main.py from backend folder
 
 ## Frontend
 https://react.dev/learn/creating-a-react-app
@@ -22,11 +26,3 @@ https://zod.dev/
 cd into frontend
 Run npm install if first time
 in console, run npm run dev
-
-Testing a commit and merge
-
-One more test
-
-Another test to check proper commit history
-
-Final test
