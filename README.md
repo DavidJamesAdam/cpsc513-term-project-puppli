@@ -7,12 +7,14 @@ https://fastapi.tiangolo.com/
 ### On first setup
 1. Setup own virtual environment
 2. In console enter ./.venv/Scripts/activate (In VSCode, Pycharm might be different)
-3. Once virtual environment is running, run pip install "fastapi[standard]"
+3. Once virtual environment is running, run in console:
+  - python3 -m pip install -r requirements.txt (Mac)
+  - python -m pip install -r requirements.txt (PC)
 
 ### After initial setup
 1. activate Python virtual environment
-- (PC) In console enter ./.venv/Scripts/activate (In VSCode, Pycharm might be different)
-- (Mac) In concsole enter source venv/scripts/activate
+- (PC) In console enter './.venv/Scripts/activate' (In VSCode, Pycharm might be different)
+- (Mac) In concsole enter 'source venv/scripts/activate'
 2. CD into /backend
 3. Once virtual environment is activated, run in console fastapi dev main.py from backend folder
 
