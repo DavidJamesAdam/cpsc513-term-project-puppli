@@ -14,17 +14,6 @@ export function MainNavMenu() {
   };
 
   return (
-    // <div
-    //   style={{
-    // width: 421,
-    // height: 436,
-    // backgroundColor: "#FFC2CF",
-    // display: "flex",
-    // flexDirection: "column",
-    // justifyContent: 'space-around'
-    //   }}
-    // >
-    // </div>
     <div>
       <Button
         id="basic-button"
@@ -33,9 +22,7 @@ export function MainNavMenu() {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
       >
-        <div style={{}}>
           <img src="app\icons\Logo.svg" />
-        </div>
         <div
           className="dropdown"
           style={{ position: "absolute", right: -4, bottom: -6 }}
@@ -43,9 +30,9 @@ export function MainNavMenu() {
           <img src="app\icons\mdi_arrow-down-drop.svg" />
         </div>
       </Button>
-      <Menu
+        <Menu
         className="menu"
-        id='nav-menu'
+        id="nav-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -56,28 +43,28 @@ export function MainNavMenu() {
         }}
       >
         <MenuItem>
-          <div className="navLink">
+          <div className="menu-icon">
             <img src="app\icons\Profile icon.svg" />
-            <p>Profile</p>
           </div>
+          <p className="menu-text">Profile</p>
         </MenuItem>
         <MenuItem>
-          <div className="navLink">
+          <div className="menu-icon">
             <img src="app\icons\Rankings icon.svg" />
-            <p>Rankings</p>
           </div>
+          <p className="menu-text">Rankings</p>
         </MenuItem>
         <MenuItem>
-          <div className="navLink">
+          <div className="menu-icon">
             <img src="app\icons\Upload icon.svg" />
-            <p>Upload</p>
           </div>
+          <p className="menu-text">Upload</p>
         </MenuItem>
         <MenuItem>
-          <div className="navLink">
+          <div className="menu-icon">
             <img src="app\icons\Message icon.svg" />
-            <p>Messages</p>
           </div>
+          <p className="menu-text">Messages</p>
         </MenuItem>
       </Menu>
     </div>
@@ -113,7 +100,7 @@ export function NotificationMenu() {
       </Button>
       <Menu
         className="menu"
-        id='notification-menu'
+        id="notification-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}

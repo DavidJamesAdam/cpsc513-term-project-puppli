@@ -21,36 +21,17 @@ export default function Header() {
       }}
     >
       {/* Logo */}
-      <div
-        data-property-1="Default"
-        style={{ width: 73, height: 55, position: "relative" }}
-      >
+      <div>
         <MainNavMenu />
       </div>
-      
+
       {/* App name */}
-      <div
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 10,
-          display: "flex",
-        }}
-      >
+      <div>
         <h1 style={{ fontSize: "54px", color: "var(--font-color)" }}>Puppli</h1>
       </div>
 
       {/* Notification Bell */}
-      <div
-        data-property-1="Default"
-        style={{
-          width: 73,
-          height: 55,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-        }}
-      >
+      <div>
         <NotificationMenu />
       </div>
     </div>

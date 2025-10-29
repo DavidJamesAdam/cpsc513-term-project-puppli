@@ -23,28 +23,61 @@
   }
 }
 
-.menu .MuiMenuItem-root{
-  width: 421;
-  height: 436;
-  background-color: #FFC2CF;
+/* .MuiButtonBase-root {
+  height: 100%;
+  width: 100%
+} */
+
+.MuiPaper-root {
+
+  background-color: #ffc2cf;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 }
 
-.navLink {
+.MuiList-root {
+  margin: 20%;
+}
+
+.MuiMenuItem-root {
   width: 60%;
   padding: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
+  font-family: Itim;
   font-size: clamp(1rem, 2.5vw, 3rem);
 }
 
-/* .navLink p {
-  size: auto;
-} */
+#nav-menu .MuiMenuItem-root,
+#notification-menu .MuiMenuItem-root {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+#nav-menu .menu-icon,
+#notification-menu .menu-icon {
+  width: clamp(1rem, 3.2vw, 2.25rem);
+  height: clamp(1rem, 3.2vw, 2.25rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+#nav-menu .menu-icon img,
+#notification-menu .menu-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+#nav-menu .menu-text,
+#notification-menu .menu-text {
+  margin: 0;
+  line-height: 1;
+}
 
 html,
 body {
