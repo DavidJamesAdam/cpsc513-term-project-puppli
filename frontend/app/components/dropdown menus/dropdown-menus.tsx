@@ -22,12 +22,12 @@ export function MainNavMenu() {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
       >
-          <img src="app\icons\Logo.svg" />
+          <img src="assets\icons\Logo.svg" />
         <div
           className="dropdown"
           style={{ position: "absolute", right: -4, bottom: -6 }}
         >
-          <img src="app\icons\mdi_arrow-down-drop.svg" />
+          <img src="assets\icons\mdi_arrow-down-drop.svg" />
         </div>
       </Button>
         <Menu
@@ -44,25 +44,25 @@ export function MainNavMenu() {
       >
         <MenuItem>
           <div className="menu-icon">
-            <img src="app\icons\Profile icon.svg" />
+            <img src="assets\icons\Profile icon.svg" />
           </div>
           <p className="menu-text">Profile</p>
         </MenuItem>
         <MenuItem>
           <div className="menu-icon">
-            <img src="app\icons\Rankings icon.svg" />
+            <img src="assets\icons\Rankings icon.svg" />
           </div>
           <p className="menu-text">Rankings</p>
         </MenuItem>
         <MenuItem>
           <div className="menu-icon">
-            <img src="app\icons\Upload icon.svg" />
+            <img src="assets\icons\Upload icon.svg" />
           </div>
           <p className="menu-text">Upload</p>
         </MenuItem>
         <MenuItem>
           <div className="menu-icon">
-            <img src="app\icons\Message icon.svg" />
+            <img src="assets\icons\Message icon.svg" />
           </div>
           <p className="menu-text">Messages</p>
         </MenuItem>
@@ -91,9 +91,9 @@ export function NotificationMenu() {
         onClick={handleClick}
       >
         <div style={{ position: "relative", display: "inline-block" }}>
-          <img src="app\icons\Notification Bell.svg" />
+          <img src="assets\icons\Notification Bell.svg" />
           <img
-            src="app\icons\mdi_arrow-down-drop.svg"
+            src="assets\icons\mdi_arrow-down-drop.svg"
             style={{ position: "absolute", left: -12, bottom: -12 }}
           />
         </div>
