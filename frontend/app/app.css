@@ -23,13 +23,7 @@
   }
 }
 
-/* .MuiButtonBase-root {
-  height: 100%;
-  width: 100%
-} */
-
 .MuiPaper-root {
-
   background-color: #ffc2cf;
   display: flex;
   flex-direction: column;
@@ -41,7 +35,8 @@
 }
 
 .MuiMenuItem-root {
-  width: 60%;
+  width: 100%;
+  border-radius: 20px;
   padding: 10px;
   font-family: Itim;
   font-size: clamp(1rem, 2.5vw, 3rem);
