@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -22,7 +23,7 @@ export function MainNavMenu() {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
       >
-          <img src="assets\icons\Logo.svg" />
+        <img src="assets\icons\Logo.svg" />
         <div
           className="dropdown"
           style={{ position: "absolute", right: -4, bottom: -6 }}
@@ -30,7 +31,7 @@ export function MainNavMenu() {
           <img src="assets\icons\mdi_arrow-down-drop.svg" />
         </div>
       </Button>
-        <Menu
+      <Menu
         className="menu"
         id="nav-menu"
         anchorEl={anchorEl}
@@ -42,29 +43,37 @@ export function MainNavMenu() {
           },
         }}
       >
-        <MenuItem>
+        <MenuItem onClick={handleClose}>
           <div className="menu-icon">
             <img src="assets\icons\Profile icon.svg" />
           </div>
-          <p className="menu-text">Profile</p>
+          <Link className="menu-text" to="/profile">
+            Profile
+          </Link>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={handleClose}>
           <div className="menu-icon">
             <img src="assets\icons\Rankings icon.svg" />
           </div>
-          <p className="menu-text">Rankings</p>
+          <Link className="menu-text" to="/ranking">
+            Rankings
+          </Link>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={handleClose}>
           <div className="menu-icon">
             <img src="assets\icons\Upload icon.svg" />
           </div>
-          <p className="menu-text">Upload</p>
+          <Link className="menu-text" to="/upload">
+            Upload
+          </Link>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={handleClose}>
           <div className="menu-icon">
             <img src="assets\icons\Message icon.svg" />
           </div>
-          <p className="menu-text">Messages</p>
+          <Link className="menu-text" to="/message">
+            Messages
+          </Link>
         </MenuItem>
       </Menu>
     </div>

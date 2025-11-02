@@ -1,4 +1,5 @@
 import type { Route } from "./+types/ranking";
+import Header from "../components/header/header";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,8 +10,11 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Ranking() {
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>ranking page</h1>
-    </main>
+    <>
+      <Header />
+      <main style={{ backgroundColor: "var{--bg-color}" }}>
+        <p>Ranking page</p>
+      </main>
+    </>
   );
 }
