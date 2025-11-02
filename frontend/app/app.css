@@ -23,7 +23,8 @@
   }
 }
 
-.MuiPaper-root {
+#nav-menu .MuiPaper-root,
+#notification-menu .MuiPaper-root {
   background-color: #ffc2cf;
   display: flex;
   flex-direction: column;

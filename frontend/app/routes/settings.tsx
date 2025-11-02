@@ -1,4 +1,5 @@
 import type { Route } from "./+types/settings";
+import Header from "../components/header/header";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,9 +10,11 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Settings() {
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>Settings page</h1>
-      <p>Here is a paragraph</p>
-    </main>
+    <>
+      <Header />
+      <main style={{ backgroundColor: "var{--bg-color}" }}>
+        <p>Settings page</p>
+      </main>
+    </>
   );
 }
