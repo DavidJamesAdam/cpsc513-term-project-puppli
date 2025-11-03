@@ -14,7 +14,7 @@ https://fastapi.tiangolo.com/
 ### After initial setup
 1. activate Python virtual environment
 - (PC) In console enter './.venv/Scripts/activate' (In VSCode, Pycharm might be different)
-- (Mac) In concsole enter 'source venv/scripts/activate'
+- (Mac) In concsole enter 'source venv/bin/activate'
 2. CD into /backend
 3. Once virtual environment is activated, run in console fastapi dev main.py from backend folder
 

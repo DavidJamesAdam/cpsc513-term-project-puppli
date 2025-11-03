@@ -1,0 +1,27 @@
+services:
+  frontend:
+    # build:
+    #   context: ./frontend
+    #   dockerfile: Dockerfile
+    image: seng513-202510-group-9-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+    stdin_open: true
+    tty: true
+    command: npm start
+  backend:
+    # build:
+    #   context: ./backend
+    #   dockerfile: Dockerfile
+    image: seng513-202510-group-9-backend
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+    command: fastapi run main.py --port 80
+  db:
+

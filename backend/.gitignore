@@ -1,4 +1,4 @@
 .vscode
 .venv
+.env
 __pycache__
-/keys/puppli-422db-firebase-adminsdk-fbsvc-aead4d6c7c.json
