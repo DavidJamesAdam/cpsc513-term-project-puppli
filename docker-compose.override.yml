@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    volumes:
+    - .:/app
+    environment:
+    - DEBUG=1
+  db:
+    environment:
+    - POSTGRES_DB=dev_db

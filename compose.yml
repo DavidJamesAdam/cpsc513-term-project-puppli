@@ -6,9 +6,6 @@ services:
     image: seng513-202510-group-9-frontend
     ports:
       - "3000:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
     environment:
       NODE_ENV: development
     stdin_open: true
@@ -21,8 +18,10 @@ services:
     image: seng513-202510-group-9-backend
     ports:
       - "80:80"
-    volumes:
-      - ./backend:/app
+    depends_on:
+      - db
     stdin_open: true
     tty: true
     command: fastapi run main.py --port 80
+  db:
+

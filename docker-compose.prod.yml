@@ -1,0 +1,12 @@
+services:
+  web:
+  image: my-web-app:prod
+  environment:
+    - DEBUG=0
+    - DB_HOST=<your_aws_db_endpoint>
+    - DB_USER=<your_db_user>
+    - DB_PASSWORD=<you need to figure this part out>
+    - DB_NAME=<your_db_name>
+    - DB_PORT=<your_db_port>
+  ports:
+    - "80:80"
