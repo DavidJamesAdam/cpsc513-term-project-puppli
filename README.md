@@ -25,7 +25,11 @@ https://tanstack.com/query/latest/docs/framework/react/installation
 https://react-hook-form.com/get-startednpm
 https://zod.dev/
 
-### To Run
+### To Run Back End
+cd backend
+python3 -m fastapi dev main.py --port 8000
+
+### To Run Front End
 cd into frontend
 Run npm install if first time
 in console, run npm run dev
