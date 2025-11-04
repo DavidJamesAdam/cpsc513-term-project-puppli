@@ -16,7 +16,7 @@ https://fastapi.tiangolo.com/
 - (PC) In console enter './.venv/Scripts/activate' (In VSCode, Pycharm might be different)
 - (Mac) In concsole enter 'source venv/bin/activate'
 2. CD into /backend
-3. Once virtual environment is activated, run in console fastapi dev main.py from backend folder
+
 
 ## Frontend
 https://react.dev/learn/creating-a-react-app
