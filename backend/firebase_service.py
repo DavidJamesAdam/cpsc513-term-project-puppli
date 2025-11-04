@@ -1,5 +1,5 @@
-import firebase_admin # type: ignore
-from firebase_admin import credentials, firestore # type: ignore
+import firebase_admin # type: ignore (installed in venv)
+from firebase_admin import credentials, firestore # type: ignore (installed in venv)
 import os
 
 def initialize_firebase():
