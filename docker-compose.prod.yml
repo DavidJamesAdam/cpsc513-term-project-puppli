@@ -1,12 +1,14 @@
-# services:
-#   web:
-#   image: my-web-app:prod
-#   environment:
-#     - DEBUG=0
-#     - DB_HOST=<your_aws_db_endpoint>
-#     - DB_USER=<your_db_user>
-#     - DB_PASSWORD=<you need to figure this part out>
-#     - DB_NAME=<your_db_name>
-#     - DB_PORT=<your_db_port>
-#   ports:
-#     - "80:80"
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "3000:3000"
