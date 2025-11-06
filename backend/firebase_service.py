@@ -9,7 +9,7 @@ def initialize_firebase():
         cred_path = os.path.join(
             os.path.dirname(__file__),
             'keys',
-            'puppli-422db-firebase-adminsdk-fbsvc-aead4d6c7c.json'
+            'service_account.json'
         )
 
         # Initialize Firebase Admin
