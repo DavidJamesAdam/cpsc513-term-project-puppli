@@ -33,3 +33,13 @@ python3 -m fastapi dev main.py --port 8000
 cd into frontend
 Run npm install if first time
 in console, run npm run dev
+
+## Docker
+
+### To run dev environment
+1. Make sure Docker is running
+2. While in the root directory, run 'docker compose -f docker-compose.dev.yml up --build'
+
+### To run prod environment
+1. Make sure Docker is running
+2. While in the root directory, run 'docker compose -f docker-compose.prod.yml up --build -d'

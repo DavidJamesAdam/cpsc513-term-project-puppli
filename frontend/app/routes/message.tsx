@@ -1,4 +1,5 @@
 import type { Route } from "./+types/message";
+import Header from "../components/header/header";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,8 +10,11 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Message() {
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>Message page</h1>
-    </main>
+    <>
+      <Header />
+      <main style={{ backgroundColor: "var{--bg-color}" }}>
+        <p>Message page</p>
+      </main>
+    </>
   );
 }

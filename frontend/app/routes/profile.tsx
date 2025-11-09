@@ -1,4 +1,5 @@
 import type { Route } from "./+types/profile";
+import Header from "../components/header/header";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,8 +10,11 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Profile() {
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>profile page</h1>
-    </main>
+    <>
+      <Header />
+      <main style={{ backgroundColor: "var{--bg-color}" }}>
+        <p>Profile page</p>
+      </main>
+    </>
   );
 }
