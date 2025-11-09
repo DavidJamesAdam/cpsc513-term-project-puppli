@@ -2,6 +2,8 @@ from typing import Union, List, Dict, Any
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
 from firebase_service import db
 
 
@@ -78,3 +80,15 @@ async def get_test_document(document_id: str):
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
+
+class TestItem(BaseModel):
+    test: str
+    id: int
+
+@app.post("/test")
+async def post_test(item_id: TestItem):
+    try:
+        doc = db.collection('test').add(item_id.model_dump())
+        return {"message": "Document added successfully"},
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error adding item: {str(e)}")
