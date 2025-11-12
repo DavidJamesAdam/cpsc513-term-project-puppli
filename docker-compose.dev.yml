@@ -3,6 +3,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
+    image: backend-dev
     container_name: backend-dev
     env_file:
       - ./backend/.env
@@ -17,6 +18,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
+    image: frontend-dev
     container_name: frontend-dev
     env_file:
       - ./frontend/.env
