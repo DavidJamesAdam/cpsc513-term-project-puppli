@@ -45,6 +45,14 @@ export function MainNavMenu() {
       >
         <MenuItem onClick={handleClose}>
           <div className="menu-icon">
+            <img src="assets\icons\vote icon.svg" />
+          </div>
+          <Link className="menu-text" to="/">
+            Vote
+          </Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <div className="menu-icon">
             <img src="assets\icons\Profile icon.svg" />
           </div>
           <Link className="menu-text" to="/profile">

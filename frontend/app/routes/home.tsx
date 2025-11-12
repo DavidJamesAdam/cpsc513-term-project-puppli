@@ -1,5 +1,6 @@
 import type { Route } from "./+types/home";
 import Header from "../components/header/header";
+import VotingCard from "../components/voting-card/voting-card"
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -12,7 +13,9 @@ export default function Home() {
   return (
     <>
     <Header />
-      <main style={{ backgroundColor: 'var{--bg-color}'}}>
+      <main className='voting-page'>
+        <VotingCard />
+        <VotingCard />
       </main>
     </>
 );
