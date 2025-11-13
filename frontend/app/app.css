@@ -115,6 +115,10 @@
   justify-content: space-around;
 }
 
+.voting-card-options .MuiButtonBase-root {
+  border-radius: 15px;
+}
+
 html,
 body {
   @apply bg-white dark:bg-gray-950;
@@ -139,4 +143,5 @@ body {
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+  height: 100%;
 }

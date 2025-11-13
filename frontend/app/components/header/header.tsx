@@ -8,7 +8,7 @@ export default function Header() {
     <div
       style={{
         width: "100%",
-        height: "100%",
+        height: "10%",
         paddingLeft: 30,
         paddingRight: 30,
         paddingTop: 15,
