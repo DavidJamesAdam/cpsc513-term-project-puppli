@@ -25,10 +25,10 @@ export default function Login() {
             <h1>Log-in</h1>
             <CardContent className="inputs">
               <p>Username</p>
-              <TextField className="input" variant="standard" />
+              <TextField className="input" variant="standard" slotProps={{input: {disableUnderline: true, style: {color: "#675844"}}}}/>
               <br></br>
               <p>Password</p>
-              <TextField className="input" variant="standard" />
+              <TextField className="input" variant="standard" slotProps={{input: {disableUnderline: true, style: {color: "#675844"}}}}/>
             </CardContent>
             <CardActions className="buttons">
               <Button size="medium" variant="contained" className="enterButton">

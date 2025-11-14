@@ -25,13 +25,13 @@ export default function SignUp() {
             <h1>Sign-up</h1>
             <CardContent className="inputs">
               <p className="signupInput">Enter an email address</p>
-              <TextField className="input" variant="standard" />
+              <TextField className="input" variant="standard" slotProps={{input: {disableUnderline: true, style: {color: "#675844"}}}}/>
               <br></br>
               <p className="signupInput">Pick a Username</p>
-              <TextField className="input" variant="standard" />
+              <TextField className="input" variant="standard" slotProps={{input: {disableUnderline: true, style: {color: "#675844"}}}}/>
               <br></br>
               <p className="signupInput">Pick password <span id="helpText">(Include at least 1 number)</span></p>
-              <TextField className="input" variant="standard" />
+              <TextField className="input" variant="standard" slotProps={{input: {disableUnderline: true, style: {color: "#675844"}}}}/>
             </CardContent>
             <CardActions className="buttons">
               <Button size="medium" variant="contained" className="enterButton">

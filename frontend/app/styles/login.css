@@ -50,6 +50,7 @@ p {
     border-radius: 100px;
     padding: 10px;
     max-height: 59px;
+    border-bottom: "none"
 }
 
 .buttons {
