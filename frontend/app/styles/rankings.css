@@ -1,0 +1,89 @@
+:root {
+  --bg-color: rgba(245, 240, 234, 1);
+  --font-color: rgba(103, 88, 68, 1);
+}
+
+h1 {
+    font-size: 36px;
+    color: var(--font-color);
+    font-family: "Itim";
+}
+
+p {
+    color: var(--font-color);
+}
+
+.rankings {
+    display: flex;
+    align-items: center;
+    padding: 30px;
+}
+
+#title {
+    padding-left: 20px;
+}
+
+#filterBar {
+    background-color: #93BFBF;
+}
+
+#filterBar .MuiTabs-indicator {
+    display: none;
+}
+
+#filterBar .MuiTab-root.Mui-selected {
+    color: #8F7A60;
+}
+
+.filterTab {
+    color: var(--font-color);
+    font-family: "Itim";
+    text-transform: none;
+    font-size: 36px;
+}
+
+.oddItem {
+    background-color: #FFC2CF;
+    color: var(--font-color);
+    font-family: "Itim";
+    text-transform: none;
+    font-size: 36px;
+    justify-content: space-evenly;
+}
+
+.evenItem {
+    background-color: #FFECF0;
+    color: var(--font-color);
+    font-family: "Itim";
+    text-transform: none;
+    font-size: 36px;
+}
+
+.rankItem {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    padding: 0px 40px;
+}
+
+.petItem {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+}
+
+#customBadge {
+    color: #739797;
+    font-family: "Itim";
+    text-transform: none;
+    font-size: 36px;
+    background-color: #E0CDB2;
+    border-radius: 100px;
+    width: 85px;
+    height: 85px;
+    text-align: center;
+    align-content: center;
+    border-color: var(--font-color);
+    border-width: 5px;
+}

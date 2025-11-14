@@ -1,5 +1,16 @@
 import type { Route } from "./+types/ranking";
 import Header from "../components/header/header";
+import rankingIcon from "../components/rankings/rankingIcon.svg";
+import "../styles/rankings.css";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import { useState } from "react";
+import Table from "@mui/material/Table";
+import TableRow from "@mui/material/TableRow";
+import rankOneIcon from "../components/rankings/rankOne.svg";
+import rankTwoIcon from "../components/rankings/rankTwo.svg";
+import rankThreeIcon from "../components/rankings/rankThree.svg";
+import RankItem from "~/components/rankings/rankItem";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,11 +20,60 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Ranking() {
+  const [value, setValue] = useState(0);
+  const data = [
+    {
+      rankIcon: rankOneIcon,
+      image: rankingIcon,
+      name: "Pet 1",
+    },
+    {
+      rankIcon: rankTwoIcon,
+      image: rankingIcon,
+      name: "Pet 2",
+    },
+    {
+      rankIcon: rankThreeIcon,
+      image: rankingIcon,
+      name: "Pet 3",
+    },
+        {
+      rankIcon: undefined,
+      image: rankingIcon,
+      name: "Pet 4",
+    },
+        {
+      rankIcon: undefined,
+      image: rankingIcon,
+      name: "Pet 5",
+    },
+  ];
+
+  function changeTab(event: React.SyntheticEvent, value: any): void {
+    // hightlight selected tab
+    setValue(value);
+  }
+
   return (
     <>
       <Header />
       <main style={{ backgroundColor: "var{--bg-color}" }}>
-        <p>Ranking page</p>
+        <div className="rankings">
+            <img src={rankingIcon} alt="" />
+            <h1 id="title">Rankings</h1>
+        </div>
+        <Tabs value={value} onChange={changeTab} centered={true} id="filterBar" variant="fullWidth">
+          <Tab label="Global" className="filterTab"/>
+          <Tab label="Local" className="filterTab"/>
+          <Tab label="Friends" className="filterTab"/>
+        </Tabs>
+        <Table>
+          {data.map((row, index) => (
+            <TableRow key={index} className={index % 2 === 0 ? "evenItem" : "oddItem"}>
+              <RankItem petName={row.name} rank={index + 1} ></RankItem>
+            </TableRow>
+          ))}
+        </Table>
       </main>
     </>
   );
