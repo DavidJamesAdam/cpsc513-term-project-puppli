@@ -1,0 +1,63 @@
+:root {
+  --bg-color: rgba(245, 240, 234, 1);
+  --font-color: rgba(103, 88, 68, 1);
+}
+
+h1 {
+    font-size: 48px;
+    color: var(--font-color);
+}
+
+p {
+    font-size: 24px;
+    color: var(--font-color);
+}
+
+.card {
+    text-align: center;
+    background-color: #E0CDB2;
+    border-radius: 100px;
+    justify-content: center;
+    width: 785px;
+}
+
+.enterButton {
+    color: var(--font-color);
+    background-color: #B3E8E8;
+    font-family: "Itim";
+    padding: 10px;
+    border-radius: 100px;
+    text-transform: none;
+    line-height: 1.5;
+    padding-left: 60px;
+    padding-right: 60px;
+    font-size: 24px;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    padding: 70px;
+    width: 522px;
+    justify-self: center;
+}
+
+.input {
+    background-color: var(--bg-color);
+    border-radius: 100px;
+    padding: 20px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 25px;
+}
+
+.loginBox {
+    justify-items: center;
+}
+
+#signup {
+    padding-top: 20px;
+}
