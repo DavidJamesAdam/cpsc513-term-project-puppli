@@ -37,15 +37,19 @@ p {
 .inputs {
     display: flex;
     flex-direction: column;
-    padding: 70px;
-    width: 522px;
+    padding: 50px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 522px;
     justify-self: center;
 }
 
 .input {
     background-color: var(--bg-color);
     border-radius: 100px;
-    padding: 20px;
+    padding: 10px;
+    max-height: 59px;
 }
 
 .buttons {
@@ -55,9 +59,31 @@ p {
 }
 
 .loginBox {
-    justify-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 16px;
 }
 
-#signup {
-    padding-top: 20px;
+.redirectLink {
+    display: flex;
+    justify-content: center;
+}
+
+.link {
+    padding-left: 7px;
+    color: var(--font-color);
+}
+
+/*
+Styles for sign-up page
+*/
+
+#helpText {
+    font-size: 16px;
+    padding-left: 10px;
+}
+
+.signupInput {
+    text-align: left;
 }

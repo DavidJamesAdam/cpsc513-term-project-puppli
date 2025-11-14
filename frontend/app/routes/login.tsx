@@ -19,7 +19,7 @@ export default function Login() {
   return (
     <>
       <LoginHeader />
-      <main style={{ backgroundColor: "var{--bg-color}", paddingTop: "60px", display: "flex", justifyContent: "center"}}>
+      <main style={{ backgroundColor: "var{--bg-color}", paddingTop: "60px"}}>
         <div className="loginBox">
           <Card className="card" sx={{ maxWidth: 785 }}>
             <h1>Log-in</h1>
@@ -36,8 +36,8 @@ export default function Login() {
               </Button>
             </CardActions>
           </Card>
-          <p id="signup">Don’t have an account? <Link href="signup">Sign-up here</Link></p>
         </div>
+        <p className="redirectLink">Don’t have an account? <Link className="link" href="signup">Sign-up here</Link></p>
       </main>
     </>
   );
