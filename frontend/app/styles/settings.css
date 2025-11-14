@@ -1,0 +1,42 @@
+:root {
+  --bg-color: rgba(245, 240, 234, 1);
+  --font-color: rgba(103, 88, 68, 1);
+}
+
+h1 {
+    font-size: 36px;
+    color: var(--font-color);
+}
+
+p {
+    color: var(--font-color);
+}
+
+#version {
+  padding-left: 40px;
+  padding-top: 12px;
+  font-size: 24px;
+  color: var(--font-color);
+}
+
+.settings {
+  display: flex;
+  padding-bottom: 30px;
+}
+
+.options {
+  display: flex;
+  padding-bottom: 30px;
+}
+
+.optionTitle {
+  padding-left: 20px;
+}
+
+.listOptions {
+  padding-left: 70px;
+}
+
+.userOptions {
+  padding-left: 70px;
+}
