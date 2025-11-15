@@ -36,7 +36,7 @@ p {
     grid-template-areas:
     "about pets pets"
     "about pets pets"
-    "horizontalDivider horizontalDivider horizontalDivider"
+    "hDivider hDivider hDivider"
     "posts posts posts";
 }
 
@@ -49,7 +49,7 @@ p {
 }
 
 #horizontalDivider {
-  grid-area: horizontalDivider;
+  grid-area: hDivider;
 }
 
 .flexBox {

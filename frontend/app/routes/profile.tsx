@@ -41,7 +41,6 @@ export default function Profile() {
         </div>
         {onMainProfile ? (
           <div className="grid-container">
-            <div className="flexBox">
               <Container id="aboutContainer">
                 <p>About</p>
                 <img src={banner} alt="" />
@@ -53,8 +52,6 @@ export default function Profile() {
                   <li>...</li>
                 </ul>
               </Container>
-              <Divider id="verticalDivider" className="divider" variant="inset" orientation="vertical" 
-              sx={{ opacity: 1, borderColor: "#675844", borderWidth: "3px", borderTopRightRadius: "10px", borderTopLeftRadius: "10px"}} />
               <Container id="petsContainer">
                 <p>Pets</p>
                 <div className="oddItem">
@@ -70,7 +67,6 @@ export default function Profile() {
                   </div>
                 </div>
               </Container>
-            </div>
             <Divider id="horizontalDivider" className="divider" variant="middle" sx={{ opacity: 1, borderColor: "#675844", borderWidth: "3px", borderRadius: "10px"}} />
             <Container id="postsContainer">
               <p>Posts</p>
