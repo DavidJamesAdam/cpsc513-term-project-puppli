@@ -72,7 +72,7 @@ export default function Profile() {
                 </div>
               </Container>
             <Divider id="horizontalDivider" className="divider" variant="middle" sx={{ opacity: 1, borderColor: "#675844", borderWidth: "3px", borderRadius: "10px"}} />
-            <div id="postsContainer">
+            <div id="postsContainerUser">
               <p>Posts</p>
               <img src={postIcon} alt="" id="postIcon"/>
             </div>

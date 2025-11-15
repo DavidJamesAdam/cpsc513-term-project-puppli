@@ -57,6 +57,12 @@ p {
     padding-top: 30px;
 }
 
+#postsContainerUser {
+  grid-area: posts;
+  display: flex;
+  padding: 30px;
+}
+
 #postsContainer {
   grid-area: posts;
   display: flex;
