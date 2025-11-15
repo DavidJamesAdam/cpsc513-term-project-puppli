@@ -36,6 +36,7 @@ p {
     grid-template-areas:
     "about pets pets"
     "about pets pets"
+    "horizontalDivider horizontalDivider horizontalDivider"
     "posts posts posts";
 }
 
@@ -47,10 +48,20 @@ p {
   grid-area: pets;
 }
 
+#horizontalDivider {
+  grid-area: horizontalDivider;
+}
+
+.flexBox {
+    display: flex;
+    padding-top: 30px;
+}
+
 #postsContainer {
   grid-area: posts;
   display: flex;
   padding: 30px;
+  justify-content: flex-start;
 }
 
 #postIcon {
@@ -63,7 +74,6 @@ p {
     font-family: "Itim";
     font-size: 32px;
     justify-content: space-evenly;
-    padding: 30px;
 }
 
 .evenItem {
@@ -72,18 +82,29 @@ p {
     font-family: "Itim";
     text-transform: none;
     font-size: 32px;
-    padding: 30px;
 }
 
 #aboutTitle {
     padding-left: 30px;
 }
 
-.divider {
-    color: var(--font-color);
-}
-
 .banner {
     justify-self: center;
     padding: 30px;
+}
+
+li {
+    color: var(--font-color);
+    font-size: 32px;
+    text-align: center;
+}
+
+.petItem {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.petName {
+    padding-right: 30px;
 }
