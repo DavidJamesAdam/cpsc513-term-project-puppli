@@ -74,6 +74,7 @@ p {
     font-family: "Itim";
     font-size: 32px;
     justify-content: space-evenly;
+    padding: 30px;
 }
 
 .evenItem {
@@ -82,6 +83,7 @@ p {
     font-family: "Itim";
     text-transform: none;
     font-size: 32px;
+    padding: 30px;
 }
 
 #aboutTitle {
