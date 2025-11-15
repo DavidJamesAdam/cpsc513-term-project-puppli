@@ -61,7 +61,8 @@ p {
   grid-area: posts;
   display: flex;
   padding: 30px;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #postIcon {
@@ -109,4 +110,16 @@ li {
 
 .petName {
     padding-right: 30px;
+    color: var(--font-color);
+    text-transform: none;
+    font-family: "Itim";
+    font-size: 32px;
+}
+
+#backButton {
+    padding-right: 30px;
+    color: var(--font-color);
+    text-transform: none;
+    font-family: "Itim";
+    font-size: 32px;
 }

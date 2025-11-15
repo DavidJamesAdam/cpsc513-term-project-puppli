@@ -10,6 +10,7 @@ import defaultPetProfilePicture from "../components/profile/defaultPetPFP.svg";
 import defaultPetPFPMain from "../components/profile/defaultPetPFPMain.svg";
 import banner from "../components/profile/banner.svg";
 import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -26,6 +27,9 @@ export default function Profile() {
   const userInfo = {first: "First", last: "Last", username: "username", pet: "Pet 1"};
   const petInfo = {name: "Pet name", breed: "Golden Retriver", bday: "March 5", treat: "Bone", toy: "Ball"};
 
+  function changeProfilePage(): void {
+    setOnMainProfile(!onMainProfile);
+  }
 
   return (
     <>
@@ -56,22 +60,22 @@ export default function Profile() {
                 <p>Pets</p>
                 <div className="oddItem">
                   <div className="petItem">
-                    <p className="petName">{userInfo.pet}</p>
+                    <Button className="petName" onClick={changeProfilePage}>{userInfo.pet}</Button>
                     <img src={defaultPetPFPMain} alt="" />
                   </div>
                 </div>
                 <div className="evenItem">
                   <div className="petItem">
-                    <p className="petName">{userInfo.pet}</p>
+                    <Button className="petName" onClick={changeProfilePage}>{userInfo.pet}</Button>
                     <img src={defaultPetPFPMain} alt="" />
                   </div>
                 </div>
               </Container>
             <Divider id="horizontalDivider" className="divider" variant="middle" sx={{ opacity: 1, borderColor: "#675844", borderWidth: "3px", borderRadius: "10px"}} />
-            <Container id="postsContainer">
+            <div id="postsContainer">
               <p>Posts</p>
               <img src={postIcon} alt="" id="postIcon"/>
-            </Container>
+            </div>
           </div>
         ) :
         (<>
@@ -96,8 +100,8 @@ export default function Profile() {
           </div>
           <Divider className="divider" variant="middle" sx={{ opacity: 1, borderColor: "#675844", borderWidth: "3px", borderRadius: "10px"}} />
           <div id="postsContainer">
-            <p>Posts</p>
-            <img src={postIcon} alt="" id="postIcon"/>
+            <p style={{display: "flex"}}>Posts <img src={postIcon} alt="" id="postIcon"/></p>
+            <Button id="backButton" onClick={changeProfilePage}>Back</Button>
           </div>
         </>)}
       </main>
