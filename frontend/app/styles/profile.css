@@ -50,6 +50,7 @@ p {
 #postsContainer {
   grid-area: posts;
   display: flex;
+  padding: 30px;
 }
 
 #postIcon {
@@ -62,7 +63,7 @@ p {
     font-family: "Itim";
     font-size: 32px;
     justify-content: space-evenly;
-    padding: 20px;
+    padding: 30px;
 }
 
 .evenItem {
@@ -71,13 +72,18 @@ p {
     font-family: "Itim";
     text-transform: none;
     font-size: 32px;
-    padding: 20px;
+    padding: 30px;
 }
 
 #aboutTitle {
-    padding-left: 20px;
+    padding-left: 30px;
 }
 
 .divider {
     color: var(--font-color);
+}
+
+.banner {
+    justify-self: center;
+    padding: 30px;
 }

@@ -7,6 +7,7 @@ import defaultProfilePicture from "../components/profile/defaultPFP.svg";
 import postIcon from "../components/profile/postIcon.svg";
 import Container from "@mui/material/Container";
 import defaultPetProfilePicture from "../components/profile/defaultPetPFP.svg";
+import banner from "../components/profile/banner.svg";
 import Divider from "@mui/material/Divider";
 
 export function meta({}: Route.MetaArgs) {
@@ -54,7 +55,7 @@ export default function Profile() {
           </div>
         ) :
         (<>
-          <p>banner here</p>
+          <div className="banner"><img src={banner} alt=""/></div>
           <div id="petInfoContainer">
             <p id="aboutTitle">About</p>
             <div className="oddItem">
@@ -73,11 +74,11 @@ export default function Profile() {
               Favourite Toy: {petInfo.toy}
             </div>
           </div>
-          <Divider className="divider" variant="middle"></Divider>
-          <Container id="postsContainer">
+          <Divider className="divider" variant="middle" sx={{ opacity: 1, borderColor: "#675844", borderWidth: "3px", borderRadius: "10px"}} />
+          <div id="postsContainer">
             <p>Posts</p>
             <img src={postIcon} alt="" id="postIcon"/>
-          </Container>
+          </div>
         </>)}
       </main>
     </>
