@@ -1,5 +1,13 @@
 import type { Route } from "./+types/profile";
 import Header from "../components/header/header";
+import "../styles/profile.css";
+import { useState } from "react";
+import userIcon from "../components/settings/icons/user.svg";
+import defaultProfilePicture from "../components/profile/defaultPFP.svg";
+import postIcon from "../components/profile/postIcon.svg";
+import Container from "@mui/material/Container";
+import defaultPetProfilePicture from "../components/profile/defaultPetPFP.svg";
+import Divider from "@mui/material/Divider";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,11 +17,68 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Profile() {
+
+  const [onMainProfile, setOnMainProfile] = useState(false);
+
+  // test data
+  const userInfo = {first: "First", last: "Last", username: "username"};
+  const petInfo = {name: "Pet name", breed: "Golden Retriver", bday: "March 5", treat: "Bone", toy: "Ball"};
+
+
   return (
     <>
       <Header />
       <main style={{ backgroundColor: "var{--bg-color}" }}>
-        <p>Profile page</p>
+        <div id="profileBanner">
+          <img src={onMainProfile ? defaultProfilePicture : defaultPetProfilePicture} alt=""/>
+          <div id="profileBannerContents">
+            <p className="profileName">{onMainProfile ? (userInfo.first + " " + userInfo.last) : petInfo.name}</p>
+            {onMainProfile ? (<p>{userInfo.username}</p>) : (<br></br>)}
+            <img src={userIcon} alt=""/>
+          </div>
+        </div>
+        {onMainProfile ? (
+          <div className="grid-container">
+            <Container id="aboutContainer">
+              <p>About</p>
+              <p>banner here</p>
+              <p>more stuff here</p>
+            </Container>
+            <Container id="petsContainer">
+              <p>Pets</p>
+            </Container>
+            <Container id="postsContainer">
+              <p>Posts</p>
+              <img src={postIcon} alt="" id="postIcon"/>
+            </Container>
+          </div>
+        ) :
+        (<>
+          <p>banner here</p>
+          <div id="petInfoContainer">
+            <p id="aboutTitle">About</p>
+            <div className="oddItem">
+              Breed: {petInfo.breed}
+            </div>
+            <div className="evenItem">
+              Birthday: {petInfo.bday}
+            </div>
+            <div className="oddItem">
+              Favourite Treat: {petInfo.treat}
+            </div>
+            <div className="evenItem">
+              Owner: {userInfo.first} {userInfo.last} - {userInfo.username}
+            </div>
+            <div className="oddItem">
+              Favourite Toy: {petInfo.toy}
+            </div>
+          </div>
+          <Divider className="divider" variant="middle"></Divider>
+          <Container id="postsContainer">
+            <p>Posts</p>
+            <img src={postIcon} alt="" id="postIcon"/>
+          </Container>
+        </>)}
       </main>
     </>
   );
