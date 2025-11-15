@@ -2,7 +2,7 @@ import type { Route } from "./+types/profile";
 import Header from "../components/header/header";
 import "../styles/profile.css";
 import { useState } from "react";
-import userIcon from "../components/settings/icons/user.svg";
+import settingsIcon from "../components/settings/icons/settings.svg";
 import defaultProfilePicture from "../components/profile/defaultPFP.svg";
 import postIcon from "../components/profile/postIcon.svg";
 import Container from "@mui/material/Container";
@@ -11,6 +11,7 @@ import defaultPetPFPMain from "../components/profile/defaultPetPFPMain.svg";
 import banner from "../components/profile/banner.svg";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -20,6 +21,8 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Profile() {
+
+  const navigate = useNavigate();
 
   const [onMainProfile, setOnMainProfile] = useState(true);
 
@@ -40,7 +43,7 @@ export default function Profile() {
           <div id="profileBannerContents">
             <p className="profileName">{onMainProfile ? (userInfo.first + " " + userInfo.last) : petInfo.name}</p>
             {onMainProfile ? (<p>{userInfo.username}</p>) : (<br></br>)}
-            <img src={userIcon} alt=""/>
+            <Button id="settingsButton" onClick={() => navigate("/settings")}><img src={settingsIcon} alt=""/></Button>
           </div>
         </div>
         {onMainProfile ? (

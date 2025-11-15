@@ -83,14 +83,6 @@ export function MainNavMenu() {
             Messages
           </Link>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <div className="menu-icon">
-            <img src="assets\icons\Settings icon.svg" />
-          </div>
-          <Link className="menu-text" to="/settings">
-            Settings
-          </Link>
-        </MenuItem>
       </Menu>
     </div>
   );

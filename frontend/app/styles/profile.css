@@ -129,3 +129,7 @@ li {
     font-family: "Itim";
     font-size: 32px;
 }
+
+#settingsButton {
+    padding: 0;
+}
