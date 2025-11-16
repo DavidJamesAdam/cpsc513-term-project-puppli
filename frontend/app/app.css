@@ -119,6 +119,14 @@
   border-radius: 15px;
 }
 
+.change-password-modal {
+  border-radius: 40px;
+  border: 1px solid rgba(255, 132, 164, 1);
+  width: 50%;
+  height: 50%;
+  box-shadow: 5px 10px 10px;
+}
+
 html,
 body {
   @apply bg-white dark:bg-gray-950;

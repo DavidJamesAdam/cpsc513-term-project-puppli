@@ -1,5 +1,6 @@
 import type { Route } from "./+types/settings";
 import Header from "../components/header/header";
+import ChangePasswordModal from "~/components/change-password-modal/change-password-modal";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -14,6 +15,7 @@ export default function Settings() {
       <Header />
       <main style={{ backgroundColor: "var{--bg-color}" }}>
         <p>Settings page</p>
+        <ChangePasswordModal/>
       </main>
     </>
   );
