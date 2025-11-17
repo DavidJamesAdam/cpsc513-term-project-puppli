@@ -119,56 +119,6 @@
   border-radius: 15px;
 }
 
-/* make direct children (close button, input groups, submit) share the same width
-   so their right edges align; content inside buttons will be right-aligned */
-.change-password-modal > * {
-  width: 80%;
-}
-
-.change-password-modal > .close-btn {
-  display: flex;
-  justify-content: flex-end;
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0; /* align with input groups */
-}
-
-.change-password-modal form {
-  display: contents;
-  padding: 0;
-}
-.change-password-modal form .input{
-  border: 1px solid rgba(255, 132, 164, 1);
-  border-radius: 100px;
-  background-color: white;
-  width: 100%;
-  padding: 8px 12px;
-  box-sizing: border-box;
-}
-.change-password-modal #submit{
-  border-radius: 100px;
-  border: 1px solid rgba(147, 191, 191, 1);
-  background-color: rgba(179, 232, 232, 1);
-  color: inherit;
-  font: inherit;
-  display: flex;
-  justify-content: flex-end; /* place the button content to the right inside its 80% width */
-}
-
-.change-password-modal form .inputGroup {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  gap: 8px;
-  width: 80%;
-}
-
-/* right-align the button inside its inputGroup wrapper */
-.change-password-modal form .inputGroup.buttonRow {
-  align-items: flex-end;
-}
-
 html,
 body {
   @apply bg-white dark:bg-gray-950;
