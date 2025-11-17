@@ -1,6 +1,10 @@
 import type { Route } from "./+types/settings";
 import Header from "../components/header/header";
-import ChangePasswordModal from "~/components/change-password-modal/change-password-modal";
+import SettingOption from "../components/settings/settingOption";
+import "../styles/settings.css";
+import settingsIcon from "../components/settings/icons/settings.svg";
+import aboutIcon from "../components/settings/icons/about.svg";
+import userIcon from "../components/settings/icons/user.svg";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,13 +13,40 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+const pathToSettingsIcons = "./icons/";
+
+const version = "1.0.0";
+
+function getIconPath(name : string) {
+  return (pathToSettingsIcons + name + ".svg");
+}
+
 export default function Settings() {
   return (
     <>
       <Header />
-      <main style={{ backgroundColor: "var{--bg-color}" }}>
-        <p>Settings page</p>
-        <ChangePasswordModal/>
+      <main style={{ backgroundColor: "var{--bg-color}", padding: "60px"}}>
+        <div className="settings">
+            <img src={settingsIcon} alt="" />
+            <h1 className="optionTitle">Settings</h1>
+        </div>
+        <div className="listOptions">
+          <SettingOption settingName={"Notifications"} enabled={true}></SettingOption>
+          <div className="options">
+              <img src={userIcon} alt="" />
+              <h1 className="optionTitle">User</h1>
+          </div>
+          <div className="userOptions">
+            <SettingOption settingName={"Change username"}></SettingOption>
+            <SettingOption settingName={"Change password"} ></SettingOption>
+          </div>
+          <SettingOption settingName={"FAQs"}></SettingOption>
+          <div className="options">
+              <img src={aboutIcon} alt="" />
+              <h1 className="optionTitle">About</h1>
+              <span id="version">Version: {version}</span>
+          </div>
+        </div>
       </main>
     </>
   );

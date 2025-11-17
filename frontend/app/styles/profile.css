@@ -1,0 +1,135 @@
+:root {
+  --bg-color: rgba(245, 240, 234, 1);
+  --font-color: rgba(103, 88, 68, 1);
+}
+
+h1 {
+    font-size: 48px;
+    color: var(--font-color);
+}
+
+p {
+    font-size: 32px;
+    color: var(--font-color);
+}
+
+#profileBanner {
+    background-color: #E0CDB2;
+    display: flex;
+    width: 100%;
+    padding: 30px;
+}
+
+.profileName {
+    font-size: 45px;
+    line-height: 0.6;
+}
+
+#profileBannerContents {
+    padding-left: 30px;
+    display: inline-block;
+    align-self: center;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-areas:
+    "about pets pets"
+    "about pets pets"
+    "hDivider hDivider hDivider"
+    "posts posts posts";
+}
+
+#aboutContainer {
+  grid-area: about;
+}
+
+#petsContainer {
+  grid-area: pets;
+}
+
+#horizontalDivider {
+  grid-area: hDivider;
+}
+
+.flexBox {
+    display: flex;
+    padding-top: 30px;
+}
+
+#postsContainerUser {
+  grid-area: posts;
+  display: flex;
+  padding: 30px;
+}
+
+#postsContainer {
+  grid-area: posts;
+  display: flex;
+  padding: 30px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#postIcon {
+    padding-left: 15px;
+}
+
+.oddItem {
+    background-color: #FFC2CF;
+    color: var(--font-color);
+    font-family: "Itim";
+    font-size: 32px;
+    justify-content: space-evenly;
+    padding: 30px;
+}
+
+.evenItem {
+    background-color: #FFECF0;
+    color: var(--font-color);
+    font-family: "Itim";
+    text-transform: none;
+    font-size: 32px;
+    padding: 30px;
+}
+
+#aboutTitle {
+    padding-left: 30px;
+}
+
+.banner {
+    justify-self: center;
+    padding: 30px;
+}
+
+li {
+    color: var(--font-color);
+    font-size: 32px;
+    text-align: center;
+}
+
+.petItem {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.petName {
+    padding-right: 30px;
+    color: var(--font-color);
+    text-transform: none;
+    font-family: "Itim";
+    font-size: 32px;
+}
+
+#backButton {
+    padding-right: 30px;
+    color: var(--font-color);
+    text-transform: none;
+    font-family: "Itim";
+    font-size: 32px;
+}
+
+#settingsButton {
+    padding: 0;
+}
