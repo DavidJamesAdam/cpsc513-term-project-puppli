@@ -119,23 +119,6 @@
   border-radius: 15px;
 }
 
-.change-password-modal {
-  border-radius: 40px;
-  border: 1px solid rgba(255, 132, 164, 1);
-  width: 50%;
-  height: 50%;
-  box-shadow: 5px 10px 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  background-color: rgba(224, 205, 178, 1);
-}
-
-.change-password-modal button {
-  margin: 10px;
-}
-
 /* make direct children (close button, input groups, submit) share the same width
    so their right edges align; content inside buttons will be right-aligned */
 .change-password-modal > * {
