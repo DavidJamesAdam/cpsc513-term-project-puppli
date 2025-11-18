@@ -120,7 +120,7 @@ export default function EditAboutModal({
             <TextField
               sx={inputFieldStyle}
               variant="standard"
-              placeholder={petInfo.breed}
+              defaultValue={petInfo.breed}
               slotProps={{
                 input: {
                   disableUnderline: true,
@@ -133,7 +133,7 @@ export default function EditAboutModal({
             <TextField
               sx={inputFieldStyle}
               variant="standard"
-              placeholder={petInfo.bday}
+              defaultValue={petInfo.bday}
               slotProps={{
                 input: {
                   disableUnderline: true,
@@ -146,7 +146,7 @@ export default function EditAboutModal({
             <TextField
               sx={inputFieldStyle}
               variant="standard"
-              placeholder={petInfo.treat}
+              defaultValue={petInfo.treat}
               slotProps={{
                 input: {
                   disableUnderline: true,
@@ -165,7 +165,7 @@ export default function EditAboutModal({
             <TextField
               sx={inputFieldStyle}
               variant="standard"
-              placeholder={petInfo.toy}
+              defaultValue={petInfo.toy}
               slotProps={{
                 input: {
                   disableUnderline: true,

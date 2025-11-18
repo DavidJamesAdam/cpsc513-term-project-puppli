@@ -77,6 +77,8 @@ export default function CreateSubProfileModal() {
     margin: "10px",
   };
 
+  const [petName, setPetName] = React.useState("");
+
   return (
     <div style={{ display: "flex" }}>
       <Button onClick={handleOpen} sx={openButtonStyle} variant="outlined">
@@ -101,6 +103,7 @@ export default function CreateSubProfileModal() {
               sx={inputFieldStyle}
               variant="standard"
               placeholder={"Pet name"}
+              onChange={(event) => setPetName(event.target.value)}
               slotProps={{
                 input: {
                   disableUnderline: true,
