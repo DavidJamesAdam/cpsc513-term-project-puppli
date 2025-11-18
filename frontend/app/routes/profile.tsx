@@ -66,7 +66,7 @@ export default function Profile() {
               </Container>
               <Container id="petsContainer">
                 <p>Pets</p>
-                <div className="oddItem">
+                <div className="oddItemPetProfile">
                   <div className="petItem">
                     { userInfo.pet1 ? 
                     (<Button className="petName" onClick={changeProfilePage}>{userInfo.pet1}</Button>) 
@@ -74,7 +74,7 @@ export default function Profile() {
                     <img src={defaultPetPFPMain} alt="" />
                   </div>
                 </div>
-                <div className="evenItem">
+                <div className="evenItemPetProfile">
                   <div className="petItem">
                     { userInfo.pet2 ? 
                     (<Button className="petName" onClick={changeProfilePage}>{userInfo.pet2}</Button>) 

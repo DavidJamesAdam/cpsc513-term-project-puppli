@@ -96,6 +96,24 @@ p {
     display: flex;
 }
 
+.oddItemPetProfile {
+    background-color: #FFC2CF;
+    color: var(--font-color);
+    font-family: "Itim";
+    font-size: 32px;
+    justify-content: space-evenly;
+    padding: 30px;
+}
+
+.evenItemPetProfile {
+    background-color: #FFECF0;
+    color: var(--font-color);
+    font-family: "Itim";
+    text-transform: none;
+    font-size: 32px;
+    padding: 30px;
+}
+
 #aboutTitle {
     padding-left: 30px;
 }
