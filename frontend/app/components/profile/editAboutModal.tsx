@@ -18,8 +18,20 @@ interface EditAboutModalProps {
     first: string;
     last: string;
     username: string;
-    pet1: string;
-    pet2: undefined;
+    pet1?: {
+      name: string;
+      breed: string;
+      bday: string;
+      treat: string;
+      toy: string;
+    };
+    pet2?: {
+      name: string;
+      breed: string;
+      bday: string;
+      treat: string;
+      toy: string;
+    };
   };
 }
 

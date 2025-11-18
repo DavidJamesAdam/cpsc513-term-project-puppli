@@ -27,28 +27,58 @@ export default function Profile() {
 
   const [onMainProfile, setOnMainProfile] = useState(true);
 
+  const [onPetOneSubPage, setOnPetOneSubPage] = useState(false);
+
   // test data
-  const userInfo = {
-    first: "First",
-    last: "Last",
-    username: "username",
-    pet1: "Pet 1",
-    pet2: undefined,
-  };
-  const petInfo = {
-    name: "Pet name",
+  const petInfo1 = {
+    name: "Pet 1",
     breed: "Golden Retriver",
     bday: "March 5",
     treat: "Bone",
     toy: "Ball",
   };
 
+  const petInfo2 = {
+    name: "",
+    breed: "",
+    bday: "",
+    treat: "",
+    toy: "",
+  };
+
+  const userInfo = {
+    first: "First",
+    last: "Last",
+    username: "username",
+    pet1: petInfo1,
+    pet2: petInfo2,
+  };
+
+  const [currentPet, setCurrentPet] = useState(petInfo1);
+
   function changeProfilePage(): void {
     setOnMainProfile(!onMainProfile);
+    if (onPetOneSubPage) {
+      setCurrentPet(petInfo1);
+    } else {
+      setCurrentPet(petInfo2);
+    }
   }
 
   function createSubProfile(): void {
     throw new Error("Function not implemented.");
+  }
+
+  function goToSubProfileOne(): void {
+    setOnMainProfile(!onMainProfile);
+    setOnPetOneSubPage(true);
+    setCurrentPet(petInfo1);
+  }
+
+  function goToSubProfileTwo(): void {
+    setOnMainProfile(!onMainProfile);
+    setOnPetOneSubPage(false);
+    setCurrentPet(petInfo2);
   }
 
   return (
@@ -66,7 +96,7 @@ export default function Profile() {
             <p className="profileName">
               {onMainProfile
                 ? userInfo.first + " " + userInfo.last
-                : petInfo.name}
+                : currentPet.name}
             </p>
             {onMainProfile ? <p>{userInfo.username}</p> : <br></br>}
             <Button id="settingsButton" onClick={() => navigate("/settings")}>
@@ -92,8 +122,8 @@ export default function Profile() {
               <div className="oddItem">
                 <div className="petItem">
                   {userInfo.pet1 ? (
-                    <Button className="petName" onClick={changeProfilePage}>
-                      {userInfo.pet1}
+                    <Button className="petName" onClick={goToSubProfileOne}>
+                      {userInfo.pet1.name}
                     </Button>
                   ) : (
                     <></>
@@ -103,9 +133,9 @@ export default function Profile() {
               </div>
               <div className="evenItem">
                 <div className="petItem">
-                  {userInfo.pet2 ? (
-                    <Button className="petName" onClick={changeProfilePage}>
-                      {userInfo.pet2}
+                  {userInfo.pet2.name ? (
+                    <Button className="petName" onClick={goToSubProfileTwo}>
+                      {userInfo.pet2.name}
                     </Button>
                   ) : (
                     <CreateSubProfileModal />
@@ -136,14 +166,14 @@ export default function Profile() {
               <img src={banner} alt="" />
             </div>
             <div id="petInfoContainer">
-              <EditAboutModal petInfo={petInfo} userInfo={userInfo} />
-              <div className="oddItem">Breed: {petInfo.breed}</div>
-              <div className="evenItem">Birthday: {petInfo.bday}</div>
-              <div className="oddItem">Favourite Treat: {petInfo.treat}</div>
+              <EditAboutModal petInfo={currentPet} userInfo={userInfo} />
+              <div className="oddItem">Breed: {currentPet.breed}</div>
+              <div className="evenItem">Birthday: {currentPet.bday}</div>
+              <div className="oddItem">Favourite Treat: {currentPet.treat}</div>
               <div className="evenItem">
                 Owner: {userInfo.first} {userInfo.last} - {userInfo.username}
               </div>
-              <div className="oddItem">Favourite Toy: {petInfo.toy}</div>
+              <div className="oddItem">Favourite Toy: {currentPet.toy}</div>
             </div>
             <Divider
               className="divider"

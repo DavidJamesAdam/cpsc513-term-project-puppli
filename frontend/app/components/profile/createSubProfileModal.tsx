@@ -7,11 +7,24 @@ import TextField from "@mui/material/TextField";
 
 export default function CreateSubProfileModal() {
   const [open, setOpen] = React.useState(false);
+  const [errorMsg, setErrorMsg] = React.useState("");
+  const [hasError, setHasError] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleSubmit = () => {
+    if (petName !== "") {
+      // pass created object back to parent page
+      const newPetInfo = {
+        name: "Pet 2",
+        breed: "",
+        bday: "",
+        treat: "",
+        toy: "",
+      };
+      console.log("done");
+    }
     // This function would send off the user's request to update the pets information
-    setOpen(false);
+    setOpen(true);
   };
 
   const modalStyle = {
@@ -79,6 +92,21 @@ export default function CreateSubProfileModal() {
 
   const [petName, setPetName] = React.useState("");
 
+  React.useEffect(() => {
+    if (petName === "") {
+      setErrorMsg("Pet name field cannot be empty.");
+      setHasError(true);
+    } else {
+      setErrorMsg("");
+      setHasError(false);
+      console.log(petName);
+    }
+  }, [petName]);
+
+  function onNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setPetName(event.currentTarget.value);
+  }
+
   return (
     <div style={{ display: "flex" }}>
       <Button onClick={handleOpen} sx={openButtonStyle} variant="outlined">
@@ -103,7 +131,8 @@ export default function CreateSubProfileModal() {
               sx={inputFieldStyle}
               variant="standard"
               placeholder={"Pet name"}
-              onChange={(event) => setPetName(event.target.value)}
+              helperText={errorMsg}
+              onChange={onNameChange}
               slotProps={{
                 input: {
                   disableUnderline: true,
@@ -118,6 +147,7 @@ export default function CreateSubProfileModal() {
               id="submit"
               sx={submitButtonStyle}
               onClick={handleSubmit}
+              disabled={hasError}
             >
               Submit
             </Button>
