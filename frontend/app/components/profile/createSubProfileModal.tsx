@@ -61,13 +61,17 @@ export default function CreateSubProfileModal() {
     justifySelf: "left",
   };
 
+  const pinkBorder = "1px solid rgba(255, 132, 164, 1)";
+  const [inputFieldBorderColor, setInputFieldBorderColor] =
+    React.useState(pinkBorder);
+
   const inputFieldStyle = {
     backgroundColor: "var(--bg-color)",
     borderRadius: "100px",
     padding: "10px",
     maxHeight: "59px",
     borderBottom: "none",
-    border: "1px solid rgba(255, 132, 164, 1)",
+    border: inputFieldBorderColor,
   };
 
   const closeButtonStyle = {
@@ -96,10 +100,12 @@ export default function CreateSubProfileModal() {
     if (petName === "") {
       setErrorMsg("Pet name field cannot be empty.");
       setHasError(true);
+      setInputFieldBorderColor("1px solid rgba(255, 0, 0, 1)");
     } else {
       setErrorMsg("");
       setHasError(false);
       console.log(petName);
+      setInputFieldBorderColor(pinkBorder);
     }
   }, [petName]);
 
@@ -131,7 +137,6 @@ export default function CreateSubProfileModal() {
               sx={inputFieldStyle}
               variant="standard"
               placeholder={"Pet name"}
-              helperText={errorMsg}
               onChange={onNameChange}
               slotProps={{
                 input: {
@@ -140,6 +145,9 @@ export default function CreateSubProfileModal() {
                 },
               }}
             />
+            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+              {errorMsg}
+            </p>
           </CardContent>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
