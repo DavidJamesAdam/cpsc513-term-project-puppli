@@ -79,13 +79,15 @@ export default function EditAboutModal({
     justifySelf: "left",
   };
 
+  const pinkBorder = "1px solid rgba(255, 132, 164, 1)";
+
   const inputFieldStyle = {
     backgroundColor: "var(--bg-color)",
     borderRadius: "100px",
     padding: "10px",
     maxHeight: "59px",
     borderBottom: "none",
-    border: "1px solid rgba(255, 132, 164, 1)",
+    border: pinkBorder,
   };
 
   const closeButtonStyle = {
@@ -107,6 +109,80 @@ export default function EditAboutModal({
     justifyContent: "flex-end",
     margin: "10px",
   };
+
+  const [breed, setBreed] = React.useState(petInfo.breed);
+  const [bday, setBday] = React.useState(petInfo.bday);
+  const [treat, setTreat] = React.useState(petInfo.treat);
+  const [toy, setToy] = React.useState(petInfo.toy);
+
+  const [breedErrorMsg, setBreedErrorMsg] = React.useState("");
+  const [hasBreedError, setHasBreedError] = React.useState(false);
+  const [bdayErrorMsg, setBdayErrorMsg] = React.useState("");
+  const [hasBdayError, setHasBdayError] = React.useState(false);
+  const [treatErrorMsg, setTreatErrorMsg] = React.useState("");
+  const [hasTreatError, setHasTreatError] = React.useState(false);
+  const [toyErrorMsg, setToyErrorMsg] = React.useState("");
+  const [hasToyError, setHasToyError] = React.useState(false);
+
+  const [hasFormErrors, setHasFormErrors] = React.useState(false);
+
+  React.useEffect(() => {
+    if (breed === "") {
+      setBreedErrorMsg("Pet breed field cannot be empty.");
+      setHasBreedError(true);
+    } else {
+      setBreedErrorMsg("");
+      setHasBreedError(false);
+    }
+
+    if (bday === "") {
+      setBdayErrorMsg("Pet birthday field cannot be empty.");
+      setHasBdayError(true);
+    } else {
+      setBdayErrorMsg("");
+      setHasBdayError(false);
+    }
+
+    if (treat === "") {
+      setTreatErrorMsg("Pet favourite treat field cannot be empty.");
+      setHasTreatError(true);
+    } else {
+      setTreatErrorMsg("");
+      setHasTreatError(false);
+    }
+
+    if (toy === "") {
+      setToyErrorMsg("Pet favourite toy field cannot be empty.");
+      setHasToyError(true);
+    } else {
+      setToyErrorMsg("");
+      setHasToyError(false);
+    }
+  }, [breed, bday, treat, toy]);
+
+  React.useEffect(() => {
+    if (hasBreedError || hasBdayError || hasTreatError || hasToyError) {
+      setHasFormErrors(true);
+    } else {
+      setHasFormErrors(false);
+    }
+  }, [hasBreedError, hasBdayError, hasTreatError, hasToyError]);
+
+  function onBreedChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setBreed(event.currentTarget.value);
+  }
+
+  function onBdayChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setBday(event.currentTarget.value);
+  }
+
+  function onTreatChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setTreat(event.currentTarget.value);
+  }
+
+  function onToyChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setToy(event.currentTarget.value);
+  }
 
   return (
     <div style={{ display: "flex" }}>
@@ -133,6 +209,7 @@ export default function EditAboutModal({
               sx={inputFieldStyle}
               variant="standard"
               defaultValue={petInfo.breed}
+              onChange={onBreedChange}
               slotProps={{
                 input: {
                   disableUnderline: true,
@@ -140,12 +217,16 @@ export default function EditAboutModal({
                 },
               }}
             />
+            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+              {breedErrorMsg}
+            </p>
             <br></br>
             <p>Birthday:</p>
             <TextField
               sx={inputFieldStyle}
               variant="standard"
               defaultValue={petInfo.bday}
+              onChange={onBdayChange}
               slotProps={{
                 input: {
                   disableUnderline: true,
@@ -153,12 +234,16 @@ export default function EditAboutModal({
                 },
               }}
             />
+            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+              {bdayErrorMsg}
+            </p>
             <br></br>
             <p>Favourite Treat:</p>
             <TextField
               sx={inputFieldStyle}
               variant="standard"
               defaultValue={petInfo.treat}
+              onChange={onTreatChange}
               slotProps={{
                 input: {
                   disableUnderline: true,
@@ -166,6 +251,9 @@ export default function EditAboutModal({
                 },
               }}
             />
+            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+              {treatErrorMsg}
+            </p>
             <br></br>
             <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
               <p>
@@ -178,6 +266,7 @@ export default function EditAboutModal({
               sx={inputFieldStyle}
               variant="standard"
               defaultValue={petInfo.toy}
+              onChange={onToyChange}
               slotProps={{
                 input: {
                   disableUnderline: true,
@@ -185,6 +274,9 @@ export default function EditAboutModal({
                 },
               }}
             />
+            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+              {toyErrorMsg}
+            </p>
             <br></br>
           </CardContent>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -193,6 +285,7 @@ export default function EditAboutModal({
               id="submit"
               sx={submitButtonStyle}
               onClick={handleSubmit}
+              disabled={hasFormErrors}
             >
               Submit
             </Button>
