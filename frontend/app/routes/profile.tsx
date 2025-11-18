@@ -76,7 +76,7 @@ export default function Profile() {
               </Container>
             <Divider id="horizontalDivider" className="divider" variant="middle" sx={{ opacity: 1, borderColor: "#675844", borderWidth: "3px", borderRadius: "10px"}} />
             <div id="postsContainerUser">
-              <p>Posts</p>
+              <p>Upload</p>
               <img src={postIcon} alt="" id="postIcon"/>
             </div>
           </div>
@@ -103,7 +103,7 @@ export default function Profile() {
           </div>
           <Divider className="divider" variant="middle" sx={{ opacity: 1, borderColor: "#675844", borderWidth: "3px", borderRadius: "10px"}} />
           <div id="postsContainer">
-            <p style={{display: "flex"}}>Posts <img src={postIcon} alt="" id="postIcon"/></p>
+            <p style={{display: "flex"}}>Upload <img src={postIcon} alt="" id="postIcon"/></p>
             <Button id="backButton" onClick={changeProfilePage}>Back</Button>
           </div>
         </>)}
