@@ -80,8 +80,9 @@ p {
     color: var(--font-color);
     font-family: "Itim";
     font-size: 32px;
-    justify-content: space-evenly;
+    justify-content: space-between;
     padding: 30px;
+    display: flex;
 }
 
 .evenItem {
@@ -91,6 +92,8 @@ p {
     text-transform: none;
     font-size: 32px;
     padding: 30px;
+    justify-content: space-between;
+    display: flex;
 }
 
 #aboutTitle {

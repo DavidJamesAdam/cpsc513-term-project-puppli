@@ -5,6 +5,7 @@ import { useState } from "react";
 import settingsIcon from "../components/settings/icons/settings.svg";
 import defaultProfilePicture from "../components/profile/defaultPFP.svg";
 import postIcon from "../components/profile/postIcon.svg";
+import editIcon from "../components/settings/icons/username.svg";
 import Container from "@mui/material/Container";
 import defaultPetProfilePicture from "../components/profile/defaultPetPFP.svg";
 import defaultPetPFPMain from "../components/profile/defaultPetPFPMain.svg";
@@ -27,11 +28,15 @@ export default function Profile() {
   const [onMainProfile, setOnMainProfile] = useState(true);
 
   // test data
-  const userInfo = {first: "First", last: "Last", username: "username", pet: "Pet 1"};
+  const userInfo = {first: "First", last: "Last", username: "username", pet1: "Pet 1", pet2: undefined};
   const petInfo = {name: "Pet name", breed: "Golden Retriver", bday: "March 5", treat: "Bone", toy: "Ball"};
 
   function changeProfilePage(): void {
     setOnMainProfile(!onMainProfile);
+  }
+
+  function createSubProfile(): void {
+    throw new Error("Function not implemented.");
   }
 
   return (
@@ -63,13 +68,17 @@ export default function Profile() {
                 <p>Pets</p>
                 <div className="oddItem">
                   <div className="petItem">
-                    <Button className="petName" onClick={changeProfilePage}>{userInfo.pet}</Button>
+                    { userInfo.pet1 ? 
+                    (<Button className="petName" onClick={changeProfilePage}>{userInfo.pet1}</Button>) 
+                    : (<></>) }
                     <img src={defaultPetPFPMain} alt="" />
                   </div>
                 </div>
                 <div className="evenItem">
                   <div className="petItem">
-                    <Button className="petName" onClick={changeProfilePage}>{userInfo.pet}</Button>
+                    { userInfo.pet2 ? 
+                    (<Button className="petName" onClick={changeProfilePage}>{userInfo.pet2}</Button>) 
+                    : (<Button className="petName" onClick={createSubProfile} variant="outlined">+ Add Pet</Button>) }
                     <img src={defaultPetPFPMain} alt="" />
                   </div>
                 </div>
@@ -87,18 +96,33 @@ export default function Profile() {
             <p id="aboutTitle">About</p>
             <div className="oddItem">
               Breed: {petInfo.breed}
+              <Button>
+                <img src={editIcon} alt="" id="editIcon"/>
+              </Button>
             </div>
             <div className="evenItem">
               Birthday: {petInfo.bday}
+              <Button>
+                <img src={editIcon} alt="" id="editIcon"/>
+              </Button>
             </div>
             <div className="oddItem">
               Favourite Treat: {petInfo.treat}
+              <Button>
+                <img src={editIcon} alt="" id="editIcon"/>
+              </Button>
             </div>
             <div className="evenItem">
               Owner: {userInfo.first} {userInfo.last} - {userInfo.username}
+              <Button>
+                <img src={editIcon} alt="" id="editIcon"/>
+              </Button>
             </div>
             <div className="oddItem">
               Favourite Toy: {petInfo.toy}
+              <Button>
+                <img src={editIcon} alt="" id="editIcon"/>
+              </Button>
             </div>
           </div>
           <Divider className="divider" variant="middle" sx={{ opacity: 1, borderColor: "#675844", borderWidth: "3px", borderRadius: "10px"}} />
