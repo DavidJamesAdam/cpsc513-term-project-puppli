@@ -10,7 +10,10 @@ export default function CreateSubProfileModal() {
   const [errorMsg, setErrorMsg] = React.useState("");
   const [hasError, setHasError] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setPetName(""); // reset after window closed
+  };
   const handleSubmit = () => {
     if (petName !== "") {
       // pass created object back to parent page
@@ -24,7 +27,8 @@ export default function CreateSubProfileModal() {
       console.log("done");
     }
     // This function would send off the user's request to update the pets information
-    setOpen(true);
+    setOpen(false);
+    setPetName(""); // reset after submitted
   };
 
   const modalStyle = {
