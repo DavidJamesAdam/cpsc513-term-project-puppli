@@ -80,32 +80,11 @@ p {
     color: var(--font-color);
     font-family: "Itim";
     font-size: 32px;
-    justify-content: space-between;
-    padding: 30px;
-    display: flex;
-}
-
-.evenItem {
-    background-color: #FFECF0;
-    color: var(--font-color);
-    font-family: "Itim";
-    text-transform: none;
-    font-size: 32px;
-    padding: 30px;
-    justify-content: space-between;
-    display: flex;
-}
-
-.oddItemPetProfile {
-    background-color: #FFC2CF;
-    color: var(--font-color);
-    font-family: "Itim";
-    font-size: 32px;
     justify-content: space-evenly;
     padding: 30px;
 }
 
-.evenItemPetProfile {
+.evenItem {
     background-color: #FFECF0;
     color: var(--font-color);
     font-family: "Itim";
@@ -116,6 +95,7 @@ p {
 
 #aboutTitle {
     padding-left: 30px;
+    font-size: 40px;
 }
 
 .banner {

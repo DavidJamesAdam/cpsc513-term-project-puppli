@@ -5,7 +5,6 @@ import { useState } from "react";
 import settingsIcon from "../components/settings/icons/settings.svg";
 import defaultProfilePicture from "../components/profile/defaultPFP.svg";
 import postIcon from "../components/profile/postIcon.svg";
-import editIcon from "../components/settings/icons/username.svg";
 import Container from "@mui/material/Container";
 import defaultPetProfilePicture from "../components/profile/defaultPetPFP.svg";
 import defaultPetPFPMain from "../components/profile/defaultPetPFPMain.svg";
@@ -13,6 +12,7 @@ import banner from "../components/profile/banner.svg";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import EditAboutModal from "~/components/profile/editAboutModal";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -66,7 +66,7 @@ export default function Profile() {
               </Container>
               <Container id="petsContainer">
                 <p>Pets</p>
-                <div className="oddItemPetProfile">
+                <div className="oddItem">
                   <div className="petItem">
                     { userInfo.pet1 ? 
                     (<Button className="petName" onClick={changeProfilePage}>{userInfo.pet1}</Button>) 
@@ -74,7 +74,7 @@ export default function Profile() {
                     <img src={defaultPetPFPMain} alt="" />
                   </div>
                 </div>
-                <div className="evenItemPetProfile">
+                <div className="evenItem">
                   <div className="petItem">
                     { userInfo.pet2 ? 
                     (<Button className="petName" onClick={changeProfilePage}>{userInfo.pet2}</Button>) 
@@ -93,36 +93,21 @@ export default function Profile() {
         (<>
           <div className="banner"><img src={banner} alt=""/></div>
           <div id="petInfoContainer">
-            <p id="aboutTitle">About</p>
+            <EditAboutModal petInfo={petInfo} userInfo={userInfo}/>
             <div className="oddItem">
               Breed: {petInfo.breed}
-              <Button>
-                <img src={editIcon} alt="" id="editIcon"/>
-              </Button>
             </div>
             <div className="evenItem">
               Birthday: {petInfo.bday}
-              <Button>
-                <img src={editIcon} alt="" id="editIcon"/>
-              </Button>
             </div>
             <div className="oddItem">
               Favourite Treat: {petInfo.treat}
-              <Button>
-                <img src={editIcon} alt="" id="editIcon"/>
-              </Button>
             </div>
             <div className="evenItem">
               Owner: {userInfo.first} {userInfo.last} - {userInfo.username}
-              <Button>
-                <img src={editIcon} alt="" id="editIcon"/>
-              </Button>
             </div>
             <div className="oddItem">
               Favourite Toy: {petInfo.toy}
-              <Button>
-                <img src={editIcon} alt="" id="editIcon"/>
-              </Button>
             </div>
           </div>
           <Divider className="divider" variant="middle" sx={{ opacity: 1, borderColor: "#675844", borderWidth: "3px", borderRadius: "10px"}} />
