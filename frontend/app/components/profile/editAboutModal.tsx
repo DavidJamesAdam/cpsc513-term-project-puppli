@@ -1,28 +1,32 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
 import editIcon from "../settings/icons/username.svg";
-
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import TextField from "@mui/material/TextField";
 
 interface EditAboutModalProps {
-    petInfo: {
-        name: string;
-        breed: string;
-        bday: string;
-        treat: string;
-        toy: string;
-    }
-    userInfo: {
-        first: string;
-        last: string;
-        username: string;
-        pet1: string;
-        pet2: undefined;
-    }
+  petInfo: {
+    name: string;
+    breed: string;
+    bday: string;
+    treat: string;
+    toy: string;
+  };
+  userInfo: {
+    first: string;
+    last: string;
+    username: string;
+    pet1: string;
+    pet2: undefined;
+  };
 }
 
-export default function EditAboutModal( {petInfo, userInfo} : EditAboutModalProps) {
+export default function EditAboutModal({
+  petInfo,
+  userInfo,
+}: EditAboutModalProps) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -32,19 +36,20 @@ export default function EditAboutModal( {petInfo, userInfo} : EditAboutModalProp
   };
 
   const modalStyle = {
+    textAlign: "left",
+    backgroundColor: "#E0CDB2",
     borderRadius: "40px",
+    justifyContent: "center",
+    maxWidth: "785px",
+    minWidth: "420px",
+    maxHeight: "520px",
+    padding: "5px",
     border: "1px solid rgba(255, 132, 164, 1)",
-    boxShadow: "5px 10px 10px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    backgroundColor: "rgba(224, 205, 178, 1)",
-    width: "60%",
-    maxWidth: "620px",
-    height: "100%",
-    maxHeight: "600px",
-    minHeight: "700px",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    overflow: "auto",
   };
 
   const openButtonStyle = {
@@ -53,172 +58,135 @@ export default function EditAboutModal( {petInfo, userInfo} : EditAboutModalProp
     textTransform: "capitalize",
   };
 
+  const inputSectionStyle = {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    width: "100%",
+    maxWidth: "522px",
+    justifySelf: "left",
+  };
+
+  const inputFieldStyle = {
+    backgroundColor: "var(--bg-color)",
+    borderRadius: "100px",
+    padding: "10px",
+    maxHeight: "59px",
+    borderBottom: "none",
+    border: "1px solid rgba(255, 132, 164, 1)",
+  };
+
   const closeButtonStyle = {
     display: "flex",
     border: "none",
     padding: 0,
     borderRadius: "100px",
+    justifySelf: "flex-end",
+    scale: "50%",
   };
 
   const submitButtonStyle = {
     borderRadius: "100px",
     border: "1px solid rgba(147, 191, 191, 1)",
     backgroundColor: "rgba(179, 232, 232, 1)",
-    color: "inherit",
+    color: "#675844",
     font: "inherit",
     display: "flex",
     justifyContent: "flex-end",
-    margin: "10px"
+    margin: "10px",
   };
 
   return (
     <div style={{ display: "flex" }}>
-        <span id="aboutTitle">About</span>
-        <Button onClick={handleOpen} sx={openButtonStyle}>
-            <img src={editIcon} alt="" id="editIcon"/>
-        </Button>
-        <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="Edit about modal"
-            aria-describedby="Modal that allows user to edit pet information"
-        >
-            <Box sx={modalStyle}>
-                <div style={{ width: "80%" }}>
-                    <div style={{ display: "flex", justifyContent: "flex-end", scale: "80%" }}>
-                        {/* <div style={{ display: "flex", justifyContent: "flex-end" }}> */}
-                        <Button sx={closeButtonStyle} onClick={handleClose}>
-                            <img src="assets\icons\Close icon.svg" />
-                        </Button>
-                    </div>
-                    <p>Edit your pet's information!</p>
-                    <br></br>
-                    <form>
-                        <div
-                            style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            margin: 0,
-                            gap: "8px",
-                            }}
-                        >
-                            <label htmlFor="breed" style={{ paddingLeft: "15px", fontSize: "24px" }}>
-                            Breed:
-                            </label>
-                            <input
-                            type="text"
-                            name="breed"
-                            placeholder={petInfo.breed}
-                            style={{
-                                border: "1px solid rgba(255, 132, 164, 1)",
-                                borderRadius: "100px",
-                                backgroundColor: "white",
-                                width: "100%",
-                                padding: "8px 12px",
-                                boxSizing: "border-box",
-                            }}
-                            />
-                        </div>
-                        <br></br>
-                        <div
-                            style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            margin: 0,
-                            gap: "8px",
-                            }}
-                        >
-                            <label htmlFor="bday" style={{ paddingLeft: "15px", fontSize: "24px" }}>
-                            Birthday:
-                            </label>
-                            <input
-                            type="text"
-                            name="bday"
-                            placeholder={petInfo.bday}
-                            style={{
-                                border: "1px solid rgba(255, 132, 164, 1)",
-                                borderRadius: "100px",
-                                backgroundColor: "white",
-                                width: "100%",
-                                padding: "8px 12px",
-                                boxSizing: "border-box",
-                            }}
-                            />
-                        </div>
-                        <br></br>
-                        <div
-                            style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            margin: 0,
-                            gap: "8px",
-                            }}
-                        >
-                            <label htmlFor="treat" style={{ paddingLeft: "15px", fontSize: "24px" }}>
-                            Favourite Treat:
-                            </label>
-                            <input
-                            type="text"
-                            name="treat"
-                            placeholder={petInfo.treat}
-                            style={{
-                                border: "1px solid rgba(255, 132, 164, 1)",
-                                borderRadius: "100px",
-                                backgroundColor: "white",
-                                width: "100%",
-                                padding: "8px 12px",
-                                boxSizing: "border-box",
-                            }}
-                            />
-                        </div>
-                        <br></br>
-                        <div
-                            style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            margin: 0,
-                            gap: "8px",
-                            }}
-                        >
-                            <p style={{ paddingLeft: "15px", fontSize: "24px" }}>
-                            Owner: {userInfo.first} {userInfo.last} - {userInfo.username}
-                            </p>
-                        </div>
-                        <br></br>
-                        <div
-                            style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            margin: 0,
-                            gap: "8px",
-                            }}
-                        >
-                            <label htmlFor="toy" style={{ paddingLeft: "15px", fontSize: "24px" }}>
-                            Favourite Toy:
-                            </label>
-                            <input
-                            type="text"
-                            name="toy"
-                            placeholder={petInfo.toy}
-                            style={{
-                                border: "1px solid rgba(255, 132, 164, 1)",
-                                borderRadius: "100px",
-                                backgroundColor: "white",
-                                width: "100%",
-                                padding: "8px 12px",
-                                boxSizing: "border-box",
-                            }}
-                            />
-                        </div>
-                        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                            <Button variant="contained" id="submit" sx={submitButtonStyle} onClick={handleSubmit}>
-                            Submit
-                            </Button>
-                        </div>
-                    </form>
-                </div>
-            </Box>
-        </Modal>
+      <span id="aboutTitle">About</span>
+      <Button onClick={handleOpen} sx={openButtonStyle}>
+        <img src={editIcon} alt="" id="editIcon" />
+      </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="Edit about modal"
+        aria-describedby="Modal that allows user to edit pet information"
+      >
+        <Card sx={modalStyle}>
+          <Button sx={closeButtonStyle} onClick={handleClose}>
+            <img src="assets\icons\Close icon.svg" />
+          </Button>
+          <h1 style={{ paddingLeft: "15px", paddingRight: "15px" }}>
+            Edit your pet's information!
+          </h1>
+          <CardContent sx={inputSectionStyle}>
+            <p>Breed:</p>
+            <TextField
+              sx={inputFieldStyle}
+              variant="standard"
+              placeholder={petInfo.breed}
+              slotProps={{
+                input: {
+                  disableUnderline: true,
+                  style: { color: "#675844" },
+                },
+              }}
+            />
+            <br></br>
+            <p>Birthday:</p>
+            <TextField
+              sx={inputFieldStyle}
+              variant="standard"
+              placeholder={petInfo.bday}
+              slotProps={{
+                input: {
+                  disableUnderline: true,
+                  style: { color: "#675844" },
+                },
+              }}
+            />
+            <br></br>
+            <p>Favourite Treat:</p>
+            <TextField
+              sx={inputFieldStyle}
+              variant="standard"
+              placeholder={petInfo.treat}
+              slotProps={{
+                input: {
+                  disableUnderline: true,
+                  style: { color: "#675844" },
+                },
+              }}
+            />
+            <br></br>
+            <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
+              <p>
+                Owner: {userInfo.first} {userInfo.last} - {userInfo.username}
+              </p>
+            </div>
+            <br></br>
+            <p>Favourite Toy:</p>
+            <TextField
+              sx={inputFieldStyle}
+              variant="standard"
+              placeholder={petInfo.toy}
+              slotProps={{
+                input: {
+                  disableUnderline: true,
+                  style: { color: "#675844" },
+                },
+              }}
+            />
+            <br></br>
+          </CardContent>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              variant="contained"
+              id="submit"
+              sx={submitButtonStyle}
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
+          </div>
+        </Card>
+      </Modal>
     </div>
   );
 }
