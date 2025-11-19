@@ -7,6 +7,7 @@ import aboutIcon from "../components/settings/icons/about.svg";
 import userIcon from "../components/settings/icons/user.svg";
 import ChangePasswordModal from "~/components/change-password-modal/change-password-modal";
 import ChangeUsernameModal from "~/components/change-username-modal/change-username-modal";
+import FAQModal from "~/components/faq-modal/faq-modal";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -42,7 +43,7 @@ export default function Settings() {
             <ChangeUsernameModal/>
             <ChangePasswordModal/>
           </div>
-          <SettingOption settingName={"FAQs"}></SettingOption>
+          <FAQModal/>
           <div className="options">
               <img src={aboutIcon} alt="" />
               <h1 className="optionTitle">About</h1>
