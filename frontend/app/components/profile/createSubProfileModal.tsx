@@ -132,11 +132,17 @@ export default function CreateSubProfileModal() {
           <Button sx={closeButtonStyle} onClick={handleClose}>
             <img src="assets\icons\Close icon.svg" />
           </Button>
-          <h1 style={{ paddingLeft: "15px", paddingRight: "15px" }}>
+          <h1
+            style={{
+              paddingLeft: "15px",
+              paddingRight: "15px",
+              fontSize: "32px",
+            }}
+          >
             Create a new sub-profile!
           </h1>
           <CardContent sx={inputSectionStyle}>
-            <p>Pet name:</p>
+            <p style={{ fontSize: "24px" }}>Pet name:</p>
             <TextField
               sx={inputFieldStyle}
               variant="standard"

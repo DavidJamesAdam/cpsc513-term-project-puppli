@@ -200,11 +200,17 @@ export default function EditAboutModal({
           <Button sx={closeButtonStyle} onClick={handleClose}>
             <img src="assets\icons\Close icon.svg" />
           </Button>
-          <h1 style={{ paddingLeft: "15px", paddingRight: "15px" }}>
+          <h1
+            style={{
+              paddingLeft: "15px",
+              paddingRight: "15px",
+              fontSize: "32px",
+            }}
+          >
             Edit your pet's information!
           </h1>
           <CardContent sx={inputSectionStyle}>
-            <p>Breed:</p>
+            <p style={{ fontSize: "24px" }}>Breed:</p>
             <TextField
               sx={inputFieldStyle}
               variant="standard"
@@ -221,7 +227,7 @@ export default function EditAboutModal({
               {breedErrorMsg}
             </p>
             <br></br>
-            <p>Birthday:</p>
+            <p style={{ fontSize: "24px" }}>Birthday:</p>
             <TextField
               sx={inputFieldStyle}
               variant="standard"
@@ -238,7 +244,7 @@ export default function EditAboutModal({
               {bdayErrorMsg}
             </p>
             <br></br>
-            <p>Favourite Treat:</p>
+            <p style={{ fontSize: "24px" }}>Favourite Treat:</p>
             <TextField
               sx={inputFieldStyle}
               variant="standard"
@@ -256,12 +262,12 @@ export default function EditAboutModal({
             </p>
             <br></br>
             <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
-              <p>
+              <p style={{ fontSize: "24px" }}>
                 Owner: {userInfo.first} {userInfo.last} - {userInfo.username}
               </p>
             </div>
             <br></br>
-            <p>Favourite Toy:</p>
+            <p style={{ fontSize: "24px" }}>Favourite Toy:</p>
             <TextField
               sx={inputFieldStyle}
               variant="standard"
