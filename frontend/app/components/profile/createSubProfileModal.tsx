@@ -37,7 +37,7 @@ export default function CreateSubProfileModal() {
     borderRadius: "40px",
     justifyContent: "center",
     maxWidth: "785px",
-    minWidth: "420px",
+    minWidth: "300px",
     maxHeight: "520px",
     padding: "5px",
     border: "1px solid rgba(255, 132, 164, 1)",
