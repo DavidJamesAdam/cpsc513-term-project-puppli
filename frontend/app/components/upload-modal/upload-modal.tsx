@@ -17,11 +17,12 @@ export default function UploadModal({
   onClose,
   hideTrigger,
 }: UploadModalProps) {
-  const [internalOpen, setInternalOpen] = React.useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
   const [image, setImage] = useState(null);
   const isControlled = propOpen !== undefined;
   const open = isControlled ? propOpen! : internalOpen;
   const fileInputRef = useRef(null);
+
   const handleOpen = () => {
     if (onOpen) onOpen();
     if (!isControlled) setInternalOpen(true);
@@ -30,6 +31,7 @@ export default function UploadModal({
   const handleClose = () => {
     if (onClose) onClose();
     if (!isControlled) setInternalOpen(false);
+    setImage(null);
   };
 
   const handleFileBrowser = () => {
@@ -40,21 +42,21 @@ export default function UploadModal({
     const selectedFile = event.target.files[0];
     if (event.target.files && event.target.files[0]) {
       console.log("Selected file:", selectedFile.name);
-      // You can now process the selected file, e.g., upload it
       setImage(URL.createObjectURL(event.target.files[0]));
     }
   };
 
   const handlePictureUpload = () => {
+    // Upload picture to database
     setImage(null);
     handleClose();
-  }
+  };
 
   const modalStyle = {
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
-    width: "50%",
-    height: "auto",
+    width: "70%",
+    height: "70%",
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
@@ -62,7 +64,7 @@ export default function UploadModal({
     alignItems: "center",
     backgroundColor: "rgba(224, 205, 178, 1)",
     position: "absolute",
-    transform: "translate(50%, 30%)",
+    transform: "translate(20%, 20%)",
   };
 
   const openButtonStyle = {
@@ -143,19 +145,33 @@ export default function UploadModal({
           </div>
           <input
             type="file"
+            accept=".png, .jpg, .jpeg, .pdf"
             ref={fileInputRef}
             style={{ display: "none" }}
             onChange={handlePicturePreview}
           />
-          <img
-            src={image}
+          <div
             style={{
-              width: "50%",
+              width: "auto",
+              height: "auto",
+              maxWidth: '80%',
+              maxHeight: '70%',
               borderRadius: "40px",
               border: "1px solid rgba(255, 132, 164, 1)",
+              backgroundColor: "rgba(217, 217, 217, 1)",
             }}
-            alt="Placeholder image"
-          />
+          >
+            <img
+              src={image || "assets/icons/ant-design--picture-outlined.svg"}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "inherit",
+              }}
+              alt="Image Preview"
+            />
+          </div>
           <Button sx={uploadButtonStyle} onClick={handleFileBrowser}>
             Select Picture
           </Button>
