@@ -1,7 +1,7 @@
 import type { Route } from "./+types/profile";
 import Header from "../components/header/header";
 import "../styles/profile.css";
-import { useState } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import settingsIcon from "../components/settings/icons/settings.svg";
 import defaultProfilePicture from "../components/profile/defaultPFP.svg";
 import postIcon from "../components/profile/postIcon.svg";
@@ -14,6 +14,9 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import EditAboutModal from "~/components/profile/editAboutModal";
 import CreateSubProfileModal from "~/components/profile/createSubProfileModal";
+import TextField from "@mui/material/TextField";
+import editIcon from "../components/settings/icons/username.svg";
+import SaveAndCancelButtons from "~/components/saveAndCancelButtons";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -28,6 +31,21 @@ export default function Profile() {
   const [onMainProfile, setOnMainProfile] = useState(true);
 
   const [onPetOneSubPage, setOnPetOneSubPage] = useState(false);
+
+  const [editingBio, setEditingBio] = useState(false);
+
+  const [editedBio, setEditedBio] = useState<string>("");
+
+  const handleSaveBio = (saved: boolean) => {
+    if (saved) {
+      setEditedBio(editedBio);
+      console.log("save the bio in the text field to the user DB object.");
+    }
+    // either button clicked should disable editing mode on user bio
+    setEditingBio(false);
+    // then reset the editor content
+    setEditedBio("");
+  };
 
   // test data
   const petInfo1 = {
@@ -47,9 +65,9 @@ export default function Profile() {
   };
 
   const userInfo = {
-    first: "First",
-    last: "Last",
+    name: "Name",
     username: "username",
+    bio: "Enter more information about yourself...",
     pet1: petInfo1,
     pet2: petInfo2,
   };
@@ -81,6 +99,16 @@ export default function Profile() {
     setCurrentPet(petInfo2);
   }
 
+  function setEditBioMode(): void {
+    setEditingBio(!editingBio);
+  }
+
+  function saveBioEditingContent(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void {
+    setEditedBio(event.currentTarget.value);
+  }
+
   return (
     <>
       <Header />
@@ -94,9 +122,7 @@ export default function Profile() {
           />
           <div id="profileBannerContents">
             <p className="profileName">
-              {onMainProfile
-                ? userInfo.first + " " + userInfo.last
-                : currentPet.name}
+              {onMainProfile ? userInfo.name : currentPet.name}
             </p>
             {onMainProfile ? <p>{userInfo.username}</p> : <br></br>}
             <Button id="settingsButton" onClick={() => navigate("/settings")}>
@@ -110,12 +136,37 @@ export default function Profile() {
               <p>About</p>
               <img src={banner} alt="" />
               <br></br>
-              <p>more stuff here</p>
-              <ul>
-                <li>...</li>
-                <li>...</li>
-                <li>...</li>
-              </ul>
+              <p>
+                <span>More about {userInfo.name}</span>
+                {!editingBio ? (
+                  <Button onClick={setEditBioMode}>
+                    <img src={editIcon} alt="" id="editIcon" />
+                  </Button>
+                ) : (
+                  <SaveAndCancelButtons onAction={handleSaveBio} />
+                )}
+              </p>
+              {userInfo.bio && !editingBio ? (
+                <p style={{ fontSize: "24px" }}>{userInfo.bio}</p>
+              ) : (
+                <TextField
+                  className="input"
+                  variant="filled"
+                  multiline={true}
+                  maxRows={4}
+                  onChange={saveBioEditingContent}
+                  value={editedBio}
+                  placeholder={
+                    userInfo.bio ?? "Enter more information about yourself..."
+                  }
+                  slotProps={{
+                    input: {
+                      disableUnderline: true,
+                      style: { color: "#675844" },
+                    },
+                  }}
+                />
+              )}
             </Container>
             <Container id="petsContainer">
               <p>Pets</p>
@@ -171,7 +222,7 @@ export default function Profile() {
               <div className="evenItem">Birthday: {currentPet.bday}</div>
               <div className="oddItem">Favourite Treat: {currentPet.treat}</div>
               <div className="evenItem">
-                Owner: {userInfo.first} {userInfo.last} - {userInfo.username}
+                Owner: {userInfo.name} - {userInfo.username}
               </div>
               <div className="oddItem">Favourite Toy: {currentPet.toy}</div>
             </div>

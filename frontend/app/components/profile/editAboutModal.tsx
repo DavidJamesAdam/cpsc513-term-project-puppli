@@ -15,9 +15,9 @@ interface EditAboutModalProps {
     toy: string;
   };
   userInfo: {
-    first: string;
-    last: string;
+    name: string;
     username: string;
+    bio: string;
     pet1?: {
       name: string;
       breed: string;
@@ -263,7 +263,7 @@ export default function EditAboutModal({
             <br></br>
             <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
               <p style={{ fontSize: "24px" }}>
-                Owner: {userInfo.first} {userInfo.last} - {userInfo.username}
+                Owner: {userInfo.name} - {userInfo.username}
               </p>
             </div>
             <br></br>

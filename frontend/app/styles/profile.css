@@ -40,6 +40,18 @@ p {
     "posts posts posts";
 }
 
+@media screen and (max-width: 500px) {
+  .grid-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #aboutContainer {
+    grid-area: about;
+    padding-bottom: 70px;
+  }
+}
+
 #aboutContainer {
   grid-area: about;
 }
@@ -134,4 +146,12 @@ li {
 
 #settingsButton {
   padding: 0;
+}
+
+.input {
+  background-color: var(--bg-color);
+  border-radius: 100px;
+  padding: 10px;
+  max-height: 59px;
+  border-bottom: "none";
 }
