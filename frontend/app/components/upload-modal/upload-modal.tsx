@@ -1,9 +1,8 @@
-import * as React from "react";
+import React, { useRef, useState } from "react";
 import "./styles.css";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 
 type UploadModalProps = {
   open?: boolean;
@@ -12,18 +11,44 @@ type UploadModalProps = {
   hideTrigger?: boolean;
 };
 
-export default function UploadModal({ open: propOpen, onOpen, onClose, hideTrigger }: UploadModalProps) {
+export default function UploadModal({
+  open: propOpen,
+  onOpen,
+  onClose,
+  hideTrigger,
+}: UploadModalProps) {
   const [internalOpen, setInternalOpen] = React.useState(false);
+  const [image, setImage] = useState(null);
   const isControlled = propOpen !== undefined;
   const open = isControlled ? propOpen! : internalOpen;
+  const fileInputRef = useRef(null);
   const handleOpen = () => {
     if (onOpen) onOpen();
     if (!isControlled) setInternalOpen(true);
   };
+
   const handleClose = () => {
     if (onClose) onClose();
     if (!isControlled) setInternalOpen(false);
   };
+
+  const handleFileBrowser = () => {
+    fileInputRef.current.click();
+  };
+
+  const handlePicturePreview = (event) => {
+    const selectedFile = event.target.files[0];
+    if (event.target.files && event.target.files[0]) {
+      console.log("Selected file:", selectedFile.name);
+      // You can now process the selected file, e.g., upload it
+      setImage(URL.createObjectURL(event.target.files[0]));
+    }
+  };
+
+  const handlePictureUpload = () => {
+    setImage(null);
+    handleClose();
+  }
 
   const modalStyle = {
     borderRadius: "40px",
@@ -43,7 +68,7 @@ export default function UploadModal({ open: propOpen, onOpen, onClose, hideTrigg
   const openButtonStyle = {
     fontFamily: "inherit",
     fontSize: "inherit",
-    height: 'inherit',
+    height: "inherit",
     textTransform: "capitalize",
     color: "inherit",
     gap: "0.75rem",
@@ -105,7 +130,7 @@ export default function UploadModal({ open: propOpen, onOpen, onClose, hideTrigg
             <Button
               id="uploadButton"
               sx={uploadButtonStyle}
-              onClick={handleClose}
+              onClick={handlePictureUpload}
             >
               Upload
             </Button>
@@ -116,42 +141,24 @@ export default function UploadModal({ open: propOpen, onOpen, onClose, hideTrigg
               />
             </Button>
           </div>
-          <Grid container spacing={4}>
-            <Grid
-              size={12}
-              style={{
-                borderRadius: "40px",
-                border: "1px solid rgba(255, 132, 164, 1)",
-              }}
-            >
-              Picture
-            </Grid>
-            <Grid size={3} sx={pictureSmall}>
-              Picture
-            </Grid>
-            <Grid size={3} sx={pictureSmall}>
-              Picture
-            </Grid>
-            <Grid size={3} sx={pictureSmall}>
-              Picture
-            </Grid>
-            <Grid size={3} sx={pictureSmall}>
-              Picture
-            </Grid>
-            <Grid size={3} sx={pictureSmall}>
-              Picture
-            </Grid>
-            <Grid size={3} sx={pictureSmall}>
-              Picture
-            </Grid>
-            <Grid size={3} sx={pictureSmall}>
-              Picture
-            </Grid>
-            <Grid size={3} sx={pictureSmall}>
-              Picture
-            </Grid>
-          </Grid>
-          <Button sx={uploadButtonStyle}>More</Button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handlePicturePreview}
+          />
+          <img
+            src={image}
+            style={{
+              width: "50%",
+              borderRadius: "40px",
+              border: "1px solid rgba(255, 132, 164, 1)",
+            }}
+            alt="Placeholder image"
+          />
+          <Button sx={uploadButtonStyle} onClick={handleFileBrowser}>
+            Select Picture
+          </Button>
         </Box>
       </Modal>
     </div>
