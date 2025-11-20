@@ -4,12 +4,12 @@ import Modal from "@mui/material/Modal";
 import SettingOption from "../settings/settingOption";
 import Box from "@mui/material/Box";
 
-export default function ChangePasswordModal() {
+export default function ChangeUsernameModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleSubmit = () => {
-    // This function would send off the user's request to change password
+    // This function would send off the user's request to change username
     setOpen(false);
   };
 
@@ -21,6 +21,7 @@ export default function ChangePasswordModal() {
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
+    justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "rgba(224, 205, 178, 1)",
     position: "absolute",
@@ -54,13 +55,13 @@ export default function ChangePasswordModal() {
   return (
     <div>
       <Button onClick={handleOpen} sx={openButtonStyle}>
-        <SettingOption settingName={"Change password"}></SettingOption>
+        <SettingOption settingName={"Change username"}></SettingOption>
       </Button>
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="Password Change modal"
-        aria-describedby="Modal that allows user to change password"
+        aria-labelledby="Change Username modal"
+        aria-describedby="Modal that allows user to change their username"
       >
         <Box sx={modalStyle}>
           <div
@@ -87,7 +88,7 @@ export default function ChangePasswordModal() {
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-evenly",
-              margin: '10px'
+              margin: "10px",
             }}
           >
             <div
@@ -96,25 +97,24 @@ export default function ChangePasswordModal() {
                 flexDirection: "column",
                 margin: 0,
                 gap: "8px",
-                // width: "100%",
+                width: "100%",
               }}
             >
               <label
-                htmlFor="currentPass"
-                style={{ paddingLeft: "15px", fontSize: "calc(1vh + 1vw)" }}
+                htmlFor="newUsername"
+                style={{ paddingLeft: "15px", fontSize: "2vw" }}
               >
-                Please enter current password:
+                Please enter new Username:
               </label>
               <input
                 type="text"
-                name="currentPass"
+                name="newUsername"
                 style={{
                   border: "1px solid rgba(255, 132, 164, 1)",
                   borderRadius: "100px",
                   backgroundColor: "white",
-                  // width: "100%",
+                  width: "100%",
                   padding: "8px 12px",
-                  fontSize: "1vw",
                   boxSizing: "border-box",
                 }}
               />
@@ -128,52 +128,21 @@ export default function ChangePasswordModal() {
               }}
             >
               <label
-                htmlFor="newPass"
-                style={{ paddingLeft: "15px", fontSize: "calc(1vh + 1vw)" }}
+                htmlFor="confirmPass"
+                style={{ paddingLeft: "15px", fontSize: "2vw" }}
               >
-                Please enter new password:
+                Please confirm current password:
               </label>
               <input
                 type="text"
-                name="newPass"
+                name="confirmPass"
                 style={{
                   border: "1px solid rgba(255, 132, 164, 1)",
                   borderRadius: "100px",
                   backgroundColor: "white",
                   width: "100%",
-                  height: "100%",
                   padding: "8px 12px",
                   boxSizing: "border-box",
-                  fontSize: "1vw",
-                }}
-              />
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                margin: 0,
-                gap: "8px",
-              }}
-            >
-              <label
-                htmlFor="reenterPass"
-                style={{ paddingLeft: "15px", fontSize: "calc(1vh + 1vw)" }}
-              >
-                Please re-enter new password:
-              </label>
-              <input
-                type="text"
-                name="reenterPass"
-                style={{
-                  border: "1px solid rgba(255, 132, 164, 1)",
-                  borderRadius: "100px",
-                  backgroundColor: "white",
-                  width: "100%",
-                  height: "100%",
-                  padding: "8px 12px",
-                  boxSizing: "border-box",
-                  fontSize: "calc(.5vw + 1vh)",
                 }}
               />
             </div>
