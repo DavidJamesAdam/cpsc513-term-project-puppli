@@ -79,25 +79,19 @@ export default function UploadModal({
 
   const closeButtonStyle = {
     display: "flex",
-    padding: 0,
     borderRadius: "100px",
     height: "100%",
   };
 
-  const uploadButtonStyle = {
+  const buttonStyle = {
     borderRadius: "100px",
     border: "1px solid rgba(147, 191, 191, 1)",
     backgroundColor: "rgba(179, 232, 232, 1)",
     color: "inherit",
     font: "inherit",
     display: "flex",
-    justifyContent: "flex-end",
+    minWidth: '30%',
     margin: "10px",
-  };
-
-  const pictureSmall = {
-    borderRadius: "40px",
-    border: "1px solid rgba(255, 132, 164, 1)",
   };
 
   return (
@@ -123,19 +117,11 @@ export default function UploadModal({
               width: "100%",
               height: "10%",
               display: "flex",
-              justifyContent: "space-between",
-              marginTop: "2%",
-              marginRight: "5%",
-              marginLeft: "5%",
+              justifyContent: "flex-end",
+              marginRight: "2%",
+              marginLeft: "2%",
             }}
           >
-            <Button
-              id="uploadButton"
-              sx={uploadButtonStyle}
-              onClick={handlePictureUpload}
-            >
-              Upload
-            </Button>
             <Button sx={closeButtonStyle} onClick={handleClose}>
               <img
                 style={{ height: "100%" }}
@@ -154,8 +140,8 @@ export default function UploadModal({
             style={{
               width: "auto",
               height: "auto",
-              maxWidth: '80%',
-              maxHeight: '70%',
+              maxWidth: "80%",
+              maxHeight: "70%",
               borderRadius: "40px",
               border: "1px solid rgba(255, 132, 164, 1)",
               backgroundColor: "rgba(217, 217, 217, 1)",
@@ -172,9 +158,24 @@ export default function UploadModal({
               alt="Image Preview"
             />
           </div>
-          <Button sx={uploadButtonStyle} onClick={handleFileBrowser}>
-            Select Picture
-          </Button>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: '30%',
+            marginBottom: '10px'
+          }}>
+            <Button sx={buttonStyle} onClick={handleFileBrowser}>
+              Select Picture
+            </Button>
+            <Button
+              id="uploadButton"
+              sx={buttonStyle}
+              onClick={handlePictureUpload}
+            >
+              Upload
+            </Button>
+          </div>
         </Box>
       </Modal>
     </div>
