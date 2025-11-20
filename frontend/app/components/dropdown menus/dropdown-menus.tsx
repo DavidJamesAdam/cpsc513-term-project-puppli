@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import UploadModal from "../upload-modal/upload-modal";
 
 export function MainNavMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [uploadOpen, setUploadOpen] = React.useState(false);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -67,13 +69,17 @@ export function MainNavMenu() {
             Rankings
           </Link>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={() => {
+            // Close the menu, then open the modal rendered outside the Menu
+            handleClose();
+            setUploadOpen(true);
+          }}
+        >
           <div className="menu-icon">
             <img src="assets\icons\Upload icon.svg" />
           </div>
-          <Link className="menu-text" to="/upload">
-            Upload
-          </Link>
+          <div className="menu-text">Upload</div>
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <div className="menu-icon">
@@ -84,9 +90,13 @@ export function MainNavMenu() {
           </Link>
         </MenuItem>
       </Menu>
+      {/* Render modal outside the Menu so it isn't unmounted when the Menu closes */}
+      <UploadModal open={uploadOpen} onClose={() => setUploadOpen(false)} hideTrigger />
     </div>
   );
 }
+
+// (UploadModal is rendered from inside MainNavMenu so closing the Menu doesn't unmount it)
 
 export function NotificationMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
