@@ -155,6 +155,7 @@ li {
   text-transform: none;
   font-family: inherit;
   font-size: 32px;
+  margin: 10px;
 }
 
 #settingsButton {
@@ -175,4 +176,8 @@ li {
   text-transform: none;
   font-family: inherit;
   font-size: 32px;
+}
+
+#petInfoContainer {
+  padding-top: 50px;
 }

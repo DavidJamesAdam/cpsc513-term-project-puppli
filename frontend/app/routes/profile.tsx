@@ -36,7 +36,7 @@ export default function Profile() {
     toy: "Ball",
   });
 
- const [petInfo2, setPetInfo2] = useState({
+  const [petInfo2, setPetInfo2] = useState({
     name: "",
     breed: "",
     bday: "",
@@ -48,6 +48,9 @@ export default function Profile() {
     name: "Name",
     username: "username",
     bio: "About me!!!!",
+    first: 4,
+    second: 7,
+    third: 0,
     pet1: petInfo1,
     pet2: petInfo2,
   });
@@ -96,7 +99,9 @@ export default function Profile() {
   };
 
   const [editingPetName, setEditingPetName] = useState(false);
-  const [editedPetName, setEditedPetName] = useState<string>(onPetOneSubPage ? petInfo1.name : petInfo2.name);
+  const [editedPetName, setEditedPetName] = useState<string>(
+    onPetOneSubPage ? petInfo1.name : petInfo2.name
+  );
 
   const handleSavePetName = (saved: boolean) => {
     if (saved) {
@@ -177,6 +182,13 @@ export default function Profile() {
     <>
       <Header />
       <main style={{ backgroundColor: "var{--bg-color}" }}>
+        {!onMainProfile && (
+          <div style={{ backgroundColor: "#e0cdb2" }}>
+            <Button id="backButton" onClick={changeProfilePage}>
+              ← Back
+            </Button>
+          </div>
+        )}
         <div id="profileBanner">
           <img
             src={
@@ -191,62 +203,82 @@ export default function Profile() {
                   <p className="profileName">
                     {userInfo.name}
                     <Button onClick={setEditNameMode}>
-                    <img src={editIcon} alt="" id="editIcon" style={{ scale: "85%" }} />
-                  </Button>
+                      <img
+                        src={editIcon}
+                        alt=""
+                        id="editIcon"
+                        style={{ scale: "85%" }}
+                      />
+                    </Button>
                   </p>
                 </>
-              ) : onMainProfile && (
-                <>              
-                <TextField
-                  className="input"
-                  variant="standard"
-                  onChange={saveNameEditingContent}
-                  value={editedName}
-                  placeholder={userInfo.name ?? "Enter your name..."}
-                  slotProps={{
-                    input: {
-                      disableUnderline: true,
-                      style: { color: "#675844" },
-                    },
-                    htmlInput: { maxLength: maxCharacters },
-                  }}
-                />
-                <SaveAndCancelButtons onAction={handleSaveName} />
-                </>
+              ) : (
+                onMainProfile && (
+                  <>
+                    <TextField
+                      className="input"
+                      variant="standard"
+                      onChange={saveNameEditingContent}
+                      value={editedName}
+                      placeholder={userInfo.name ?? "Enter your name..."}
+                      slotProps={{
+                        input: {
+                          disableUnderline: true,
+                          style: { color: "#675844" },
+                        },
+                        htmlInput: { maxLength: maxCharacters },
+                      }}
+                    />
+                    <SaveAndCancelButtons onAction={handleSaveName} />
+                  </>
+                )
               )}
               {!onMainProfile && !editingPetName ? (
                 <>
                   <p className="profileName">
                     {onPetOneSubPage ? petInfo1.name : petInfo2.name}
                     <Button onClick={setEditPetNameMode}>
-                    <img src={editIcon} alt="" id="editIcon" style={{ scale: "85%" }} />
-                  </Button>
+                      <img
+                        src={editIcon}
+                        alt=""
+                        id="editIcon"
+                        style={{ scale: "85%" }}
+                      />
+                    </Button>
                   </p>
                 </>
-              ) : !onMainProfile && (
-                <>              
-                <TextField
-                  className="input"
-                  variant="standard"
-                  onChange={savePetNameEditingContent}
-                  value={editedPetName}
-                  placeholder={(onPetOneSubPage ? petInfo1.name : petInfo2.name) ?? "Enter your pet's name..."}
-                  slotProps={{
-                    input: {
-                      disableUnderline: true,
-                      style: { color: "#675844" },
-                    },
-                    htmlInput: { maxLength: maxCharacters },
-                  }}
-                />
-                <SaveAndCancelButtons onAction={handleSavePetName} />
-                </>
+              ) : (
+                !onMainProfile && (
+                  <>
+                    <TextField
+                      className="input"
+                      variant="standard"
+                      onChange={savePetNameEditingContent}
+                      value={editedPetName}
+                      placeholder={
+                        (onPetOneSubPage ? petInfo1.name : petInfo2.name) ??
+                        "Enter your pet's name..."
+                      }
+                      slotProps={{
+                        input: {
+                          disableUnderline: true,
+                          style: { color: "#675844" },
+                        },
+                        htmlInput: { maxLength: maxCharacters },
+                      }}
+                    />
+                    <SaveAndCancelButtons onAction={handleSavePetName} />
+                  </>
+                )
               )}
             </p>
             {onMainProfile && (
               <>
                 <p>{userInfo.username}</p>
-                <Button id="settingsButton" onClick={() => navigate("/settings")}>
+                <Button
+                  id="settingsButton"
+                  onClick={() => navigate("/settings")}
+                >
                   <img src={settingsIcon} alt="" />
                 </Button>
               </>
@@ -333,11 +365,14 @@ export default function Profile() {
             />
             <div id="postsContainerUser">
               <p style={{ display: "flex" }}>
-                <Button id="petUploadButton" onClick={() => {
-                  // Close the menu, then open the modal rendered outside the Menu
-                  handleClose();
-                  setUploadOpen(true);
-                }}>
+                <Button
+                  id="petUploadButton"
+                  onClick={() => {
+                    // Close the menu, then open the modal rendered outside the Menu
+                    handleClose();
+                    setUploadOpen(true);
+                  }}
+                >
                   Upload <img src={postIcon} alt="" id="postIcon" />
                 </Button>
               </p>
@@ -345,9 +380,6 @@ export default function Profile() {
           </div>
         ) : (
           <>
-            <div className="banner">
-              <img src={banner} alt="" />
-            </div>
             <div id="petInfoContainer">
               <EditAboutModal petInfo={currentPet} userInfo={userInfo} />
               <div className="oddItem">Breed: {currentPet.breed}</div>
@@ -370,21 +402,25 @@ export default function Profile() {
             />
             <div id="postsContainer">
               <p style={{ display: "flex" }}>
-                <Button id="petUploadButton" onClick={() => {
-                  // Close the menu, then open the modal rendered outside the Menu
-                  handleClose();
-                  setUploadOpen(true);
-                }}>
+                <Button
+                  id="petUploadButton"
+                  onClick={() => {
+                    // Close the menu, then open the modal rendered outside the Menu
+                    handleClose();
+                    setUploadOpen(true);
+                  }}
+                >
                   Upload <img src={postIcon} alt="" id="postIcon" />
                 </Button>
               </p>
-              <Button id="backButton" onClick={changeProfilePage}>
-                Back
-              </Button>
             </div>
           </>
         )}
-        <UploadModal open={uploadOpen} onClose={() => setUploadOpen(false)} hideTrigger />
+        <UploadModal
+          open={uploadOpen}
+          onClose={() => setUploadOpen(false)}
+          hideTrigger
+        />
       </main>
     </>
   );

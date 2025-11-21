@@ -18,6 +18,9 @@ interface EditAboutModalProps {
     name: string;
     username: string;
     bio: string;
+    first: number;
+    second: number;
+    third: number;
     pet1?: {
       name: string;
       breed: string;
