@@ -35,7 +35,7 @@ export default function CommentModal() {
     textTransform: "capitalize",
     color: "inherit",
     gap: "0.75rem",
-    padding: 0,
+    padding: '8px',
   };
 
   const closeButtonStyle = {

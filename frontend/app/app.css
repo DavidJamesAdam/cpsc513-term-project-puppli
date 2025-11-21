@@ -76,48 +76,12 @@
 }
 
 .voting-page{
-  width: 100%;
+  width: auto;
   height: 100%;
-  background-color: rgba(245, 240, 234, 1);
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  /* background-color: 'var{--bg-color}'; */
-}
-
-.voting-card {
-  border: 1px solid rgba(255, 132, 164, 1);
-  width: 459px;
-  height: 505px;
-  border-radius: 40px;
-  background-color: rgba(224, 205, 178, 1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.picture {
-  border: 1px solid;
-  border-radius: 40px;
-  width: 75%;
-  height: 75%;
-  margin: 20px;
-  background-color: rgba(217, 217, 217, 1);
-}
-
-.voting-card-options {
-  display: flex;
-  flex-direction: row;
-  width: 50%;
-  height: 20%;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.voting-card-options .MuiButtonBase-root {
-  border-radius: 15px;
 }
 
 html,
@@ -145,5 +109,5 @@ body {
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
-  height: 100%;
+
 }
