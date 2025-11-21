@@ -288,7 +288,7 @@ export default function Profile() {
         {onMainProfile ? (
           <div className="grid-container">
             <Container id="aboutContainer">
-              <p>About</p>
+              <p>Awards</p>
               <ProfileBanner
                 first={userInfo.first}
                 second={userInfo.second}
