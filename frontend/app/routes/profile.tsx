@@ -58,6 +58,8 @@ export default function Profile() {
     setAnchorEl(null);
   };
 
+  const maxCharacters = 50;
+
   const navigate = useNavigate();
 
   const [onMainProfile, setOnMainProfile] = useState(true);
@@ -206,7 +208,7 @@ export default function Profile() {
                       disableUnderline: true,
                       style: { color: "#675844" },
                     },
-                    htmlInput: { maxLength: 50 },
+                    htmlInput: { maxLength: maxCharacters },
                   }}
                 />
                 <SaveAndCancelButtons onAction={handleSaveName} />
@@ -234,7 +236,7 @@ export default function Profile() {
                       disableUnderline: true,
                       style: { color: "#675844" },
                     },
-                    htmlInput: { maxLength: 50 },
+                    htmlInput: { maxLength: maxCharacters },
                   }}
                 />
                 <SaveAndCancelButtons onAction={handleSavePetName} />

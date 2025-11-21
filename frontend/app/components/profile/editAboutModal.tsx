@@ -46,6 +46,7 @@ export default function EditAboutModal({
     // This function would send off the user's request to update the pets information
     setOpen(false);
   };
+  const maxCharacters = 50;
 
   const modalStyle = {
     textAlign: "left",
@@ -221,6 +222,7 @@ export default function EditAboutModal({
                   disableUnderline: true,
                   style: { color: "#675844" },
                 },
+                htmlInput: { maxLength: maxCharacters },
               }}
             />
             <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
@@ -238,6 +240,7 @@ export default function EditAboutModal({
                   disableUnderline: true,
                   style: { color: "#675844" },
                 },
+                htmlInput: { maxLength: maxCharacters },
               }}
             />
             <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
@@ -255,6 +258,7 @@ export default function EditAboutModal({
                   disableUnderline: true,
                   style: { color: "#675844" },
                 },
+                htmlInput: { maxLength: maxCharacters },
               }}
             />
             <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
@@ -278,6 +282,7 @@ export default function EditAboutModal({
                   disableUnderline: true,
                   style: { color: "#675844" },
                 },
+                htmlInput: { maxLength: maxCharacters },
               }}
             />
             <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
