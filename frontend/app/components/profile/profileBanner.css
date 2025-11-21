@@ -1,0 +1,31 @@
+.banner {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: #ffc2cf;
+  border-radius: 100px;
+  padding: 20px;
+}
+
+.award {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 30px;
+}
+
+.icon {
+  scale: 75%;
+}
+
+p {
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 500px) {
+  .banner {
+    flex-direction: column;
+  }
+}

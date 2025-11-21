@@ -18,6 +18,7 @@ import TextField from "@mui/material/TextField";
 import editIcon from "../components/settings/icons/username.svg";
 import SaveAndCancelButtons from "~/components/saveAndCancelButtons";
 import UploadModal from "~/components/upload-modal/upload-modal";
+import ProfileBanner from "~/components/profile/profileBanner";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -289,7 +290,11 @@ export default function Profile() {
           <div className="grid-container">
             <Container id="aboutContainer">
               <p>About</p>
-              <img src={banner} alt="" />
+              <ProfileBanner
+                first={userInfo.first}
+                second={userInfo.second}
+                third={userInfo.third}
+              />
               <br></br>
               <p>
                 <span>More about {userInfo.name}</span>
