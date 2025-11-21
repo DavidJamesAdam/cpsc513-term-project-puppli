@@ -206,6 +206,7 @@ export default function Profile() {
                       disableUnderline: true,
                       style: { color: "#675844" },
                     },
+                    htmlInput: { maxLength: 50 },
                   }}
                 />
                 <SaveAndCancelButtons onAction={handleSaveName} />
@@ -233,6 +234,7 @@ export default function Profile() {
                       disableUnderline: true,
                       style: { color: "#675844" },
                     },
+                    htmlInput: { maxLength: 50 },
                   }}
                 />
                 <SaveAndCancelButtons onAction={handleSavePetName} />
@@ -279,7 +281,9 @@ export default function Profile() {
                       disableUnderline: true,
                       style: { color: "#675844" },
                     },
+                    htmlInput: { maxLength: 200 },
                   }}
+                  helperText="Max 200 characters"
                 />
               )}
             </Container>

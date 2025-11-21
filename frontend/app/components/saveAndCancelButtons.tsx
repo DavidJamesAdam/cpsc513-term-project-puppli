@@ -16,6 +16,8 @@ export default function SaveAndCancelButtons({
     justifyContent: "flex-end",
     textTransform: "none",
     fontSize: "24px",
+    borderRadius: "30px",
+    padding: "10px",
   };
 
   const cancelButtonStyle = {
@@ -26,6 +28,8 @@ export default function SaveAndCancelButtons({
     justifyContent: "flex-end",
     textTransform: "none",
     fontSize: "24px",
+    borderRadius: "30px",
+    padding: "10px",
   };
 
   const buttonGroupStyle = {

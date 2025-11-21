@@ -53,7 +53,7 @@ p {
 
   #aboutContainer {
     grid-area: about;
-    padding-bottom: 70px;
+    padding-bottom: 120px;
   }
 
   .nameEditor {
