@@ -17,6 +17,8 @@
 
 The `seed_database.py` script populates the Firestore database with initial test data for development purposes (5 users, 10 pets, 10 posts).
 
+The `clear_database.py` script is for **testing purposes only** and removes all documents from specified Firestore collections (users, pets, posts).
+
 ### Seed Data Structures
 
 **User:**
