@@ -3,8 +3,10 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import SettingOption from "../settings/settingOption";
 import Box from "@mui/material/Box";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function ChangeUsernameModal() {
+  const matches = useMediaQuery("(min-width: 600px)");
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -17,7 +19,7 @@ export default function ChangeUsernameModal() {
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
     width: "50%",
-    height: "auto",
+    height: "40%",
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
@@ -26,6 +28,20 @@ export default function ChangeUsernameModal() {
     backgroundColor: "rgba(224, 205, 178, 1)",
     position: "absolute",
     transform: "translate(50%, 50%)",
+  };
+
+  const modalStyleMobile = {
+    borderRadius: "40px",
+    border: "1px solid rgba(255, 132, 164, 1)",
+    width: "100%",
+    height: "35%",
+    boxShadow: "5px 10px 10px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    backgroundColor: "rgba(224, 205, 178, 1)",
+    position: "absolute",
+    transform: "translate(0%, 80%)",
   };
 
   const openButtonStyle = {
@@ -53,112 +69,224 @@ export default function ChangeUsernameModal() {
   };
 
   return (
-    <div>
-      <Button onClick={handleOpen} sx={openButtonStyle}>
-        <SettingOption settingName={"Change username"}></SettingOption>
-      </Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="Change Username modal"
-        aria-describedby="Modal that allows user to change their username"
-      >
-        <Box sx={modalStyle}>
-          <div
-            style={{
-              width: "100%",
-              height: "10%",
-              display: "flex",
-              justifyContent: "flex-end",
-              marginTop: "2%",
-              marginRight: "2%",
-            }}
+    <>
+      {matches ? (
+        <div>
+          <Button onClick={handleOpen} sx={openButtonStyle}>
+            <SettingOption settingName={"Change username"}></SettingOption>
+          </Button>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="Change Username modal"
+            aria-describedby="Modal that allows user to change their username"
           >
-            <Button sx={closeButtonStyle} onClick={handleClose}>
-              <img
-                style={{ height: "100%" }}
-                src="assets\icons\Close icon.svg"
-              />
-            </Button>
-          </div>
-          <form
-            style={{
-              height: "100%",
-              width: "80%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-evenly",
-              margin: "10px",
-            }}
+            <Box sx={modalStyle}>
+              <div
+                style={{
+                  width: "100%",
+                  height: "10%",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: "2%",
+                  marginRight: "2%",
+                }}
+              >
+                <Button sx={closeButtonStyle} onClick={handleClose}>
+                  <img
+                    style={{ height: "100%" }}
+                    src="assets\icons\Close icon.svg"
+                  />
+                </Button>
+              </div>
+              <form
+                style={{
+                  height: "100%",
+                  width: "80%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-evenly",
+                  margin: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    margin: 0,
+                    gap: "8px",
+                    width: "100%",
+                  }}
+                >
+                  <label
+                    htmlFor="newUsername"
+                    style={{ paddingLeft: "15px", fontSize: "2vw" }}
+                  >
+                    Please enter new Username:
+                  </label>
+                  <input
+                    type="text"
+                    name="newUsername"
+                    style={{
+                      border: "1px solid rgba(255, 132, 164, 1)",
+                      borderRadius: "100px",
+                      backgroundColor: "white",
+                      width: "100%",
+                      padding: "8px 12px",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    margin: 0,
+                    gap: "8px",
+                  }}
+                >
+                  <label
+                    htmlFor="confirmPass"
+                    style={{ paddingLeft: "15px", fontSize: "2vw" }}
+                  >
+                    Please confirm current password:
+                  </label>
+                  <input
+                    type="text"
+                    name="confirmPass"
+                    style={{
+                      border: "1px solid rgba(255, 132, 164, 1)",
+                      borderRadius: "100px",
+                      backgroundColor: "white",
+                      width: "100%",
+                      padding: "8px 12px",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <Button
+                    variant="contained"
+                    id="submit"
+                    sx={submitButtonStyle}
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </Button>
+                </div>
+              </form>
+            </Box>
+          </Modal>
+        </div>
+      ) : (
+        <div>
+          <Button onClick={handleOpen} sx={openButtonStyle}>
+            <SettingOption settingName={"Change username"}></SettingOption>
+          </Button>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="Change Username modal"
+            aria-describedby="Modal that allows user to change their username"
           >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                margin: 0,
-                gap: "8px",
-                width: "100%",
-              }}
-            >
-              <label
-                htmlFor="newUsername"
-                style={{ paddingLeft: "15px", fontSize: "2vw" }}
-              >
-                Please enter new Username:
-              </label>
-              <input
-                type="text"
-                name="newUsername"
+            <Box sx={modalStyleMobile}>
+              <div
                 style={{
-                  border: "1px solid rgba(255, 132, 164, 1)",
-                  borderRadius: "100px",
-                  backgroundColor: "white",
                   width: "100%",
-                  padding: "8px 12px",
-                  boxSizing: "border-box",
+                  height: "10%",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: "2%",
+                  marginRight: "2%",
                 }}
-              />
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                margin: 0,
-                gap: "8px",
-              }}
-            >
-              <label
-                htmlFor="confirmPass"
-                style={{ paddingLeft: "15px", fontSize: "2vw" }}
               >
-                Please confirm current password:
-              </label>
-              <input
-                type="text"
-                name="confirmPass"
+                <Button sx={closeButtonStyle} onClick={handleClose}>
+                  <img
+                    style={{ height: "100%" }}
+                    src="assets\icons\Close icon.svg"
+                  />
+                </Button>
+              </div>
+              <form
                 style={{
-                  border: "1px solid rgba(255, 132, 164, 1)",
-                  borderRadius: "100px",
-                  backgroundColor: "white",
-                  width: "100%",
-                  padding: "8px 12px",
-                  boxSizing: "border-box",
+                  height: "100%",
+                  width: "80%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-evenly",
+                  margin: "10px",
                 }}
-              />
-            </div>
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button
-                variant="contained"
-                id="submit"
-                sx={submitButtonStyle}
-                onClick={handleSubmit}
               >
-                Submit
-              </Button>
-            </div>
-          </form>
-        </Box>
-      </Modal>
-    </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    margin: 0,
+                    gap: "8px",
+                    width: "100%",
+                  }}
+                >
+                  <label
+                    htmlFor="newUsername"
+                    style={{ paddingLeft: "15px", fontSize: "2vw" }}
+                  >
+                    Please enter new Username:
+                  </label>
+                  <input
+                    type="text"
+                    name="newUsername"
+                    style={{
+                      border: "1px solid rgba(255, 132, 164, 1)",
+                      borderRadius: "100px",
+                      backgroundColor: "white",
+                      width: "100%",
+                      padding: "8px 12px",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    margin: 0,
+                    gap: "8px",
+                  }}
+                >
+                  <label
+                    htmlFor="confirmPass"
+                    style={{ paddingLeft: "15px", fontSize: "2vw" }}
+                  >
+                    Please confirm current password:
+                  </label>
+                  <input
+                    type="text"
+                    name="confirmPass"
+                    style={{
+                      border: "1px solid rgba(255, 132, 164, 1)",
+                      borderRadius: "100px",
+                      backgroundColor: "white",
+                      width: "100%",
+                      padding: "8px 12px",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <Button
+                    variant="contained"
+                    id="submit"
+                    sx={submitButtonStyle}
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </Button>
+                </div>
+              </form>
+            </Box>
+          </Modal>
+        </div>
+      )}
+    </>
   );
 }

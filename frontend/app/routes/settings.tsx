@@ -45,8 +45,6 @@ export default function Settings() {
           </div>
           <FAQModal/>
           <div className="options">
-              <img src={aboutIcon} alt="" />
-              <h1 className="optionTitle">About</h1>
               <span id="version">Version: {version}</span>
           </div>
         </div>
