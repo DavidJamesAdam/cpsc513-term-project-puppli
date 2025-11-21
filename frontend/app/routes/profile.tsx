@@ -17,6 +17,7 @@ import CreateSubProfileModal from "~/components/profile/createSubProfileModal";
 import TextField from "@mui/material/TextField";
 import editIcon from "../components/settings/icons/username.svg";
 import SaveAndCancelButtons from "~/components/saveAndCancelButtons";
+import UploadModal from "~/components/upload-modal/upload-modal";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -50,6 +51,12 @@ export default function Profile() {
     pet1: petInfo1,
     pet2: petInfo2,
   });
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [uploadOpen, setUploadOpen] = useState(false);
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const navigate = useNavigate();
 
@@ -259,8 +266,15 @@ export default function Profile() {
               }}
             />
             <div id="postsContainerUser">
-              <p>Upload</p>
-              <img src={postIcon} alt="" id="postIcon" />
+              <p style={{ display: "flex" }}>
+                <Button id="petUploadButton" onClick={() => {
+                  // Close the menu, then open the modal rendered outside the Menu
+                  handleClose();
+                  setUploadOpen(true);
+                }}>
+                  Upload <img src={postIcon} alt="" id="postIcon" />
+                </Button>
+              </p>
             </div>
           </div>
         ) : (
@@ -290,7 +304,13 @@ export default function Profile() {
             />
             <div id="postsContainer">
               <p style={{ display: "flex" }}>
-                Upload <img src={postIcon} alt="" id="postIcon" />
+                <Button id="petUploadButton" onClick={() => {
+                  // Close the menu, then open the modal rendered outside the Menu
+                  handleClose();
+                  setUploadOpen(true);
+                }}>
+                  Upload <img src={postIcon} alt="" id="postIcon" />
+                </Button>
               </p>
               <Button id="backButton" onClick={changeProfilePage}>
                 Back
@@ -298,6 +318,7 @@ export default function Profile() {
             </div>
           </>
         )}
+        <UploadModal open={uploadOpen} onClose={() => setUploadOpen(false)} hideTrigger />
       </main>
     </>
   );

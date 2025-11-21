@@ -140,7 +140,7 @@ li {
   padding-right: 30px;
   color: var(--font-color);
   text-transform: none;
-  font-family: "Itim";
+  font-family: inherit;
   font-size: 32px;
 }
 
@@ -154,4 +154,12 @@ li {
   padding: 10px;
   max-height: 59px;
   border-bottom: "none";
+}
+
+#petUploadButton {
+  padding-right: 30px;
+  color: var(--font-color);
+  text-transform: none;
+  font-family: inherit;
+  font-size: 32px;
 }
