@@ -241,10 +241,14 @@ export default function Profile() {
                 </>
               )}
             </p>
-            {onMainProfile ? <p>{userInfo.username}</p> : <br></br>}
-            <Button id="settingsButton" onClick={() => navigate("/settings")}>
-              <img src={settingsIcon} alt="" />
-            </Button>
+            {onMainProfile && (
+              <>
+                <p>{userInfo.username}</p>
+                <Button id="settingsButton" onClick={() => navigate("/settings")}>
+                  <img src={settingsIcon} alt="" />
+                </Button>
+              </>
+            )}
           </div>
         </div>
         {onMainProfile ? (
