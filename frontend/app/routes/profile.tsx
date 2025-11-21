@@ -28,21 +28,21 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Profile() {
   // test data
-  const petInfo1 = {
+  const [petInfo1, setPetInfo1] = useState({
     name: "Pet 1",
     breed: "Golden Retriver",
     bday: "March 5",
     treat: "Bone",
     toy: "Ball",
-  };
+  });
 
-  const petInfo2 = {
+ const [petInfo2, setPetInfo2] = useState({
     name: "",
     breed: "",
     bday: "",
     treat: "",
     toy: "",
-  };
+  });
 
   const [userInfo, setUserInfo] = useState({
     name: "Name",
@@ -93,6 +93,27 @@ export default function Profile() {
     setEditedName(userInfo.name);
   };
 
+  const [editingPetName, setEditingPetName] = useState(false);
+  const [editedPetName, setEditedPetName] = useState<string>(onPetOneSubPage ? petInfo1.name : petInfo2.name);
+
+  const handleSavePetName = (saved: boolean) => {
+    if (saved) {
+      setEditedPetName(editedPetName);
+      // update local object (since data from DB is not available yet)
+      if (onPetOneSubPage) {
+        setPetInfo1((prev) => ({ ...prev, name: editedPetName }));
+        setUserInfo((prev) => ({ ...prev, pet1: petInfo1 }));
+      } else {
+        setPetInfo2((prev) => ({ ...prev, name: editedPetName }));
+        setUserInfo((prev) => ({ ...prev, pet2: petInfo2 }));
+      }
+      // TODO: save to DB
+    }
+    // either button clicked should disable editing mode on user name
+    setEditingPetName(false);
+    setEditedPetName(onPetOneSubPage ? petInfo1.name : petInfo2.name);
+  };
+
   const [currentPet, setCurrentPet] = useState(petInfo1);
 
   function changeProfilePage(): void {
@@ -140,6 +161,16 @@ export default function Profile() {
     setEditedName(event.currentTarget.value);
   }
 
+  function setEditPetNameMode(): void {
+    setEditingPetName(!editingPetName);
+  }
+
+  function savePetNameEditingContent(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void {
+    setEditedPetName(event.currentTarget.value);
+  }
+
   return (
     <>
       <Header />
@@ -153,25 +184,23 @@ export default function Profile() {
           />
           <div id="profileBannerContents">
             <p className="nameEditor">
-              {!editingName ? (
+              {onMainProfile && !editingName ? (
                 <>
                   <p className="profileName">
-                    {onMainProfile ? userInfo.name : currentPet.name}
+                    {userInfo.name}
                     <Button onClick={setEditNameMode}>
                     <img src={editIcon} alt="" id="editIcon" style={{ scale: "85%" }} />
                   </Button>
                   </p>
                 </>
-              ) : (
+              ) : onMainProfile && (
                 <>              
                 <TextField
                   className="input"
                   variant="standard"
                   onChange={saveNameEditingContent}
                   value={editedName}
-                  placeholder={
-                    userInfo.name ?? "Enter your name..."
-                  }
+                  placeholder={userInfo.name ?? "Enter your name..."}
                   slotProps={{
                     input: {
                       disableUnderline: true,
@@ -180,6 +209,33 @@ export default function Profile() {
                   }}
                 />
                 <SaveAndCancelButtons onAction={handleSaveName} />
+                </>
+              )}
+              {!onMainProfile && !editingPetName ? (
+                <>
+                  <p className="profileName">
+                    {onPetOneSubPage ? petInfo1.name : petInfo2.name}
+                    <Button onClick={setEditPetNameMode}>
+                    <img src={editIcon} alt="" id="editIcon" style={{ scale: "85%" }} />
+                  </Button>
+                  </p>
+                </>
+              ) : !onMainProfile && (
+                <>              
+                <TextField
+                  className="input"
+                  variant="standard"
+                  onChange={savePetNameEditingContent}
+                  value={editedPetName}
+                  placeholder={(onPetOneSubPage ? petInfo1.name : petInfo2.name) ?? "Enter your pet's name..."}
+                  slotProps={{
+                    input: {
+                      disableUnderline: true,
+                      style: { color: "#675844" },
+                    },
+                  }}
+                />
+                <SaveAndCancelButtons onAction={handleSavePetName} />
                 </>
               )}
             </p>
@@ -233,7 +289,7 @@ export default function Profile() {
                 <div className="petItem">
                   {userInfo.pet1 ? (
                     <Button className="petName" onClick={goToSubProfileOne}>
-                      {userInfo.pet1.name}
+                      {petInfo1.name}
                     </Button>
                   ) : (
                     <></>
@@ -245,7 +301,7 @@ export default function Profile() {
                 <div className="petItem">
                   {userInfo.pet2.name ? (
                     <Button className="petName" onClick={goToSubProfileTwo}>
-                      {userInfo.pet2.name}
+                      {petInfo2.name}
                     </Button>
                   ) : (
                     <CreateSubProfileModal />
