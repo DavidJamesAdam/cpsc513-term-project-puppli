@@ -67,7 +67,7 @@ async def get_test_document(document_id: str):
 
         if doc.exists:
             doc_data = doc.to_dict()
-            doc_data['id'] = doc.id
+            doc_data['id'] = doc.id # type: ignore
             return doc_data
         else:
             raise HTTPException(status_code=404, detail="Document not found")
