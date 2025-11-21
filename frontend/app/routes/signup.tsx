@@ -11,7 +11,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import showIcon from "../components/login/show.svg";
 import hideIcon from "../components/login/hide.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "login" }, { name: "description", content: "Sign-up page" }];
@@ -20,6 +20,53 @@ export function meta({}: Route.MetaArgs) {
 export default function SignUp() {
   const [show, setShow] = useState(true);
   const maxCharacters = 50;
+
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [emailErrorMsg, setEmailErrorMsg] = useState("");
+  const [hasEmailError, setHasEmailError] = useState(false);
+  const [usernameErrorMsg, setUsernameErrorMsg] = useState("");
+  const [hasUsernameError, setHasUsernameError] = useState(false);
+  const [passwordErrorMsg, setPasswordErrorMsg] = useState("");
+  const [hasPasswordError, setHasPasswordError] = useState(false);
+
+  const [hasFormErrors, setHasFormErrors] = useState(false);
+
+  useEffect(() => {
+    if (email === "") {
+      setEmailErrorMsg("Email cannot be empty.");
+      setHasEmailError(true);
+    } else {
+      setEmailErrorMsg("");
+      setHasEmailError(false);
+    }
+
+    if (username === "") {
+      setUsernameErrorMsg("Username cannot be empty.");
+      setHasUsernameError(true);
+    } else {
+      setUsernameErrorMsg("");
+      setHasUsernameError(false);
+    }
+
+    if (password === "") {
+      setPasswordErrorMsg("Password cannot be empty.");
+      setHasPasswordError(true);
+    } else {
+      setPasswordErrorMsg("");
+      setHasPasswordError(false);
+    }
+  }, [email, username, password]);
+
+  useEffect(() => {
+    if (hasEmailError || hasUsernameError || hasPasswordError) {
+      setHasFormErrors(true);
+    } else {
+      setHasFormErrors(false);
+    }
+  }, [hasEmailError, hasUsernameError, hasPasswordError]);
 
   return (
     <>
