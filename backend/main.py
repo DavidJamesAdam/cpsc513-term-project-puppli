@@ -77,6 +77,28 @@ async def get_test_document(document_id: str):
         raise HTTPException(status_code=500, detail=f"Error fetching document: {str(e)}")
 
 
+@app.get("/posts", response_model=List[Dict[str, Any]])
+async def get_posts():
+    """
+    Retrieve all documents from the 'posts' collection
+    Returns a list of all posts with their IDs
+    """
+    try:
+        # Get all documents from 'posts' collection
+        docs = db.collection('posts').stream()
+
+        # Convert documents to dictionary format
+        results = []
+        for doc in docs:
+            doc_data = doc.to_dict()
+            doc_data['id'] = doc.id  # Include document ID
+            results.append(doc_data)
+
+        return results
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching posts: {str(e)}")
+
+
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}

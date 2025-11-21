@@ -4,18 +4,24 @@ import Header from "../components/header/header";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Posts" },
+    { name: "description", content: "View all posts" },
   ];
 }
 
-interface TestData {
+interface Post {
   id: string;
-  [key: string]: any;
+  UserId: string;
+  petId: string;
+  imageUrl: string;
+  caption: string;
+  createdAt: string;
+  voteCount: number;
+  favouriteCount: number;
 }
 
 export default function Home() {
-  const [data, setData] = useState<TestData[]>([]);
+  const [data, setData] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,7 +29,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://localhost:8000/test");
+        const response = await fetch("http://localhost:8000/posts");
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -43,25 +49,13 @@ export default function Home() {
     fetchData();
   }, []);
 
-  // Extract all unique keys from data for table headers
-  const getTableHeaders = () => {
-    if (data.length === 0) return [];
-    const allKeys = new Set<string>();
-    data.forEach(item => {
-      Object.keys(item).forEach(key => allKeys.add(key));
-    });
-    return Array.from(allKeys);
-  };
-
-  const headers = getTableHeaders();
-
   return (
     <>
       <Header />
       <main style={{ backgroundColor: 'var(--bg-color)', padding: '20px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h1 style={{ marginBottom: '20px', fontSize: '24px', fontWeight: 'bold', color: '#ffffffff' }}>
-            Database Records
+            Posts
           </h1>
 
           {loading && (
@@ -100,27 +94,61 @@ export default function Home() {
               }}>
                 <thead>
                   <tr style={{ backgroundColor: '#f5f5f5' }}>
-                    {headers.map(header => (
-                      <th
-                        key={header}
-                        style={{
-                          padding: '12px 16px',
-                          textAlign: 'left',
-                          fontWeight: '600',
-                          borderBottom: '2px solid #e0e0e0',
-                          textTransform: 'capitalize',
-                          color: '#000'
-                        }}
-                      >
-                        {header}
-                      </th>
-                    ))}
+                    <th style={{
+                      padding: '12px 16px',
+                      textAlign: 'left',
+                      fontWeight: '600',
+                      borderBottom: '2px solid #e0e0e0',
+                      color: '#000'
+                    }}>ID</th>
+                    <th style={{
+                      padding: '12px 16px',
+                      textAlign: 'left',
+                      fontWeight: '600',
+                      borderBottom: '2px solid #e0e0e0',
+                      color: '#000'
+                    }}>Caption</th>
+                    <th style={{
+                      padding: '12px 16px',
+                      textAlign: 'left',
+                      fontWeight: '600',
+                      borderBottom: '2px solid #e0e0e0',
+                      color: '#000'
+                    }}>User ID</th>
+                    <th style={{
+                      padding: '12px 16px',
+                      textAlign: 'left',
+                      fontWeight: '600',
+                      borderBottom: '2px solid #e0e0e0',
+                      color: '#000'
+                    }}>Pet ID</th>
+                    <th style={{
+                      padding: '12px 16px',
+                      textAlign: 'left',
+                      fontWeight: '600',
+                      borderBottom: '2px solid #e0e0e0',
+                      color: '#000'
+                    }}>Votes</th>
+                    <th style={{
+                      padding: '12px 16px',
+                      textAlign: 'left',
+                      fontWeight: '600',
+                      borderBottom: '2px solid #e0e0e0',
+                      color: '#000'
+                    }}>Favourites</th>
+                    <th style={{
+                      padding: '12px 16px',
+                      textAlign: 'left',
+                      fontWeight: '600',
+                      borderBottom: '2px solid #e0e0e0',
+                      color: '#000'
+                    }}>Created At</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((row, index) => (
+                  {data.map((post) => (
                     <tr
-                      key={row.id || index}
+                      key={post.id}
                       style={{
                         borderBottom: '1px solid #e0e0e0',
                         transition: 'background-color 0.2s'
@@ -128,20 +156,45 @@ export default function Home() {
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9f9f9'}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                     >
-                      {headers.map(header => (
-                        <td
-                          key={header}
-                          style={{
-                            padding: '12px 16px',
-                            textAlign: 'left',
-                            color: '#000'
-                          }}
-                        >
-                          {typeof row[header] === 'object'
-                            ? JSON.stringify(row[header])
-                            : String(row[header] ?? '')}
-                        </td>
-                      ))}
+                      <td style={{
+                        padding: '12px 16px',
+                        textAlign: 'left',
+                        color: '#000',
+                        fontSize: '12px'
+                      }}>{post.id}</td>
+                      <td style={{
+                        padding: '12px 16px',
+                        textAlign: 'left',
+                        color: '#000'
+                      }}>{post.caption}</td>
+                      <td style={{
+                        padding: '12px 16px',
+                        textAlign: 'left',
+                        color: '#000',
+                        fontSize: '12px'
+                      }}>{post.UserId}</td>
+                      <td style={{
+                        padding: '12px 16px',
+                        textAlign: 'left',
+                        color: '#000',
+                        fontSize: '12px'
+                      }}>{post.petId}</td>
+                      <td style={{
+                        padding: '12px 16px',
+                        textAlign: 'left',
+                        color: '#000'
+                      }}>{post.voteCount}</td>
+                      <td style={{
+                        padding: '12px 16px',
+                        textAlign: 'left',
+                        color: '#000'
+                      }}>{post.favouriteCount}</td>
+                      <td style={{
+                        padding: '12px 16px',
+                        textAlign: 'left',
+                        color: '#000',
+                        fontSize: '12px'
+                      }}>{new Date(post.createdAt).toLocaleDateString()}</td>
                     </tr>
                   ))}
                 </tbody>
