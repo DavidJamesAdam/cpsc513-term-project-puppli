@@ -19,6 +19,7 @@ export function meta({}: Route.MetaArgs) {
 
 export default function SignUp() {
   const [show, setShow] = useState(true);
+  const maxCharacters = 50;
 
   return (
     <>
@@ -40,7 +41,9 @@ export default function SignUp() {
                 }}
               />
               <br></br>
-              <p className="signupInput">Pick a Username</p>
+              <p className="signupInput">
+                Pick a Username <span id="helpText">(Max 50 Characters)</span>
+              </p>
               <TextField
                 className="input"
                 variant="standard"
@@ -49,6 +52,7 @@ export default function SignUp() {
                     disableUnderline: true,
                     style: { color: "#675844" },
                   },
+                  htmlInput: { maxLength: maxCharacters },
                 }}
               />
               <br></br>
