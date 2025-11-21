@@ -152,15 +152,15 @@ export default function Profile() {
             alt=""
           />
           <div id="profileBannerContents">
-            <p>
+            <p className="nameEditor">
               {!editingName ? (
                 <>
-                  <span className="profileName">
+                  <p className="profileName">
                     {onMainProfile ? userInfo.name : currentPet.name}
-                  </span>
-                  <Button onClick={setEditNameMode}>
+                    <Button onClick={setEditNameMode}>
                     <img src={editIcon} alt="" id="editIcon" style={{ scale: "85%" }} />
                   </Button>
+                  </p>
                 </>
               ) : (
                 <>              

@@ -40,6 +40,11 @@ p {
     "posts posts posts";
 }
 
+.nameEditor {
+  display: flex;
+  flex-direction: row;
+}
+
 @media screen and (max-width: 500px) {
   .grid-container {
     display: flex;
@@ -49,6 +54,14 @@ p {
   #aboutContainer {
     grid-area: about;
     padding-bottom: 70px;
+  }
+
+  .nameEditor {
+    flex-direction: column;
+  }
+
+  #profileBanner {
+    flex-direction: column;
   }
 }
 
