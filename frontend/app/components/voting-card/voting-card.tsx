@@ -1,5 +1,6 @@
 import Button from "@mui/material/Button";
 import * as React from "react";
+import CommentModal from "../comment-modal/comment-modal";
 
 export default function VotingCard() {
   const handleCommentButtonClick = (
@@ -20,11 +21,14 @@ export default function VotingCard() {
   };
   return (
     <div className="voting-card">
-      <div className="picture"></div>
+      <div className="picture">
+        <img src={"assets/icons/ant-design--picture-outlined.svg"}/>
+      </div>
       <div className="voting-card-options">
-        <Button id="comment-button" onClick={handleCommentButtonClick}>
+        {/* <Button id="comment-button" onClick={handleCommentButtonClick}>
           <img src="assets\icons\Message icon.svg" />
-        </Button>
+        </Button> */}
+        <CommentModal/>
         <Button id="favorite-button" onClick={handleFavoriteButtonClick}>
           <img src="assets\icons\heart icon.svg" />
         </Button>
