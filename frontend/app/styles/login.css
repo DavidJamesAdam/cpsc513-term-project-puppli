@@ -87,3 +87,10 @@ Styles for sign-up page
 .signupInput {
   text-align: left;
 }
+
+@media screen and (max-width: 500px) {
+  .redirectLink {
+    flex-direction: column;
+    text-align: center;
+  }
+}
