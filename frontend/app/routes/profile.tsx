@@ -1,7 +1,7 @@
 import type { Route } from "./+types/profile";
 import Header from "../components/header/header";
 import "../styles/profile.css";
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent } from "react";
 import settingsIcon from "../components/settings/icons/settings.svg";
 import defaultProfilePicture from "../components/profile/defaultPFP.svg";
 import postIcon from "../components/profile/postIcon.svg";
@@ -26,27 +26,6 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Profile() {
-  const navigate = useNavigate();
-
-  const [onMainProfile, setOnMainProfile] = useState(true);
-
-  const [onPetOneSubPage, setOnPetOneSubPage] = useState(false);
-
-  const [editingBio, setEditingBio] = useState(false);
-
-  const [editedBio, setEditedBio] = useState<string>("");
-
-  const handleSaveBio = (saved: boolean) => {
-    if (saved) {
-      setEditedBio(editedBio);
-      console.log("save the bio in the text field to the user DB object.");
-    }
-    // either button clicked should disable editing mode on user bio
-    setEditingBio(false);
-    // then reset the editor content
-    setEditedBio("");
-  };
-
   // test data
   const petInfo1 = {
     name: "Pet 1",
@@ -64,12 +43,35 @@ export default function Profile() {
     toy: "",
   };
 
-  const userInfo = {
+  const [userInfo, setUserInfo] = useState({
     name: "Name",
     username: "username",
-    bio: "Enter more information about yourself...",
+    bio: "About me!!!!",
     pet1: petInfo1,
     pet2: petInfo2,
+  });
+
+  const navigate = useNavigate();
+
+  const [onMainProfile, setOnMainProfile] = useState(true);
+
+  const [onPetOneSubPage, setOnPetOneSubPage] = useState(false);
+
+  const [editingBio, setEditingBio] = useState(false);
+
+  const [editedBio, setEditedBio] = useState<string>(userInfo.bio ?? "");
+
+  const handleSaveBio = (saved: boolean) => {
+    if (saved) {
+      setEditedBio(editedBio);
+      console.log(editedBio);
+      // update local object (since data from DB is not available yet)
+      setUserInfo((prev) => ({ ...prev, bio: editedBio }));
+      // TODO:
+      console.log("save the bio in the text field to the user DB object.");
+    }
+    // either button clicked should disable editing mode on user bio
+    setEditingBio(false);
   };
 
   const [currentPet, setCurrentPet] = useState(petInfo1);
