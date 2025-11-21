@@ -54,24 +54,36 @@ export default function Profile() {
   const navigate = useNavigate();
 
   const [onMainProfile, setOnMainProfile] = useState(true);
-
   const [onPetOneSubPage, setOnPetOneSubPage] = useState(false);
 
   const [editingBio, setEditingBio] = useState(false);
-
   const [editedBio, setEditedBio] = useState<string>(userInfo.bio ?? "");
 
   const handleSaveBio = (saved: boolean) => {
     if (saved) {
       setEditedBio(editedBio);
-      console.log(editedBio);
       // update local object (since data from DB is not available yet)
       setUserInfo((prev) => ({ ...prev, bio: editedBio }));
-      // TODO:
-      console.log("save the bio in the text field to the user DB object.");
+      // TODO: save the bio in the text field to the user DB object.
     }
     // either button clicked should disable editing mode on user bio
     setEditingBio(false);
+    setEditedBio(userInfo.bio);
+  };
+
+  const [editingName, setEditingName] = useState(false);
+  const [editedName, setEditedName] = useState<string>(userInfo.name ?? "");
+
+  const handleSaveName = (saved: boolean) => {
+    if (saved) {
+      setEditedName(editedName);
+      // update local object (since data from DB is not available yet)
+      setUserInfo((prev) => ({ ...prev, name: editedName }));
+      // TODO: save to DB
+    }
+    // either button clicked should disable editing mode on user name
+    setEditingName(false);
+    setEditedName(userInfo.name);
   };
 
   const [currentPet, setCurrentPet] = useState(petInfo1);
@@ -111,6 +123,16 @@ export default function Profile() {
     setEditedBio(event.currentTarget.value);
   }
 
+  function setEditNameMode(): void {
+    setEditingName(!editingName);
+  }
+
+  function saveNameEditingContent(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void {
+    setEditedName(event.currentTarget.value);
+  }
+
   return (
     <>
       <Header />
@@ -123,8 +145,36 @@ export default function Profile() {
             alt=""
           />
           <div id="profileBannerContents">
-            <p className="profileName">
-              {onMainProfile ? userInfo.name : currentPet.name}
+            <p>
+              {!editingName ? (
+                <>
+                  <span className="profileName">
+                    {onMainProfile ? userInfo.name : currentPet.name}
+                  </span>
+                  <Button onClick={setEditNameMode}>
+                    <img src={editIcon} alt="" id="editIcon" style={{ scale: "85%" }} />
+                  </Button>
+                </>
+              ) : (
+                <>              
+                <TextField
+                  className="input"
+                  variant="standard"
+                  onChange={saveNameEditingContent}
+                  value={editedName}
+                  placeholder={
+                    userInfo.name ?? "Enter your name..."
+                  }
+                  slotProps={{
+                    input: {
+                      disableUnderline: true,
+                      style: { color: "#675844" },
+                    },
+                  }}
+                />
+                <SaveAndCancelButtons onAction={handleSaveName} />
+                </>
+              )}
             </p>
             {onMainProfile ? <p>{userInfo.username}</p> : <br></br>}
             <Button id="settingsButton" onClick={() => navigate("/settings")}>
