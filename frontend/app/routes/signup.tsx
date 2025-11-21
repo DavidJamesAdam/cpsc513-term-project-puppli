@@ -7,12 +7,19 @@ import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import "../styles/login.css";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import showIcon from "../components/login/show.svg";
+import hideIcon from "../components/login/hide.svg";
+import { useState } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "login" }, { name: "description", content: "Sign-up page" }];
 }
 
 export default function SignUp() {
+  const [show, setShow] = useState(true);
+
   return (
     <>
       <LoginHeader />
@@ -52,10 +59,22 @@ export default function SignUp() {
               <TextField
                 className="input"
                 variant="standard"
+                type={show ? "text" : "password"}
                 slotProps={{
                   input: {
                     disableUnderline: true,
                     style: { color: "#675844" },
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={() => setShow(!show)}>
+                          {show ? (
+                            <img src={showIcon} alt="Show" />
+                          ) : (
+                            <img src={hideIcon} alt="Hide" />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
                   },
                 }}
               />
