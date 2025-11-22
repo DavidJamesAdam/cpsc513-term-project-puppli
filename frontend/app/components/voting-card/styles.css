@@ -1,13 +1,4 @@
-.fade-div {
-  opacity: 1;
-  transition: opacity 0.5s ease-out; /* Transition only opacity */
-}
-
-.fade-div.faded-out {
-  opacity: 0;
-}
-
-/* Fade out + pop-in animations for the picture container */
+/* Fade out + pop-in animations for voting card */
 .fade-target {
   opacity: 1;
   transform: scale(1);
@@ -28,3 +19,5 @@
 .fade-target.pop-in {
   animation: pop-in 260ms ease-out;
 }
+
+// animation for like button

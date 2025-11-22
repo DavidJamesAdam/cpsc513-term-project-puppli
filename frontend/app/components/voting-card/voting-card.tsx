@@ -2,7 +2,7 @@ import Button from "@mui/material/Button";
 import * as React from "react";
 import CommentModal from "../comment-modal/comment-modal";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useState, useEffect, useRef, } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./styles.css";
 
 type VotingCardProps = {
@@ -13,6 +13,7 @@ type VotingCardProps = {
 export default function VotingCard({ animateKey, onVote }: VotingCardProps) {
   const [isFadedOut, setIsFadedOut] = useState(false);
   const [isPopped, setIsPopped] = useState(false);
+  const [showNumber, setShowNumber] = useState(false);
   const matches = useMediaQuery("(min-width: 600px)");
   const firstRunRef = useRef(true);
   const handleCommentButtonClick = (
@@ -25,6 +26,12 @@ export default function VotingCard({ animateKey, onVote }: VotingCardProps) {
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     // Add picture to favorites
+
+    setShowNumber(true);
+    // setIsFadedOut(true);
+    const timer = window.setTimeout(() => {
+      setShowNumber(false);
+    }, 2000);
   };
 
   useEffect(() => {
@@ -106,6 +113,7 @@ export default function VotingCard({ animateKey, onVote }: VotingCardProps) {
             <CommentModal />
             <Button id="favorite-button" onClick={handleFavoriteButtonClick}>
               <img src="assets\icons\heart icon.svg" />
+              {showNumber && <div className={`fade-target ${isFadedOut ? "fade-out" : ""}`}>+1</div>}
             </Button>
             <Button id="vote-button" onClick={handleVoteButtonClick}>
               <img src="assets\icons\vote icon.svg" />
