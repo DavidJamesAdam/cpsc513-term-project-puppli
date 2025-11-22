@@ -46,11 +46,12 @@ export default function EditAboutModal({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleSubmit = () => {
-    // This function would send off the user's request to update the pets information
+    // TODO: This function would send off the user's request to update the pets information
     setOpen(false);
   };
   const maxCharacters = 50;
 
+  // bunch of styling in constants used for sx attributes
   const modalStyle = {
     textAlign: "left",
     backgroundColor: "#E0CDB2",
@@ -114,11 +115,13 @@ export default function EditAboutModal({
     margin: "10px",
   };
 
+  // saves each input field content to a variable
   const [breed, setBreed] = React.useState(petInfo.breed);
   const [bday, setBday] = React.useState(petInfo.bday);
   const [treat, setTreat] = React.useState(petInfo.treat);
   const [toy, setToy] = React.useState(petInfo.toy);
 
+  // keeps track of error and error messages
   const [breedErrorMsg, setBreedErrorMsg] = React.useState("");
   const [hasBreedError, setHasBreedError] = React.useState(false);
   const [bdayErrorMsg, setBdayErrorMsg] = React.useState("");
@@ -128,8 +131,10 @@ export default function EditAboutModal({
   const [toyErrorMsg, setToyErrorMsg] = React.useState("");
   const [hasToyError, setHasToyError] = React.useState(false);
 
+  // keep track of any errors on the entire page
   const [hasFormErrors, setHasFormErrors] = React.useState(false);
 
+  // set error messages for each field
   React.useEffect(() => {
     if (breed === "") {
       setBreedErrorMsg("Pet breed field cannot be empty.");
@@ -164,6 +169,7 @@ export default function EditAboutModal({
     }
   }, [breed, bday, treat, toy]);
 
+  // disable submit button if any error exists
   React.useEffect(() => {
     if (hasBreedError || hasBdayError || hasTreatError || hasToyError) {
       setHasFormErrors(true);
@@ -172,6 +178,7 @@ export default function EditAboutModal({
     }
   }, [hasBreedError, hasBdayError, hasTreatError, hasToyError]);
 
+  // functions to update inputs being saved
   function onBreedChange(event: React.ChangeEvent<HTMLInputElement>) {
     setBreed(event.currentTarget.value);
   }

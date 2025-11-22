@@ -54,6 +54,7 @@ export default function Profile() {
     pet2: petInfo2,
   });
 
+  // handles the upload modal
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [uploadOpen, setUploadOpen] = useState(false);
   const handleClose = () => {
@@ -62,12 +63,15 @@ export default function Profile() {
 
   const maxCharacters = 50;
 
+  // keeps track of whether we are on a sub profile or not
   const [onMainProfile, setOnMainProfile] = useState(true);
   const [onPetOneSubPage, setOnPetOneSubPage] = useState(false);
 
+  // keep track of what is in the text field when editing the user bio
   const [editingBio, setEditingBio] = useState(false);
   const [editedBio, setEditedBio] = useState<string>(userInfo.bio ?? "");
 
+  // saves edited bio to DB
   const handleSaveBio = (saved: boolean) => {
     if (saved) {
       setEditedBio(editedBio);
@@ -80,9 +84,11 @@ export default function Profile() {
     setEditedBio(userInfo.bio);
   };
 
+  // keep track of what is in the text field when editing the user name
   const [editingName, setEditingName] = useState(false);
   const [editedName, setEditedName] = useState<string>(userInfo.name ?? "");
 
+  // saves edited name to DB
   const handleSaveName = (saved: boolean) => {
     if (saved) {
       setEditedName(editedName);
@@ -95,11 +101,13 @@ export default function Profile() {
     setEditedName(userInfo.name);
   };
 
+  // keep track of what is in the text field when editing the pet's name
   const [editingPetName, setEditingPetName] = useState(false);
   const [editedPetName, setEditedPetName] = useState<string>(
     onPetOneSubPage ? petInfo1.name : petInfo2.name
   );
 
+  // saves edited pet name to DB
   const handleSavePetName = (saved: boolean) => {
     if (saved) {
       setEditedPetName(editedPetName);
@@ -120,6 +128,7 @@ export default function Profile() {
 
   const [currentPet, setCurrentPet] = useState(petInfo1);
 
+  // updates the state to know whether we are on main or sub profiles
   function changeProfilePage(): void {
     setOnMainProfile(!onMainProfile);
     if (onPetOneSubPage) {
@@ -133,42 +142,50 @@ export default function Profile() {
     throw new Error("Function not implemented.");
   }
 
+  // updates states to know which sub profile we are on
   function goToSubProfileOne(): void {
     setOnMainProfile(!onMainProfile);
     setOnPetOneSubPage(true);
     setCurrentPet(petInfo1);
   }
 
+  // updates states to know which sub profile we are on
   function goToSubProfileTwo(): void {
     setOnMainProfile(!onMainProfile);
     setOnPetOneSubPage(false);
     setCurrentPet(petInfo2);
   }
 
+  // allows user to toggle between editing and viewing modes
   function setEditBioMode(): void {
     setEditingBio(!editingBio);
   }
 
+  // save the local updates from the input
   function saveBioEditingContent(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void {
     setEditedBio(event.currentTarget.value);
   }
 
+  // allows user to toggle between editing and viewing modes
   function setEditNameMode(): void {
     setEditingName(!editingName);
   }
 
+  // save the local updates from the input
   function saveNameEditingContent(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void {
     setEditedName(event.currentTarget.value);
   }
 
+  // allows user to toggle between editing and viewing modes
   function setEditPetNameMode(): void {
     setEditingPetName(!editingPetName);
   }
 
+  // save the local updates from the input
   function savePetNameEditingContent(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void {

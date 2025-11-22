@@ -10,28 +10,32 @@ interface SettingOptionProps {
   enabled?: boolean;
 }
 
-function getIcon(name : string, enabled? : boolean) {
-    if (name === "Notifications" && enabled === false) {
-        return notificationsDisabledIcon;
-    } else if (name === "Notifications" && enabled === true) {
-        return notificationsEnabledIcon;
-    } else if (name === "Change username") {
-        return usernameIcon;
-    } else if (name === "Change password") {
-        return passwordIcon;
-    } else if (name === "FAQs") {
-        return faqsIcon;
-    }
+// gets the icon based on the setting name
+function getIcon(name: string, enabled?: boolean) {
+  if (name === "Notifications" && enabled === false) {
+    return notificationsDisabledIcon;
+  } else if (name === "Notifications" && enabled === true) {
+    return notificationsEnabledIcon;
+  } else if (name === "Change username") {
+    return usernameIcon;
+  } else if (name === "Change password") {
+    return passwordIcon;
+  } else if (name === "FAQs") {
+    return faqsIcon;
+  }
 }
 
-export default function SettingOption( {settingName, enabled} : SettingOptionProps) {
+export default function SettingOption({
+  settingName,
+  enabled,
+}: SettingOptionProps) {
   return (
     <>
-        <div className="options">
-            <img src={getIcon(settingName, enabled)} alt="" />
-            <h1 className="optionTitle">{settingName}</h1>
-            {enabled}
-        </div>
+      <div className="options">
+        <img src={getIcon(settingName, enabled)} alt="" />
+        <h1 className="optionTitle">{settingName}</h1>
+        {enabled}
+      </div>
     </>
   );
 }

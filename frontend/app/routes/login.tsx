@@ -18,6 +18,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Login() {
+  // controls state of the password input field
   const [show, setShow] = useState(false);
 
   return (

@@ -6,14 +6,18 @@ import CardContent from "@mui/material/CardContent";
 import TextField from "@mui/material/TextField";
 
 export default function CreateSubProfileModal() {
+  // handles whether the modal is open or not
   const [open, setOpen] = React.useState(false);
+  // keeps track of error and error message
   const [errorMsg, setErrorMsg] = React.useState("");
   const [hasError, setHasError] = React.useState(false);
+  // handles what happens when user opens/closes the modal
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     setPetName(""); // reset after window closed
   };
+  // handles what happens when user clicks submit in the modal
   const handleSubmit = () => {
     if (petName !== "") {
       // pass created object back to parent page
@@ -24,13 +28,14 @@ export default function CreateSubProfileModal() {
         treat: "",
         toy: "",
       };
-      console.log("done");
     }
+    // TODO: save pet info to DB
     // This function would send off the user's request to update the pets information
     setOpen(false);
     setPetName(""); // reset after submitted
   };
 
+  // bunch of styling in constants used for sx attributes
   const modalStyle = {
     textAlign: "left",
     backgroundColor: "#E0CDB2",
@@ -100,6 +105,7 @@ export default function CreateSubProfileModal() {
 
   const [petName, setPetName] = React.useState("");
 
+  // set error messages for the input field
   React.useEffect(() => {
     if (petName === "") {
       setErrorMsg("Pet name field cannot be empty.");
@@ -113,6 +119,7 @@ export default function CreateSubProfileModal() {
     }
   }, [petName]);
 
+  // saves local updates from input
   function onNameChange(event: React.ChangeEvent<HTMLInputElement>) {
     setPetName(event.currentTarget.value);
   }
