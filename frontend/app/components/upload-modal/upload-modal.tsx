@@ -3,6 +3,7 @@ import "./styles.css";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import { PetSelectionMenu } from "../dropdown menus/dropdown-menus";
 
 type UploadModalProps = {
   open?: boolean;
@@ -90,8 +91,6 @@ export default function UploadModal({
     color: "inherit",
     font: "inherit",
     display: "flex",
-    minWidth: '30%',
-    margin: "10px",
   };
 
   return (
@@ -129,52 +128,68 @@ export default function UploadModal({
               />
             </Button>
           </div>
-          <input
-            type="file"
-            accept=".png, .jpg, .jpeg, .pdf"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            onChange={handlePicturePreview}
-          />
           <div
             style={{
-              width: "auto",
-              height: "auto",
-              maxWidth: "80%",
-              maxHeight: "70%",
-              borderRadius: "40px",
-              border: "1px solid rgba(255, 132, 164, 1)",
-              backgroundColor: "rgba(217, 217, 217, 1)",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              paddingBottom: "10%",
+              height: "80%",
+              width: "80%",
             }}
           >
-            <img
-              src={image || "assets/icons/ant-design--picture-outlined.svg"}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                borderRadius: "inherit",
-              }}
-              alt="Image Preview"
+            <input
+              type="file"
+              accept=".png, .jpg, .jpeg, .pdf"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handlePicturePreview}
             />
-          </div>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            width: '30%',
-            marginBottom: '10px'
-          }}>
-            <Button sx={buttonStyle} onClick={handleFileBrowser}>
-              Select Picture
-            </Button>
-            <Button
-              id="uploadButton"
-              sx={buttonStyle}
-              onClick={handlePictureUpload}
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                // boxSizing: "border-box",
+              }}
             >
-              Upload
-            </Button>
+              <img
+                src={image || "assets/icons/ant-design--picture-outlined.svg"}
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  objectFit: "contain",
+                  borderRadius: "40px",
+                  border: "1px solid rgba(255, 132, 164, 1)",
+                  backgroundColor: "rgba(217, 217, 217, 1)",
+                }}
+                alt="Image Preview"
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-evenly",
+                width: "20%",
+                gap: "8px",
+                boxSizing: "border-box",
+                paddingLeft: "3%",
+              }}
+            >
+              <PetSelectionMenu />
+              <Button sx={buttonStyle} onClick={handleFileBrowser}>
+                Select Picture
+              </Button>
+              <Button
+                id="uploadButton"
+                sx={buttonStyle}
+                onClick={handlePictureUpload}
+              >
+                Upload
+              </Button>
+            </div>
           </div>
         </Box>
       </Modal>

@@ -1,0 +1,10 @@
+.buttonStyle{
+    borderRadius: 100px;
+    border: 1px solid rgba(147, 191, 191, 1);
+    backgroundColor: rgba(179, 232, 232, 1);
+    color: inherit;
+    font: inherit;
+    display: flex;
+    minWidth: 80%;
+    // margin: 10px;
+}
