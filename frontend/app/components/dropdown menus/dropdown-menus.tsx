@@ -91,7 +91,11 @@ export function MainNavMenu() {
         </MenuItem>
       </Menu>
       {/* Render modal outside the Menu so it isn't unmounted when the Menu closes */}
-      <UploadModal open={uploadOpen} onClose={() => setUploadOpen(false)} hideTrigger />
+      <UploadModal
+        open={uploadOpen}
+        onClose={() => setUploadOpen(false)}
+        hideTrigger
+      />
     </div>
   );
 }
@@ -138,6 +142,57 @@ export function NotificationMenu() {
         }}
       >
         <MenuItem>Notification</MenuItem>
+      </Menu>
+    </div>
+  );
+}
+
+export function PetSelectionMenu() {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const buttonStyle = {
+    borderRadius: "100px",
+    border: "1px #FF84A4 solid",
+    backgroundColor: "#FFC2CF",
+    color: "inherit",
+    font: "inherit",
+    display: "flex",
+    width: '100%'
+    // margin: "10px",
+  };
+
+  return (
+    <div>
+      <Button
+        className="buttonStyle"
+        aria-controls={open ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        onClick={handleClick}
+        sx={buttonStyle}
+      >
+        Pick a pet
+      </Button>
+      <Menu
+        className="menu"
+        id="notification-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        slotProps={{
+          list: {
+            "aria-labelledby": "basic-button",
+          },
+        }}
+      >
+        <MenuItem>Pet</MenuItem>
       </Menu>
     </div>
   );
