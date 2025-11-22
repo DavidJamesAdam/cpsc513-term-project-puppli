@@ -2,9 +2,19 @@ import Button from "@mui/material/Button";
 import * as React from "react";
 import CommentModal from "../comment-modal/comment-modal";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useState, useEffect, useRef, } from "react";
+import "./styles.css";
 
-export default function VotingCard() {
+type VotingCardProps = {
+  animateKey?: number;
+  onVote?: () => void;
+};
+
+export default function VotingCard({ animateKey, onVote }: VotingCardProps) {
+  const [isFadedOut, setIsFadedOut] = useState(false);
+  const [isPopped, setIsPopped] = useState(false);
   const matches = useMediaQuery("(min-width: 600px)");
+  const firstRunRef = useRef(true);
   const handleCommentButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -16,15 +26,41 @@ export default function VotingCard() {
   ) => {
     // Add picture to favorites
   };
+
+  useEffect(() => {
+    if (animateKey === undefined) return;
+    // avoid running on first mount if you don't want it
+    if (firstRunRef.current) {
+      firstRunRef.current = false;
+      return;
+    }
+
+    // fade out then pop in (timings should match your CSS)
+    setIsFadedOut(true);
+    const fadeTimer = window.setTimeout(() => {
+      setIsFadedOut(false);
+      setIsPopped(true);
+      const popTimer = window.setTimeout(() => setIsPopped(false), 300);
+      // cleanup pop timer if necessary
+      return () => clearTimeout(popTimer);
+    }, 320);
+
+    return () => {
+      clearTimeout(fadeTimer);
+    };
+  }, [animateKey]);
+
   const handleVoteButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     // Vote for specific picture
+    if (onVote) onVote();
   };
   return (
     <>
       {matches ? (
         <div
+          className={`fade-target ${isFadedOut ? "fade-out" : ""} ${isPopped ? "pop-in" : ""}`}
           style={{
             border: "1px solid rgba(255, 132, 164, 1)",
             width: "30%",
@@ -45,9 +81,16 @@ export default function VotingCard() {
               height: "75%",
               margin: "20px",
               backgroundColor: "rgba(217, 217, 217, 1)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
             }}
           >
-            <img src={"assets/icons/ant-design--picture-outlined.svg"} />
+            <img
+              src={"assets/icons/ant-design--picture-outlined.svg"}
+              style={{ width: "90%", height: "auto" }}
+            />
           </div>
           <div
             className="voting-card-options"
@@ -71,6 +114,7 @@ export default function VotingCard() {
         </div>
       ) : (
         <div
+          className={`fade-target ${isFadedOut ? "fade-out" : ""} ${isPopped ? "pop-in" : ""}`}
           style={{
             border: "1px solid rgba(255, 132, 164, 1)",
             width: "100%",
@@ -93,11 +137,19 @@ export default function VotingCard() {
               marginLeft: "20px",
               marginBottom: "20px",
               backgroundColor: "rgba(217, 217, 217, 1)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
             }}
           >
-            <img src={"assets/icons/ant-design--picture-outlined.svg"} />
+            <img
+              src={"assets/icons/ant-design--picture-outlined.svg"}
+              style={{ width: "90%", height: "auto" }}
+            />
           </div>
-          <div id='menuOptions'
+          <div
+            id="menuOptions"
             style={{
               display: "flex",
               flexDirection: "column",
