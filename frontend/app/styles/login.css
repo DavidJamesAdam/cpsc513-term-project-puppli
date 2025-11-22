@@ -79,7 +79,7 @@ p {
 Styles for sign-up page
 */
 
-#helpText {
+.helpText {
   font-size: 16px;
   padding-left: 10px;
 }

@@ -21,8 +21,11 @@ export default function SignUp() {
   const [show, setShow] = useState(true);
   const maxCharacters = 50;
 
+  // email structure must be of the format: myname@example.com
   const [email, setEmail] = useState("");
+  // max 50 characters, no special characters
   const [username, setUsername] = useState("");
+  // needs at least one letter, any characters allowed
   const [password, setPassword] = useState("");
 
   const [emailErrorMsg, setEmailErrorMsg] = useState("");
@@ -34,9 +37,23 @@ export default function SignUp() {
 
   const [hasFormErrors, setHasFormErrors] = useState(false);
 
+  const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  const space = " ";
+  const allowedChars = [
+    "-",
+    "_",
+    ".",
+    ..."abcdefghijklmnopqrstuvwxyz",
+    ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    ..."0123456789",
+  ];
+
   useEffect(() => {
     if (email === "") {
       setEmailErrorMsg("Email cannot be empty.");
+      setHasEmailError(true);
+    } else if (!validateEmailStructure(email)) {
+      setEmailErrorMsg("Email structure incorrect (ex. yourname@example.com).");
       setHasEmailError(true);
     } else {
       setEmailErrorMsg("");
@@ -46,6 +63,10 @@ export default function SignUp() {
     if (username === "") {
       setUsernameErrorMsg("Username cannot be empty.");
       setHasUsernameError(true);
+    } else if (![...username].every((chr) => allowedChars.includes(chr))) {
+      // not true that (every character in username is an allowed character)
+      setUsernameErrorMsg("Username must consist of a-Z, 0-9, '.', '-', '_'");
+      setHasUsernameError(true);
     } else {
       setUsernameErrorMsg("");
       setHasUsernameError(false);
@@ -53,6 +74,13 @@ export default function SignUp() {
 
     if (password === "") {
       setPasswordErrorMsg("Password cannot be empty.");
+      setHasPasswordError(true);
+    } else if (numbers.every((num) => !password.includes(num))) {
+      // for every number from 0-9, it does not exist in the password
+      setPasswordErrorMsg("Password must include at least one number.");
+      setHasPasswordError(true);
+    } else if (password.includes(space)) {
+      setPasswordErrorMsg("Password cannot have a space.");
       setHasPasswordError(true);
     } else {
       setPasswordErrorMsg("");
@@ -68,6 +96,23 @@ export default function SignUp() {
     }
   }, [hasEmailError, hasUsernameError, hasPasswordError]);
 
+  function onEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setEmail(event.currentTarget.value);
+  }
+
+  function onUsernameChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setUsername(event.currentTarget.value);
+  }
+
+  function onPasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setPassword(event.currentTarget.value);
+  }
+
+  function validateEmailStructure(email: string) {
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return pattern.test(email);
+  }
+
   return (
     <>
       <LoginHeader />
@@ -80,6 +125,8 @@ export default function SignUp() {
               <TextField
                 className="input"
                 variant="standard"
+                type="email"
+                onChange={onEmailChange}
                 slotProps={{
                   input: {
                     disableUnderline: true,
@@ -87,13 +134,21 @@ export default function SignUp() {
                   },
                 }}
               />
+              <p
+                className="signupInput"
+                style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}
+              >
+                {emailErrorMsg}
+              </p>
               <br></br>
               <p className="signupInput">
-                Pick a Username <span id="helpText">(Max 50 Characters)</span>
+                Pick a Username{" "}
+                <span className="helpText">(Max 50 Characters)</span>
               </p>
               <TextField
                 className="input"
                 variant="standard"
+                onChange={onUsernameChange}
                 slotProps={{
                   input: {
                     disableUnderline: true,
@@ -102,14 +157,21 @@ export default function SignUp() {
                   htmlInput: { maxLength: maxCharacters },
                 }}
               />
+              <p
+                className="signupInput"
+                style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}
+              >
+                {usernameErrorMsg}
+              </p>
               <br></br>
               <p className="signupInput">
                 Pick password{" "}
-                <span id="helpText">(Include at least 1 number)</span>
+                <span className="helpText">(Include at least 1 number)</span>
               </p>
               <TextField
                 className="input"
                 variant="standard"
+                onChange={onPasswordChange}
                 type={show ? "text" : "password"}
                 slotProps={{
                   input: {
@@ -129,9 +191,21 @@ export default function SignUp() {
                   },
                 }}
               />
+              <p
+                className="signupInput"
+                style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}
+              >
+                {passwordErrorMsg}
+              </p>
+              <br></br>
             </CardContent>
             <CardActions className="buttons">
-              <Button size="medium" variant="contained" className="enterButton">
+              <Button
+                size="medium"
+                variant="contained"
+                className="enterButton"
+                disabled={hasFormErrors}
+              >
                 Sign-up!
               </Button>
             </CardActions>
