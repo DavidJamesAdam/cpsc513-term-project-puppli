@@ -355,7 +355,7 @@ export default function ChangeUsernameModal() {
                     maxLength={ maxCharacters }
                   />
                   <p
-                    style={{ fontSize: "1.3vw", color: "red", paddingLeft: "5px" }}
+                    style={{ fontSize: "2vw", color: "red", paddingLeft: "5px" }}
                   >
                     {usernameErrorMsg}
                   </p>
@@ -406,7 +406,7 @@ export default function ChangeUsernameModal() {
                     }}
                   />
                   <p
-                    style={{ fontSize: "1.3vw", color: "red", paddingLeft: "5px" }}
+                    style={{ fontSize: "2vw", color: "red", paddingLeft: "5px" }}
                   >
                     {passwordErrorMsg}
                   </p>
