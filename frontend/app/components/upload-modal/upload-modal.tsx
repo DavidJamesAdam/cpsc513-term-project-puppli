@@ -56,7 +56,7 @@ export default function UploadModal({
   const modalStyle = {
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
-    width: "70%",
+    width: "50%",
     height: "70%",
     boxShadow: "5px 10px 10px",
     display: "flex",
@@ -65,7 +65,7 @@ export default function UploadModal({
     alignItems: "center",
     backgroundColor: "rgba(224, 205, 178, 1)",
     position: "absolute",
-    transform: "translate(20%, 20%)",
+    transform: "translate(50%, 20%)",
   };
 
   const openButtonStyle = {
@@ -133,7 +133,7 @@ export default function UploadModal({
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
-              paddingBottom: "10%",
+              paddingBottom: "5%",
               height: "80%",
               width: "80%",
             }}
@@ -172,7 +172,7 @@ export default function UploadModal({
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-evenly",
-                width: "20%",
+                width: "30%",
                 gap: "8px",
                 boxSizing: "border-box",
                 paddingLeft: "3%",
