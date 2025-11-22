@@ -11,14 +11,26 @@ import hideIcon from "../login/hide.svg";
 import TextField from "@mui/material/TextField";
 
 export default function ChangeUsernameModal() {
+  // TODO: get from DB to prepopulate
+  const userPassword = "formDB";
+
   const matches = useMediaQuery("(min-width: 600px)");
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  // reset all error catching on modal close
+  const handleClose = () => {
+    setHasUsernameError(true);
+    setUsernameErrorMsg("");
+    setHasPasswordError(false);
+    setPasswordErrorMsg("");
+    // reset show password toggle
+  setShow(false);
+    setOpen(false);
+  };
   const handleSubmit = () => {
     // check password here and set error message if needed
-    // setHasPasswordError(true);
-    if (hasPasswordError) {
+    if (password !== userPassword) {
+      setHasPasswordError(true);
       setPasswordErrorMsg("Incorrect password.");
     } else {
       // This function would send off the user's request to change username
@@ -103,7 +115,7 @@ export default function ChangeUsernameModal() {
     ..."0123456789",
   ];
 
-  // set error messages for the new username field
+  // set error messages for the new username field and password field
   React.useEffect(() => {
     if (username === "") {
       setUsernameErrorMsg("Username cannot be empty.");
@@ -116,7 +128,12 @@ export default function ChangeUsernameModal() {
       setUsernameErrorMsg("");
       setHasUsernameError(false);
     }
-  }, [username]);
+
+    if (password === "") {
+      setPasswordErrorMsg("");
+      setHasPasswordError(false);
+    } 
+  }, [username, password]);
 
   // functions to update inputs being saved
   function onUsernameChange(event: React.ChangeEvent<HTMLInputElement>) {
