@@ -20,7 +20,10 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Ranking() {
+  // keeps track of which tab we are on
   const [value, setValue] = useState(0);
+
+  // test data
   const data = [
     {
       rankIcon: rankOneIcon,
@@ -37,12 +40,12 @@ export default function Ranking() {
       image: rankingIcon,
       name: "Pet 3",
     },
-        {
+    {
       rankIcon: undefined,
       image: rankingIcon,
       name: "Pet 4",
     },
-        {
+    {
       rankIcon: undefined,
       image: rankingIcon,
       name: "Pet 5",
@@ -59,18 +62,27 @@ export default function Ranking() {
       <Header />
       <main style={{ backgroundColor: "var{--bg-color}" }}>
         <div className="rankings">
-            <img src={rankingIcon} alt="" />
-            <h1 id="title">Rankings</h1>
+          <img src={rankingIcon} alt="" />
+          <h1 id="title">Rankings</h1>
         </div>
-        <Tabs value={value} onChange={changeTab} centered={true} id="filterBar" variant="fullWidth">
-          <Tab label="Global" className="filterTab"/>
-          <Tab label="Local" className="filterTab"/>
-          <Tab label="Friends" className="filterTab"/>
+        <Tabs
+          value={value}
+          onChange={changeTab}
+          centered={true}
+          id="filterBar"
+          variant="fullWidth"
+        >
+          <Tab label="Global" className="filterTab" />
+          <Tab label="Local" className="filterTab" />
+          <Tab label="Friends" className="filterTab" />
         </Tabs>
         <Table>
           {data.map((row, index) => (
-            <TableRow key={index} className={index % 2 === 0 ? "evenItem" : "oddItem"}>
-              <RankItem petName={row.name} rank={index + 1} ></RankItem>
+            <TableRow
+              key={index}
+              className={index % 2 === 0 ? "evenItem" : "oddItem"}
+            >
+              <RankItem petName={row.name} rank={index + 1}></RankItem>
             </TableRow>
           ))}
         </Table>

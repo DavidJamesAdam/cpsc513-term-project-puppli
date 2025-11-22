@@ -10,36 +10,44 @@ interface RankItemProps {
   rank: number;
 }
 
+// gets the correct svg based the rank
 function getBadge(rank: number) {
-    if (rank === 1) {
-        return rankOneIcon;
-    } else if (rank === 2) {
-        return rankTwoIcon;
-    } else if (rank === 3) {
-        return rankThreeIcon;
-    }
+  if (rank === 1) {
+    return rankOneIcon;
+  } else if (rank === 2) {
+    return rankTwoIcon;
+  } else if (rank === 3) {
+    return rankThreeIcon;
+  }
 }
 
+// creates a custom svg with the given rank
 function getCustomBadge(rank: number) {
-    return(
-        <Paper id="customBadge" variant="outlined">{rank}</Paper >
-    );
+  return (
+    <Paper id="customBadge" variant="outlined">
+      {rank}
+    </Paper>
+  );
 }
 
-export default function RankItem( {petName, rank} : RankItemProps) {
+export default function RankItem({ petName, rank }: RankItemProps) {
   return (
     <>
-        <div className="rankItem">
-            <TableCell>
-            {rank < 4 ? <img src={getBadge(rank)} alt="" /> : getCustomBadge(rank)}
-            </TableCell>
-            <TableCell>
-            <div className="petItem">
-                <h1 className="name">{petName}</h1>
-                <img src={rankOneIcon} alt="example.svg" />
-            </div>
-            </TableCell>
-        </div>
+      <div className="rankItem">
+        <TableCell>
+          {rank < 4 ? (
+            <img src={getBadge(rank)} alt="" />
+          ) : (
+            getCustomBadge(rank)
+          )}
+        </TableCell>
+        <TableCell>
+          <div className="petItem">
+            <h1 className="name">{petName}</h1>
+            <img src={rankOneIcon} alt="example.svg" />
+          </div>
+        </TableCell>
+      </div>
     </>
   );
 }

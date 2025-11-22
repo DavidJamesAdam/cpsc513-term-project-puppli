@@ -4,87 +4,93 @@
 }
 
 h1 {
-    font-size: 48px;
-    color: var(--font-color);
+  font-size: 48px;
+  color: var(--font-color);
 }
 
 p {
-    font-size: 24px;
-    color: var(--font-color);
+  font-size: 24px;
+  color: var(--font-color);
 }
 
 .card {
-    text-align: center;
-    background-color: #E0CDB2;
-    border-radius: 100px;
-    justify-content: center;
-    width: 785px;
+  text-align: center;
+  background-color: #e0cdb2;
+  border-radius: 100px;
+  justify-content: center;
+  width: 785px;
 }
 
 .enterButton {
-    color: var(--font-color);
-    background-color: #B3E8E8;
-    font-family: "Itim";
-    padding: 10px;
-    border-radius: 100px;
-    text-transform: none;
-    line-height: 1.5;
-    padding-left: 60px;
-    padding-right: 60px;
-    font-size: 24px;
+  color: var(--font-color);
+  background-color: #b3e8e8;
+  font-family: "Itim";
+  padding: 10px;
+  border-radius: 100px;
+  text-transform: none;
+  line-height: 1.5;
+  padding-left: 60px;
+  padding-right: 60px;
+  font-size: 24px;
 }
 
 .inputs {
-    display: flex;
-    flex-direction: column;
-    padding: 50px;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    max-width: 522px;
-    justify-self: center;
+  flex-direction: column;
+  padding: 50px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 522px;
+  justify-self: center;
 }
 
 .input {
-    background-color: var(--bg-color);
-    border-radius: 100px;
-    padding: 10px;
-    max-height: 59px;
-    border-bottom: "none"
+  background-color: var(--bg-color);
+  border-radius: 100px;
+  padding: 10px;
+  max-height: 59px;
+  border-bottom: "none";
 }
 
 .buttons {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 25px;
 }
 
 .loginBox {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    padding: 16px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 16px;
 }
 
 .redirectLink {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .link {
-    padding-left: 7px;
-    color: var(--font-color);
+  padding-left: 7px;
+  color: var(--font-color);
 }
 
 /*
 Styles for sign-up page
 */
 
-#helpText {
-    font-size: 16px;
-    padding-left: 10px;
+.helpText {
+  font-size: 16px;
+  padding-left: 10px;
 }
 
 .signupInput {
-    text-align: left;
+  text-align: left;
+}
+
+@media screen and (max-width: 500px) {
+  .redirectLink {
+    flex-direction: column;
+    text-align: center;
+  }
 }

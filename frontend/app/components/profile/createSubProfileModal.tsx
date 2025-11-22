@@ -1,0 +1,184 @@
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import TextField from "@mui/material/TextField";
+
+export default function CreateSubProfileModal() {
+  // handles whether the modal is open or not
+  const [open, setOpen] = React.useState(false);
+  // keeps track of error and error message
+  const [errorMsg, setErrorMsg] = React.useState("");
+  const [hasError, setHasError] = React.useState(false);
+  // handles what happens when user opens/closes the modal
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false);
+    setPetName(""); // reset after window closed
+  };
+  // handles what happens when user clicks submit in the modal
+  const handleSubmit = () => {
+    if (petName !== "") {
+      // pass created object back to parent page
+      const newPetInfo = {
+        name: "Pet 2",
+        breed: "",
+        bday: "",
+        treat: "",
+        toy: "",
+      };
+    }
+    // TODO: save pet info to DB
+    // This function would send off the user's request to update the pets information
+    setOpen(false);
+    setPetName(""); // reset after submitted
+  };
+
+  // bunch of styling in constants used for sx attributes
+  const modalStyle = {
+    textAlign: "left",
+    backgroundColor: "#E0CDB2",
+    borderRadius: "40px",
+    justifyContent: "center",
+    maxWidth: "785px",
+    minWidth: "300px",
+    maxHeight: "520px",
+    padding: "5px",
+    border: "1px solid rgba(255, 132, 164, 1)",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    overflow: "auto",
+  };
+
+  const openButtonStyle = {
+    fontFamily: "inherit",
+    fontSize: "24px",
+    textTransform: "capitalize",
+    color: "#675844",
+    borderColor: "#675844",
+  };
+
+  const inputSectionStyle = {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    width: "100%",
+    maxWidth: "522px",
+    justifySelf: "left",
+  };
+
+  const pinkBorder = "1px solid rgba(255, 132, 164, 1)";
+  const [inputFieldBorderColor, setInputFieldBorderColor] =
+    React.useState(pinkBorder);
+
+  const inputFieldStyle = {
+    backgroundColor: "var(--bg-color)",
+    borderRadius: "100px",
+    padding: "10px",
+    maxHeight: "59px",
+    borderBottom: "none",
+    border: inputFieldBorderColor,
+  };
+
+  const closeButtonStyle = {
+    display: "flex",
+    border: "none",
+    padding: 0,
+    borderRadius: "100px",
+    justifySelf: "flex-end",
+    scale: "50%",
+  };
+
+  const submitButtonStyle = {
+    borderRadius: "100px",
+    border: "1px solid rgba(147, 191, 191, 1)",
+    backgroundColor: "rgba(179, 232, 232, 1)",
+    color: "#675844",
+    font: "inherit",
+    display: "flex",
+    justifyContent: "flex-end",
+    margin: "10px",
+  };
+
+  const [petName, setPetName] = React.useState("");
+
+  // set error messages for the input field
+  React.useEffect(() => {
+    if (petName === "") {
+      setErrorMsg("Pet name field cannot be empty.");
+      setHasError(true);
+      setInputFieldBorderColor("1px solid rgba(255, 0, 0, 1)");
+    } else {
+      setErrorMsg("");
+      setHasError(false);
+      console.log(petName);
+      setInputFieldBorderColor(pinkBorder);
+    }
+  }, [petName]);
+
+  // saves local updates from input
+  function onNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setPetName(event.currentTarget.value);
+  }
+
+  return (
+    <div style={{ display: "flex" }}>
+      <Button onClick={handleOpen} sx={openButtonStyle} variant="outlined">
+        + Add Pet
+      </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="Edit about modal"
+        aria-describedby="Modal that allows user to edit pet information"
+      >
+        <Card sx={modalStyle}>
+          <Button sx={closeButtonStyle} onClick={handleClose}>
+            <img src="assets\icons\Close icon.svg" />
+          </Button>
+          <h1
+            style={{
+              paddingLeft: "15px",
+              paddingRight: "15px",
+              fontSize: "32px",
+            }}
+          >
+            Create a new sub-profile!
+          </h1>
+          <CardContent sx={inputSectionStyle}>
+            <p style={{ fontSize: "24px" }}>Pet name:</p>
+            <TextField
+              sx={inputFieldStyle}
+              variant="standard"
+              placeholder={"Pet name"}
+              onChange={onNameChange}
+              slotProps={{
+                input: {
+                  disableUnderline: true,
+                  style: { color: "#675844" },
+                },
+              }}
+            />
+            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+              {errorMsg}
+            </p>
+          </CardContent>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              variant="contained"
+              id="submit"
+              sx={submitButtonStyle}
+              onClick={handleSubmit}
+              disabled={hasError}
+            >
+              Submit
+            </Button>
+          </div>
+        </Card>
+      </Modal>
+    </div>
+  );
+}
