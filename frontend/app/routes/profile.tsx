@@ -10,7 +10,6 @@ import defaultPetProfilePicture from "../components/profile/defaultPetPFP.svg";
 import defaultPetPFPMain from "../components/profile/defaultPetPFPMain.svg";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
 import EditAboutModal from "~/components/profile/editAboutModal";
 import CreateSubProfileModal from "~/components/profile/createSubProfileModal";
 import TextField from "@mui/material/TextField";
@@ -62,8 +61,6 @@ export default function Profile() {
   };
 
   const maxCharacters = 50;
-
-  const navigate = useNavigate();
 
   const [onMainProfile, setOnMainProfile] = useState(true);
   const [onPetOneSubPage, setOnPetOneSubPage] = useState(false);
@@ -178,6 +175,11 @@ export default function Profile() {
     setEditedPetName(event.currentTarget.value);
   }
 
+  // redirects to settings page
+  function navigateToSettings(): void {
+    window.location.href = "/settings";
+  }
+
   return (
     <>
       <Header />
@@ -275,10 +277,7 @@ export default function Profile() {
             {onMainProfile && (
               <>
                 <p>{userInfo.username}</p>
-                <Button
-                  id="settingsButton"
-                  onClick={() => navigate("/settings")}
-                >
+                <Button id="settingsButton" onClick={navigateToSettings}>
                   <img src={settingsIcon} alt="" />
                 </Button>
               </>
