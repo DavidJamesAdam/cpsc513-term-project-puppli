@@ -24,7 +24,7 @@ export default function ChangeUsernameModal() {
     setHasPasswordError(false);
     setPasswordErrorMsg("");
     // reset show password toggle
-  setShow(false);
+    setShow(false);
     setOpen(false);
   };
   const handleSubmit = () => {
