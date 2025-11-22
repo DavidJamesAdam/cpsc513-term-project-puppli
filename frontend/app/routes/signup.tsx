@@ -18,6 +18,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function SignUp() {
+  // controls state of the password input field
   const [show, setShow] = useState(true);
   const maxCharacters = 50;
 
@@ -28,6 +29,7 @@ export default function SignUp() {
   // needs at least one letter, any characters allowed
   const [password, setPassword] = useState("");
 
+  // keeps track of error and error messages
   const [emailErrorMsg, setEmailErrorMsg] = useState("");
   const [hasEmailError, setHasEmailError] = useState(false);
   const [usernameErrorMsg, setUsernameErrorMsg] = useState("");
@@ -35,8 +37,10 @@ export default function SignUp() {
   const [passwordErrorMsg, setPasswordErrorMsg] = useState("");
   const [hasPasswordError, setHasPasswordError] = useState(false);
 
+  // keep track of any errors on the entire page
   const [hasFormErrors, setHasFormErrors] = useState(false);
 
+  // used to validate input
   const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   const space = " ";
   const allowedChars = [
@@ -48,6 +52,7 @@ export default function SignUp() {
     ..."0123456789",
   ];
 
+  // set error messages for each field
   useEffect(() => {
     if (email === "") {
       setEmailErrorMsg("Email cannot be empty.");
@@ -88,6 +93,7 @@ export default function SignUp() {
     }
   }, [email, username, password]);
 
+  // disable signup button if any error exists
   useEffect(() => {
     if (hasEmailError || hasUsernameError || hasPasswordError) {
       setHasFormErrors(true);
@@ -96,6 +102,7 @@ export default function SignUp() {
     }
   }, [hasEmailError, hasUsernameError, hasPasswordError]);
 
+  // functions to update inputs being saved
   function onEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
     setEmail(event.currentTarget.value);
   }
@@ -108,9 +115,23 @@ export default function SignUp() {
     setPassword(event.currentTarget.value);
   }
 
+  // used to validate structure of the email input
   function validateEmailStructure(email: string) {
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return pattern.test(email);
+  }
+
+  function handleSignUp(): void {
+    // create new account with the validated info
+    const newAccount = {
+      email: email,
+      username: username,
+      password: password,
+    };
+    // TODO: send new account object to DB
+
+    // redirect to log-in page
+    window.location.href = "/login";
   }
 
   return (
@@ -205,6 +226,7 @@ export default function SignUp() {
                 variant="contained"
                 className="enterButton"
                 disabled={hasFormErrors}
+                onClick={handleSignUp}
               >
                 Sign-up!
               </Button>
