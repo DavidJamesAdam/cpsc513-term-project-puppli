@@ -21,6 +21,13 @@ export default function Login() {
   // controls state of the password input field
   const [show, setShow] = useState(false);
 
+  // if log-in is verified, redirect using to home page
+  function handleLogIn(): void {
+    // TODO: if username and password matches data in DB, permit log in request
+
+    // redirect to home (voting) page
+    window.location.href = "/";
+  }
   return (
     <>
       <LoginHeader />
@@ -66,7 +73,12 @@ export default function Login() {
               />
             </CardContent>
             <CardActions className="buttons">
-              <Button size="medium" variant="contained" className="enterButton">
+              <Button
+                size="medium"
+                variant="contained"
+                className="enterButton"
+                onClick={handleLogIn}
+              >
                 Enter
               </Button>
             </CardActions>
