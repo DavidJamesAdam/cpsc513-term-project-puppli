@@ -159,8 +159,8 @@ export function PetSelectionMenu() {
 
   const buttonStyle = {
     borderRadius: "100px",
-    border: "1px solid rgba(147, 191, 191, 1)",
-    backgroundColor: "rgba(179, 232, 232, 1)",
+    border: "1px #FF84A4 solid",
+    backgroundColor: "#FFC2CF",
     color: "inherit",
     font: "inherit",
     display: "flex",
