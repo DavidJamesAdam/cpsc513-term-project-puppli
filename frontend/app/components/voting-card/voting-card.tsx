@@ -13,7 +13,7 @@ type VotingCardProps = {
 export default function VotingCard({ animateKey, onVote }: VotingCardProps) {
   const [isFadedOut, setIsFadedOut] = useState(false);
   const [isPopped, setIsPopped] = useState(false);
-  const [showNumber, setShowNumber] = useState(false);
+  const [plusOnes, setPlusOnes] = useState<number[]>([]);
   const matches = useMediaQuery("(min-width: 600px)");
   const firstRunRef = useRef(true);
   const handleCommentButtonClick = (
@@ -27,11 +27,14 @@ export default function VotingCard({ animateKey, onVote }: VotingCardProps) {
   ) => {
     // Add picture to favorites
 
-    setShowNumber(true);
-    // setIsFadedOut(true);
-    const timer = window.setTimeout(() => {
-      setShowNumber(false);
-    }, 2000);
+    // create a short-lived +1
+    const id = Date.now();
+    setPlusOnes((prev) => [...prev, id]);
+
+    // remove it after the animation duration (match CSS 800ms)
+    window.setTimeout(() => {
+      setPlusOnes((prev) => prev.filter((x) => x !== id));
+    }, 2000); // small buffer > animation duration
   };
 
   useEffect(() => {
@@ -111,10 +114,16 @@ export default function VotingCard({ animateKey, onVote }: VotingCardProps) {
             }}
           >
             <CommentModal />
-            <Button id="favorite-button" onClick={handleFavoriteButtonClick}>
-              <img src="assets\icons\heart icon.svg" />
-              {showNumber && <div className={`fade-target ${isFadedOut ? "fade-out" : ""}`}>+1</div>}
-            </Button>
+            <div style={{ position: "relative", display: "inline-block" }}>
+              <Button id="favorite-button" onClick={handleFavoriteButtonClick}>
+                <img src="assets\icons\heart icon.svg" />
+              </Button>
+              {plusOnes.map((id) => (
+                <span key={id} className="plus-one">
+                  +1
+                </span>
+              ))}
+            </div>
             <Button id="vote-button" onClick={handleVoteButtonClick}>
               <img src="assets\icons\vote icon.svg" />
             </Button>
