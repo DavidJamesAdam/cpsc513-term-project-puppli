@@ -4,3 +4,5 @@ pydantic
 firebase-admin
 google-cloud-firestore
 Faker
+passlib
+argon2-cffi

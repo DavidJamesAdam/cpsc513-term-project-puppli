@@ -121,14 +121,32 @@ export default function SignUp() {
     return pattern.test(email);
   }
 
-  function handleSignUp(): void {
+  async function handleSignUp(): Promise<void> {
     // create new account with the validated info
     const newAccount = {
+      userName: username,
       email: email,
-      username: username,
       password: password,
     };
-    // TODO: send new account object to DB
+
+    console.log(`Account info:\n${JSON.stringify(newAccount)}`)
+
+    try{
+      const response = await fetch("http://127.0.0.1:8000/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userName: newAccount.userName, email: newAccount.email, password: newAccount.password }),
+      })
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        throw new Error('Failed to send request');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
 
     // redirect to log-in page
     window.location.href = "/login";

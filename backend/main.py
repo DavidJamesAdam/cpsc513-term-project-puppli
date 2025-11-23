@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from firebase_service import db
+from routers.root import router as root_router
 
 
 @asynccontextmanager
@@ -29,11 +30,8 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World", "status": "Firebase connected"}
-
+# Include routers
+app.include_router(root_router)
 
 @app.get("/test", response_model=List[Dict[str, Any]])
 async def get_test_collection():
@@ -75,29 +73,6 @@ async def get_test_document(document_id: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching document: {str(e)}")
-
-
-@app.get("/posts", response_model=List[Dict[str, Any]])
-async def get_posts():
-    """
-    Retrieve all documents from the 'posts' collection
-    Returns a list of all posts with their IDs
-    """
-    try:
-        # Get all documents from 'posts' collection
-        docs = db.collection('posts').stream()
-
-        # Convert documents to dictionary format
-        results = []
-        for doc in docs:
-            doc_data = doc.to_dict()
-            doc_data['id'] = doc.id  # Include document ID
-            results.append(doc_data)
-
-        return results
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error fetching posts: {str(e)}")
-
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
