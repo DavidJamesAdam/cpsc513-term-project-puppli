@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import type { Route } from "./+types/home";
 import Header from "../components/header/header";
 import VotingCard from "../components/voting-card/voting-card";
@@ -6,9 +7,20 @@ import { useState } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Posts" },
+    { name: "description", content: "View all posts" },
   ];
+}
+
+interface Post {
+  id: string;
+  UserId: string;
+  petId: string;
+  imageUrl: string;
+  caption: string;
+  createdAt: string;
+  voteCount: number;
+  favouriteCount: number;
 }
 
 export default function Home() {
