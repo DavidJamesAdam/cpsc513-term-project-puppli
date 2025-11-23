@@ -4,43 +4,72 @@ import Modal from "@mui/material/Modal";
 import SettingOption from "../settings/settingOption";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import showIcon from "../login/show.svg";
+import hideIcon from "../login/hide.svg";
 
 export default function ChangePasswordModal() {
+  // TODO: get from DB to prepopulate
+  const userPassword = "formDB";
+
   const matches = useMediaQuery("(min-width: 600px)");
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const handleSubmit = () => {
-    // This function would send off the user's request to change password
+  // reset all error catching on modal close
+  const handleClose = () => {
+    setHasFormErrors(false);
+    setHasNewPasswordError(true);
+    setNewPasswordErrorMsg("");
+    setHasNewPassReEnterError(true);
+    setNewPassReEnterErrorMsg("");
+    setHasPasswordError(false);
+    setPasswordErrorMsg("");
+    // reset show password toggle
+    setShow(false);
     setOpen(false);
   };
+  const handleSubmit = () => {
+    // check password here and set error message if needed
+    if (password !== userPassword) {
+      setHasPasswordError(true);
+      setPasswordErrorMsg("Incorrect password.");
+    } else {
+      // This function would send off the user's request to change password
+      setOpen(false);
+    }
+  };
+
+  // controls state of the password input field
+  const [show, setShow] = React.useState(true);  
 
   const modalStyle = {
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
     width: "50%",
-    height: "50%",
+    height: "60%",
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     backgroundColor: "rgba(224, 205, 178, 1)",
     position: "absolute",
-    transform: "translate(50%, 50%)",
+    transform: "translate(50%, 40%)",
   };
 
   const modalStyleMobile = {
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
     width: "100%",
-    height: "35%",
+    height: "55%",
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     backgroundColor: "rgba(224, 205, 178, 1)",
     position: "absolute",
-    transform: "translate(0%, 80%)",
+    transform: "translate(0%, 40%)",
   };
 
   const openButtonStyle = {
@@ -66,6 +95,83 @@ export default function ChangePasswordModal() {
     width: "inherit",
     height: "inherit",
   };
+
+  // needs at least one letter, any characters allowed
+  const [newPassword, setNewPassword] = React.useState("");
+  const [newPassReEnter, setNewPassReEnter] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  
+  // keeps track of error and error messages
+  const [newPasswordErrorMsg, setNewPasswordErrorMsg] = React.useState("");
+  const [hasNewPasswordError, setHasNewPasswordError] = React.useState(true);
+  const [newPassReEnterErrorMsg, setNewPassReEnterErrorMsg] = React.useState("");
+  const [hasNewPassReEnterError, setHasNewPassReEnterError] = React.useState(true);
+  const [passwordErrorMsg, setPasswordErrorMsg] = React.useState("");
+  const [hasPasswordError, setHasPasswordError] = React.useState(false);
+
+  // keep track of any errors on the entire page
+  const [hasFormErrors, setHasFormErrors] = React.useState(false);
+
+  // used to validate input
+  const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  const space = " ";
+
+  // set error messages for the new password fields
+  React.useEffect(() => {
+    if (newPassword === "") {
+      setNewPasswordErrorMsg("New password cannot be empty.");
+      setHasNewPasswordError(true);
+    } else if (numbers.every((num) => !newPassword.includes(num))) {
+      // for every number from 0-9, it does not exist in the password
+      setNewPasswordErrorMsg("New password must include at least one number.");
+      setHasNewPasswordError(true);
+    } else if (newPassword.includes(space)) {
+      setNewPasswordErrorMsg("New password cannot have a space.");
+      setHasNewPasswordError(true);
+    } else {
+      setNewPasswordErrorMsg("");
+      setHasNewPasswordError(false);
+    }
+
+    if (newPassReEnter === "") {
+      setNewPassReEnterErrorMsg("New password cannot be empty.");
+      setHasNewPassReEnterError(true);
+    } else if (newPassReEnter !== newPassword) {
+      setNewPassReEnterErrorMsg("Re-entered password does not match.");
+      setHasNewPassReEnterError(true);
+    } else {
+      setNewPassReEnterErrorMsg("");
+      setHasNewPassReEnterError(false);
+    }
+
+    // if current password field is empty, reset errors
+    if (password === "") {
+      setPasswordErrorMsg("");
+      setHasPasswordError(false);
+    } 
+  }, [newPassword, newPassReEnter, password]);
+
+  // disable submit button if any error exists
+  React.useEffect(() => {
+    if (hasNewPassReEnterError || hasNewPasswordError) {
+      setHasFormErrors(true);
+    } else {
+      setHasFormErrors(false);
+    }
+  }, [hasNewPassReEnterError, hasNewPasswordError]);
+
+  // functions to update inputs being saved
+  function onNewPasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setNewPassword(event.currentTarget.value);
+  }
+
+  function onReEnteredPassChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setNewPassReEnter(event.currentTarget.value);
+  }
+
+  function onPasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setPassword(event.currentTarget.value);
+  }
 
   return (
     <>
@@ -122,8 +228,7 @@ export default function ChangePasswordModal() {
                   >
                     Please enter current password:
                   </label>
-                  <input
-                    type="text"
+                  <TextField
                     name="currentPass"
                     style={{
                       border: "1px solid rgba(255, 132, 164, 1)",
@@ -132,7 +237,33 @@ export default function ChangePasswordModal() {
                       padding: "8px 12px",
                       fontSize: "1vw",
                     }}
+                    variant="standard"
+                    onChange={onPasswordChange}
+                    type={show ? "text" : "password"}
+                    slotProps={{
+                      input: {
+                        disableUnderline: true,
+                        style: { color: "#675844" },
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton onClick={() => setShow(!show)}>
+                              {show ? (
+                                <img src={showIcon} alt="Show" />
+                              ) : (
+                                <img src={hideIcon} alt="Hide" />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      },
+                    }}
                   />
+                  <p
+                    style={{ fontSize: "1.3vw", color: "red", paddingLeft: "5px", lineHeight: "1.05" }}
+                  >
+                    {passwordErrorMsg}
+                  </p>
+                  <br></br>
                 </div>
                 <div
                   style={{
@@ -148,8 +279,7 @@ export default function ChangePasswordModal() {
                   >
                     Please enter new password:
                   </label>
-                  <input
-                    type="text"
+                  <TextField
                     name="newPass"
                     style={{
                       border: "1px solid rgba(255, 132, 164, 1)",
@@ -158,7 +288,22 @@ export default function ChangePasswordModal() {
                       padding: "8px 12px",
                       fontSize: "1vw",
                     }}
+                    variant="standard"
+                    onChange={onNewPasswordChange}
+                    type="text"
+                    slotProps={{
+                      input: {
+                        disableUnderline: true,
+                        style: { color: "#675844" },
+                      },
+                    }}
                   />
+                  <p
+                    style={{ fontSize: "1.3vw", color: "red", paddingLeft: "5px", lineHeight: "1.05" }}
+                  >
+                    {newPasswordErrorMsg}
+                  </p>
+                  <br></br>
                 </div>
                 <div
                   style={{
@@ -174,7 +319,7 @@ export default function ChangePasswordModal() {
                   >
                     Please re-enter new password:
                   </label>
-                  <input
+                  <TextField
                     type="text"
                     name="reenterPass"
                     style={{
@@ -184,7 +329,20 @@ export default function ChangePasswordModal() {
                       padding: "8px 12px",
                       fontSize: "calc(.5vw + 1vh)",
                     }}
+                    variant="standard"
+                    onChange={onReEnteredPassChange}
+                    slotProps={{
+                      input: {
+                        disableUnderline: true,
+                        style: { color: "#675844" },
+                      },
+                    }}
                   />
+                  <p
+                    style={{ fontSize: "1.3vw", color: "red", paddingLeft: "5px", lineHeight: "1.05" }}
+                  >
+                    {newPassReEnterErrorMsg}
+                  </p>
                 </div>
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
                   <Button
@@ -192,6 +350,7 @@ export default function ChangePasswordModal() {
                     id="submit"
                     sx={submitButtonStyle}
                     onClick={handleSubmit}
+                    disabled={hasFormErrors}
                   >
                     <p style={{ fontSize: "calc(.5vw + 1vh)" }}>Submit</p>
                   </Button>
@@ -253,8 +412,7 @@ export default function ChangePasswordModal() {
                   >
                     Please enter current password:
                   </label>
-                  <input
-                    type="text"
+                  <TextField
                     name="currentPass"
                     style={{
                       border: "1px solid rgba(255, 132, 164, 1)",
@@ -263,7 +421,33 @@ export default function ChangePasswordModal() {
                       padding: "8px 12px",
                       fontSize: "calc(.5vw + 1vh)",
                     }}
+                    variant="standard"
+                    onChange={onPasswordChange}
+                    type={show ? "text" : "password"}
+                    slotProps={{
+                      input: {
+                        disableUnderline: true,
+                        style: { color: "#675844" },
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton onClick={() => setShow(!show)}>
+                              {show ? (
+                                <img src={showIcon} alt="Show" />
+                              ) : (
+                                <img src={hideIcon} alt="Hide" />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      },
+                    }}
                   />
+                  <p
+                    style={{ fontSize: "2vw", color: "red", paddingLeft: "5px", lineHeight: "1.05" }}
+                  >
+                    {passwordErrorMsg}
+                  </p>
+                  <br></br>
                 </div>
                 <div
                   style={{
@@ -279,7 +463,7 @@ export default function ChangePasswordModal() {
                   >
                     Please enter new password:
                   </label>
-                  <input
+                  <TextField
                     type="text"
                     name="newPass"
                     style={{
@@ -289,7 +473,21 @@ export default function ChangePasswordModal() {
                       padding: "8px 12px",
                       fontSize: "calc(.5vw + 1vh)",
                     }}
+                    variant="standard"
+                    onChange={onNewPasswordChange}
+                    slotProps={{
+                      input: {
+                        disableUnderline: true,
+                        style: { color: "#675844" },
+                      },
+                    }}
                   />
+                  <p
+                    style={{ fontSize: "2vw", color: "red", paddingLeft: "5px", lineHeight: "1.05" }}
+                  >
+                    {newPasswordErrorMsg}
+                  </p>
+                  <br></br>
                 </div>
                 <div
                   style={{
@@ -305,7 +503,7 @@ export default function ChangePasswordModal() {
                   >
                     Please re-enter new password:
                   </label>
-                  <input
+                  <TextField
                     type="text"
                     name="reenterPass"
                     style={{
@@ -315,7 +513,20 @@ export default function ChangePasswordModal() {
                       padding: "8px 12px",
                       fontSize: "calc(.5vw + 1vh)",
                     }}
+                    variant="standard"
+                    onChange={onReEnteredPassChange}
+                    slotProps={{
+                      input: {
+                        disableUnderline: true,
+                        style: { color: "#675844" },
+                      },
+                    }}
                   />
+                  <p
+                    style={{ fontSize: "2vw", color: "red", paddingLeft: "5px", lineHeight: "1.05" }}
+                  >
+                    {newPassReEnterErrorMsg}
+                  </p>
                 </div>
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
                   <Button
@@ -323,6 +534,7 @@ export default function ChangePasswordModal() {
                     id="submit"
                     sx={submitButtonStyle}
                     onClick={handleSubmit}
+                    disabled={hasFormErrors}
                   >
                     <p style={{ fontSize: "calc(.5vw + 1vh)" }}>Submit</p>
                   </Button>
