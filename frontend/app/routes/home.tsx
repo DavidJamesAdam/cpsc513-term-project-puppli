@@ -3,7 +3,6 @@ import type { Route } from "./+types/home";
 import Header from "../components/header/header";
 import VotingCard from "../components/voting-card/voting-card";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useState } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [
