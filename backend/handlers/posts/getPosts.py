@@ -1,6 +1,9 @@
 from firebase_service import db
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 
+router = APIRouter()
+
+@router.get("/posts")
 async def read_posts():
     """
     Retrieve all documents from the 'posts' collection

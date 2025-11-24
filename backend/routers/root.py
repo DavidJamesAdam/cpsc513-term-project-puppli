@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from handlers.auth.login import loginUser
 from handlers.posts.getPosts import read_posts
 from handlers.root import read_root
 from handlers.users.getUser import read_users
@@ -11,16 +12,6 @@ router = APIRouter()
 def get_root():
     return read_root()
 
-#user routes
-@router.get("/users")
-def get_users():
-    return read_users()
-
-@router.post("/users")
-async def post_user(user: User):
-    return await create_user(user)
-
-# posts created by user routes
-@router.get("/posts")
-async def get_posts():
-    return await read_posts()
+@router.post('/auth/login')
+def post_user(request: Request):
+    return loginUser(request)

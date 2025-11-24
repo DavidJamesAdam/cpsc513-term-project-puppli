@@ -3,3 +3,4 @@
 .env
 __pycache__
 keys/
+.__pycache__

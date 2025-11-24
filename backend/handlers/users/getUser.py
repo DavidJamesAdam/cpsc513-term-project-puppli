@@ -1,6 +1,9 @@
 from firebase_service import db
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 
+router = APIRouter()
+
+@router.get("/users")
 def read_users():
     try:
         # Get all documents from 'test' collection

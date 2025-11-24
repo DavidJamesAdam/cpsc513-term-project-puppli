@@ -12,6 +12,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import showIcon from "../components/login/show.svg";
 import hideIcon from "../components/login/hide.svg";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "login" }, { name: "description", content: "Login page" }];
@@ -22,12 +24,12 @@ export default function Login() {
   const [show, setShow] = useState(false);
 
   // keeps track of user input in real time
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   // keeps track of error and error messages
-  const [usernameErrorMsg, setUsernameErrorMsg] = useState("");
-  const [hasUsernameError, setHasUsernameError] = useState(false);
+  const [emailErrorMsg, setEmailErrorMsg] = useState("");
+  const [hasEmailError, setHasEmailError] = useState(false);
   const [passwordErrorMsg, setPasswordErrorMsg] = useState("");
   const [hasPasswordError, setHasPasswordError] = useState(false);
 
@@ -35,20 +37,20 @@ export default function Login() {
   const [hasFormErrors, setHasFormErrors] = useState(false);
   const [formErrorMsg, setFormErrorMsg] = useState("");
 
-  // display error on log-in if password mismatch or username does not exist
+  // display error on log-in if password mismatch or email does not exist
   useEffect(() => {
-    if (hasUsernameError || hasPasswordError) {
+    if (hasEmailError || hasPasswordError) {
       setHasFormErrors(true);
-      setFormErrorMsg("Username does not exist, or password is incorrect.")
+      setFormErrorMsg("email does not exist, or password is incorrect.");
     } else {
       setHasFormErrors(false);
-      setFormErrorMsg("")
+      setFormErrorMsg("");
     }
-  }, [hasUsernameError, hasPasswordError]);
+  }, [hasEmailError, hasPasswordError]);
 
   // functions to update inputs being saved
-  function onUsernameChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setUsername(event.currentTarget.value);
+  function onEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setEmail(event.currentTarget.value);
   }
 
   function onPasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -56,11 +58,34 @@ export default function Login() {
   }
 
   // if log-in is verified, redirect using to home page
-  function handleLogIn(): void {
-    // TODO: if username and password matches data in DB, permit log in request
+  async function handleLogIn() {
+    // TODO: if email and password matches data in DB, permit log in request
+    // 1) Sign in with Firebase client SDK
+    const userCredential = await signInWithEmailAndPassword(
+      auth!,
+      email,
+      password
+    );
+    // 2) Get fresh ID token
+    const idToken = await userCredential.user.getIdToken(
+      /* forceRefresh */ true
+    );
 
+    // 3) Send idToken to backend to exchange for session cookie
+    const resp = await fetch("http://localhost:8000/auth/sessionLogin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // VERY IMPORTANT: accept cookie
+      body: JSON.stringify({ idToken }),
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.detail || "Session login failed");
+    }
     // redirect to home (voting) page
     window.location.href = "/";
+    return resp.json();
   }
   return (
     <>
@@ -69,17 +94,15 @@ export default function Login() {
         <div className="loginBox">
           <Card className="card" sx={{ maxWidth: 785 }}>
             <h1>Log-in</h1>
-            <p
-              style={{ fontSize: "18px", color: "red", paddingLeft: "5px" }}
-            >
+            <p style={{ fontSize: "18px", color: "red", paddingLeft: "5px" }}>
               {formErrorMsg}
             </p>
             <CardContent className="inputs">
-              <p>Username</p>
+              <p>Email</p>
               <TextField
                 className="input"
                 variant="standard"
-                onChange={onUsernameChange}
+                onChange={onEmailChange}
                 slotProps={{
                   input: {
                     disableUnderline: true,
