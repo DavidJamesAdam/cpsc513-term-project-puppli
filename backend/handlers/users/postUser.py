@@ -1,15 +1,16 @@
 import re
 import uuid
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, APIRouter
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, field_validator
-from passlib.context import CryptContext
 
 from firebase_service import db
 from firebase_admin import auth
 from google.cloud import firestore as gcfirestore
 
 COMMON_PASSWORDS = {"password", "12345678", "qwerty", "letmein"}
+
+router = APIRouter()
 
 class User(BaseModel):
     userName: str
@@ -34,6 +35,7 @@ class User(BaseModel):
             raise ValueError("Password is too common")
         return v
 
+@router.post("/users")
 async def create_user(user: User):
     user_dict = user.model_dump()
     email = user_dict["email"].strip().lower()
