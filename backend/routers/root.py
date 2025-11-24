@@ -3,6 +3,7 @@ from handlers.posts.getPosts import read_posts
 from handlers.root import read_root
 from handlers.users.getUser import read_users
 from handlers.users.postUser import create_user, User
+from handlers.posts.postVote import post_vote
 from fastapi import APIRouter, Request
 
 router = APIRouter()
@@ -24,3 +25,7 @@ async def post_user(user: User):
 @router.get("/posts")
 async def get_posts():
     return await read_posts()
+
+@router.post("/posts/{postID}/vote")
+async def posts_vote():
+    return await post_vote()
