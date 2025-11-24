@@ -1,13 +1,25 @@
 from firebase_service import db
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
+from google.cloud import firestore
 
-#vote count increase
+router = APIRouter()
+
+# vote count increase
 async def post_vote(post_id: str):
     try:
-        post = db.collection('posts').child(post_id).get()
-        if post.val() is None:
+        doc_ref = db.collection("posts").document(post_id)
+        doc = doc_ref.get()
+
+        if not doc.exists:
             raise HTTPException(status_code=404, detail="Post not found")
-        post.update({"votes": post.val().get("votes", 0) + 1})
+
+        data = doc.to_dict()
+        current_votes = data.get("votes", 0)
+
+        # increment vote count
+        doc_ref.update({"voteCount": firestore.Increment(1)})
+
         return {"message": "Vote recorded successfully"}
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error recording vote: {str(e)}")

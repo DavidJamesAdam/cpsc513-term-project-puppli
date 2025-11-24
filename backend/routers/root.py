@@ -26,6 +26,6 @@ async def post_user(user: User):
 async def get_posts():
     return await read_posts()
 
-@router.post("/posts/{postID}/vote")
-async def posts_vote():
-    return await post_vote()
+@router.post("/posts/{postId}")
+async def posts_vote(postId: str):
+    return await post_vote(postId)
