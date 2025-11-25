@@ -17,7 +17,7 @@ export default function FAQModal() {
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
     width: "90%",
-    height: "60%",
+    height: "65%",
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
@@ -113,8 +113,7 @@ export default function FAQModal() {
                 </Typography>
                 <Typography variant="inherit">
                   A: User-initiated account deletion is not currently supported.
-                  However, accounts with no login activity for 18 months will be
-                  permanently removed.
+                  However, users may request for account deletion by contacting puppli-contact@gmail.com
                 </Typography>
 
                 <Typography className="question" variant="h6" component="h2">
