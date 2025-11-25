@@ -1,6 +1,7 @@
 from firebase_service import db
 from fastapi import FastAPI, HTTPException
-async def rank_local(user_location: str):
+
+async def rank_city(user_city: str):
         
     try:
         # Get all documents from 'posts' collection
@@ -14,7 +15,7 @@ async def rank_local(user_location: str):
             post_user = db.collection('users').document(post_user).get().to_dict()
             post_location = post_user['location'].split(',')[0]
             #match 'location' to user's 'location' 
-            if str(post_location) in str(user_location):
+            if str(post_location) in str(user_city):
                 doc_data['id'] = doc.id  # Include document ID
                 results.append(doc_data)
         

@@ -5,7 +5,8 @@ from handlers.users.getUser import read_users
 from handlers.users.postUser import create_user, User
 from handlers.posts.postVote import post_vote
 from handlers.posts.rankGlobal import rank_global as rank_g
-from handlers.posts.rankLocal import rank_local as rank_l
+from handlers.posts.rankCity import rank_city as rank_c
+from handlers.posts.rankProvince import rank_province as rank_p
 from fastapi import APIRouter, Request
 
 router = APIRouter()
@@ -34,6 +35,10 @@ async def posts_vote(postId: str):
 async def rank_global():
     return await rank_g()
 
-@router.get("/posts/rank/local/{location}")
-async def rank_local(location: str):
-    return await rank_l(location)
+@router.get("/posts/rank/province/{prov}")
+async def rank_prov(location: str):
+    return await rank_p(location)
+
+@router.get("/posts/rank/city/{city}")
+async def rank_city(location: str):
+    return await rank_c(location)
