@@ -134,6 +134,9 @@ export default function ChangePasswordModal() {
     } else if (newPassword.includes(space)) {
       setNewPasswordErrorMsg("New password cannot have a space.");
       setHasNewPasswordError(true);
+    } else if (newPassword.length < 8) {
+      setNewPasswordErrorMsg("New password must have at least 8 characters.");
+      setHasNewPasswordError(true);
     } else {
       setNewPasswordErrorMsg("");
       setHasNewPasswordError(false);
