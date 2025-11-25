@@ -35,10 +35,10 @@ async def posts_vote(postId: str):
 async def rank_global():
     return await rank_g()
 
-@router.get("/posts/rank/province/{prov}")
+@router.get("/posts/rank/province/{location}")
 async def rank_prov(location: str):
     return await rank_p(location)
 
-@router.get("/posts/rank/city/{city}")
+@router.get("/posts/rank/city/{location}")
 async def rank_city(location: str):
     return await rank_c(location)
