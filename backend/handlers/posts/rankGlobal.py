@@ -5,7 +5,7 @@ async def rank_global():
     
     try:
         # Get all documents from 'pets' collection
-        docs = db.collection('pets').stream()
+        docs = db.collection('posts').stream()
 
         # Convert documents to dictionary format
         results = []
@@ -13,7 +13,10 @@ async def rank_global():
             doc_data = doc.to_dict()
             doc_data['id'] = doc.id  # Include document ID
             results.append(doc_data)
+        
+        #sort from highest to lowest number of votes
+        results.sort(key=lambda x: x.get('voteCount', 0), reverse=True)
 
         return results
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error fetching pets: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error fetching posts: {str(e)}")

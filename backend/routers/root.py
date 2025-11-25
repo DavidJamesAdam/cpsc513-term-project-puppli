@@ -4,7 +4,7 @@ from handlers.root import read_root
 from handlers.users.getUser import read_users
 from handlers.users.postUser import create_user, User
 from handlers.posts.postVote import post_vote
-from handlers.pets.rankGlobal import rank_global as rank_g
+from handlers.posts.rankGlobal import rank_global as rank_g
 from fastapi import APIRouter, Request
 
 router = APIRouter()
@@ -29,6 +29,6 @@ async def posts_vote(postId: str):
     return await post_vote(postId)
 
 #pet routes
-@router.get("/pets/rank/global")
+@router.get("/posts/rank/global")
 async def rank_global():
     return await rank_g()
