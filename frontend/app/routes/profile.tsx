@@ -17,6 +17,7 @@ import editIcon from "../components/settings/icons/username.svg";
 import SaveAndCancelButtons from "~/components/saveAndCancelButtons";
 import UploadModal from "~/components/upload-modal/upload-modal";
 import ProfileBanner from "~/components/profile/profileBanner";
+import DeleteSubProfileModal from "~/components/profile/deleteSubProfileModal";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -57,7 +58,12 @@ export default function Profile() {
   // handles the upload modal
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
   const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleDeleteModalClose = () => {
     setAnchorEl(null);
   };
 
@@ -421,18 +427,26 @@ export default function Profile() {
               }}
             />
             <div id="postsContainer">
-              <p style={{ display: "flex" }}>
-                <Button
-                  id="petUploadButton"
-                  onClick={() => {
-                    // Close the menu, then open the modal rendered outside the Menu
-                    handleClose();
-                    setUploadOpen(true);
-                  }}
-                >
-                  Upload <img src={postIcon} alt="" id="postIcon" />
-                </Button>
-              </p>
+              <Button
+                id="petUploadButton"
+                onClick={() => {
+                  // Close the menu, then open the modal rendered outside the Menu
+                  handleClose();
+                  setUploadOpen(true);
+                }}
+              >
+                Upload <img src={postIcon} alt="" id="postIcon" />
+              </Button>
+              <Button
+                id="deleteProfileButton"
+                onClick={() => {
+                  // Close the menu, then open the modal rendered outside the Menu
+                  handleDeleteModalClose();
+                  setDeleteModalOpen(true);
+                }}
+              >
+                Delete Pet Profile
+              </Button>
             </div>
           </>
         )}
@@ -440,6 +454,11 @@ export default function Profile() {
           open={uploadOpen}
           onClose={() => setUploadOpen(false)}
           hideTrigger
+        />
+        <DeleteSubProfileModal
+          open={deleteModalOpen}
+          onClose={() => setDeleteModalOpen(false)}
+          petName={currentPet.name}
         />
       </main>
     </>

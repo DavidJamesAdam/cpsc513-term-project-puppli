@@ -181,3 +181,11 @@ li {
 #petInfoContainer {
   padding-top: 50px;
 }
+
+#deleteProfileButton {
+  color: #c10058;
+  text-transform: none;
+  font-size: 32px;
+  font-family: inherit;
+  text-decoration-line: underline;
+}
