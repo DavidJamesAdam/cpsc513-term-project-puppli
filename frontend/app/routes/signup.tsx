@@ -12,6 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import showIcon from "../components/login/show.svg";
 import hideIcon from "../components/login/hide.svg";
 import { useEffect, useState } from "react";
+import TemporaryNotification from "~/components/temporaryNotification";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "login" }, { name: "description", content: "Sign-up page" }];
@@ -21,6 +22,11 @@ export default function SignUp() {
   // controls state of the password input field
   const [show, setShow] = useState(true);
   const maxCharacters = 50;
+
+  // keep track of temporary notification state and message
+  const [showTempNotif, setShowTempNotif] = useState(false);
+  const [tempNotifMsg, setTempNotifMsg] = useState("");
+  const [requestSuccessful, setRequestSuccessful] = useState(false);
 
   // email structure must be of the format: myname@example.com
   const [email, setEmail] = useState("");
@@ -129,27 +135,46 @@ export default function SignUp() {
       password: password,
     };
 
-    console.log(`Account info:\n${JSON.stringify(newAccount)}`)
+    console.log(`Account info:\n${JSON.stringify(newAccount)}`);
 
-    try{
+    try {
       const response = await fetch("http://127.0.0.1:8000/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userName: newAccount.userName, email: newAccount.email, password: newAccount.password }),
-      })
+        body: JSON.stringify({
+          userName: newAccount.userName,
+          email: newAccount.email,
+          password: newAccount.password,
+        }),
+      });
 
       if (response.ok) {
         const data = await response.json();
         console.log(data);
+        // show success temp notification
+        setShowTempNotif(true);
+        setTempNotifMsg("Sign-up successful!");
+        setRequestSuccessful(true);
+        // redirect to log-in page, use time-out to show tmep notif for success
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 3000);
       } else {
-        throw new Error('Failed to send request');
+        // show request failed temp notification
+        setShowTempNotif(true);
+        setTempNotifMsg("Sign-up unsuccessful.");
+        setRequestSuccessful(false);
+        // print to console
+        throw new Error("Failed to send request");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
 
-    // redirect to log-in page
-    window.location.href = "/login";
+    // remove temp notif after 5 seconds
+    setTimeout(() => {
+      setShowTempNotif(false);
+    }, 5000);
   }
 
   return (
@@ -257,6 +282,12 @@ export default function SignUp() {
             Log-in here
           </Link>
         </p>
+        <TemporaryNotification
+          visible={showTempNotif}
+          onAction={setShowTempNotif}
+          message={tempNotifMsg}
+          successful={requestSuccessful}
+        />
       </main>
     </>
   );
