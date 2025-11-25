@@ -16,6 +16,11 @@ export function MainNavMenu() {
     setAnchorEl(null);
   };
 
+  function handleLogOut(event: React.MouseEvent<HTMLLIElement, MouseEvent>): void {
+    handleClose();
+    // log out logic
+  }
+
   return (
     <div>
       <Button
@@ -81,13 +86,11 @@ export function MainNavMenu() {
           </div>
           <div className="menu-text">Upload</div>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleLogOut}>
           <div className="menu-icon">
-            <img src="assets\icons\Message icon.svg" />
+            <img src="assets\icons\Logout icon.svg" />
           </div>
-          <Link className="menu-text" to="/message">
-            Messages
-          </Link>
+          <div className="menu-text" style={{ color: "#c10058"}}>Log out</div>
         </MenuItem>
       </Menu>
       {/* Render modal outside the Menu so it isn't unmounted when the Menu closes */}
