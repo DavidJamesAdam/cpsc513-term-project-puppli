@@ -23,14 +23,14 @@ class User(BaseModel):
     def validate_password(cls, v: str) -> str:
         if len(v) < 8:
             raise ValueError("Password must be at least 8 characters")
-        if not re.search(r"[A-Z]", v):
-            raise ValueError("Password must contain an uppercase letter")
-        if not re.search(r"[a-z]", v):
-            raise ValueError("Password must contain a lowercase letter")
+        # if not re.search(r"[A-Z]", v):
+        #     raise ValueError("Password must contain an uppercase letter")
+        # if not re.search(r"[a-z]", v):
+        #     raise ValueError("Password must contain a lowercase letter")
         if not re.search(r"[0-9]", v):
             raise ValueError("Password must contain a digit")
-        if not re.search(r"[^A-Za-z0-9]", v):
-            raise ValueError("Password must contain a symbol")
+        # if not re.search(r"[^A-Za-z0-9]", v):
+        #     raise ValueError("Password must contain a symbol")
         if v.lower() in COMMON_PASSWORDS:
             raise ValueError("Password is too common")
         return v
@@ -42,60 +42,21 @@ async def create_user(user: User):
     password = user_dict["password"]
     username = user_dict["userName"].strip()
 
-    username_ref = db.collection("username").document(username)
-    reservation_id = uuid.uuid4().hex
-
-    # 1) Reserve username with a short transaction so nobody else can take it
-    # @gcfirestore.transactional
-    # def _reserve_txn(transaction, username_ref, reservation_id):
-    #     snap = username_ref.get(transaction=transaction)
-    #     if snap.exists:
-    #         raise ValueError("username-taken")
-    #     transaction.set(
-    #         username_ref,
-    #         {
-    #             "reservation_id": reservation_id,
-    #             "reserved_at": gcfirestore.SERVER_TIMESTAMP,
-    #         },
-    #     )
-
-    # try:
-    #     txn = db.transaction()
-    #     await run_in_threadpool(_reserve_txn, txn, username_ref, reservation_id)
-    # except ValueError:
-    #     raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-    #                         detail="Username already taken")
-    # except Exception as e:
-    #     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-    #                         detail=f"Error reserving username: {e}")
-
-    # 2) Create the Firebase Auth user (password stored/managed by Auth)
+    # 1) Create the Firebase Auth user (password stored/managed by Auth)
     try:
         # run blocking Admin SDK call off the event loop
         user_record = await run_in_threadpool(auth.create_user, email=email, password=password)
         uid = user_record.uid
     except Exception as e:
-        # cleanup reservation when auth creation fails
-        try:
-            await run_in_threadpool(username_ref.delete)
-        except Exception:
-            pass
         # Map certain error messages to appropriate statuses if you want
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail=f"Error creating auth user: {e}")
 
     user_ref = db.collection("users").document(uid)
 
-    # 3) Finalize: within a transaction confirm reservation matches and write profile + attach uid to username doc
+    # 2) Finalize: within a transaction confirm reservation matches and write profile + attach uid to username doc
     @gcfirestore.transactional
-    def _finalize_txn(transaction, username_ref, user_ref, reservation_id, uid, user_dict, email, username):
-        # snap = username_ref.get(transaction=transaction)
-        # if not snap.exists:
-        #     raise ValueError("reservation-lost")
-        # data = snap.to_dict() or {}
-        # if data.get("reservation_id") != reservation_id:
-        #     raise ValueError("reservation-mismatch")
-        # write the user profile
+    def _finalize_txn(transaction, user_ref, uid, user_dict, email, username):
         transaction.set(
             user_ref,
             {
@@ -106,35 +67,14 @@ async def create_user(user: User):
                 "createdAt": gcfirestore.SERVER_TIMESTAMP,
             },
         )
-        # attach uid to username doc (merge to preserve reservation fields for audit)
-        transaction.set(username_ref, {
-                        "uid": uid, "finalized_at": gcfirestore.SERVER_TIMESTAMP}, merge=True)
 
     try:
         txn2 = db.transaction()
-        await run_in_threadpool(_finalize_txn, txn2, username_ref, user_ref, reservation_id, uid, user_dict, email, username)
+        await run_in_threadpool(_finalize_txn, txn2, user_ref, uid, user_dict, email, username)
     except ValueError as ve:
-        # reservation conflict or mismatch -> clean up created auth user and reservation
-        try:
-            await run_in_threadpool(auth.delete_user, uid)
-        except Exception:
-            pass
-        try:
-            await run_in_threadpool(username_ref.delete)
-        except Exception:
-            pass
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail=str(ve))
     except Exception as e:
-        # other firestore error -> cleanup auth user and reservation
-        try:
-            await run_in_threadpool(auth.delete_user, uid)
-        except Exception:
-            pass
-        try:
-            await run_in_threadpool(username_ref.delete)
-        except Exception:
-            pass
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error writing profile: {e}")
 
