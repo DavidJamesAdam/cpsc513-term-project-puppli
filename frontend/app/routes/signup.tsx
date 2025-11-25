@@ -93,6 +93,9 @@ export default function SignUp() {
     } else if (password.includes(space)) {
       setPasswordErrorMsg("Password cannot have a space.");
       setHasPasswordError(true);
+    } else if (password.length < 8) {
+      setPasswordErrorMsg("Password must have at least 8 characters.");
+      setHasPasswordError(true);
     } else {
       setPasswordErrorMsg("");
       setHasPasswordError(false);
