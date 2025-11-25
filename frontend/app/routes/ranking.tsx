@@ -73,7 +73,7 @@ export default function Ranking() {
           variant="fullWidth"
         >
           <Tab label="Global" className="filterTab" />
-          <Tab label="Province" className="filterTab" />
+          <Tab label="Provincal" className="filterTab" />
           <Tab label="Local" className="filterTab" />
         </Tabs>
         <Table>
