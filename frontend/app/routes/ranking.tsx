@@ -73,8 +73,8 @@ export default function Ranking() {
           variant="fullWidth"
         >
           <Tab label="Global" className="filterTab" />
+          <Tab label="Province" className="filterTab" />
           <Tab label="Local" className="filterTab" />
-          <Tab label="Friends" className="filterTab" />
         </Tabs>
         <Table>
           {data.map((row, index) => (
