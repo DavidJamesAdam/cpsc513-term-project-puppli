@@ -1,21 +1,29 @@
 from firebase_service import db
 from fastapi import FastAPI, HTTPException
+from classes.location import Location
 
-async def rank_province(user_prov: str):
+#fix class use if location stored as JSON instead of string
+async def rank_province(user_location: str):
         
     try:
+        #convert user's location to Location object
+        user_location = Location.from_string(user_location)
+
         # Get all documents from 'posts' collection
         docs = db.collection('posts').stream()
 
         # Convert documents to dictionary format
         results = []
         for doc in docs:
+            #get post's (other user's) location and convert to Location object
             doc_data = doc.to_dict()
             post_user = doc_data['UserId']
             post_user = db.collection('users').document(post_user).get().to_dict()
-            post_location = post_user['location'].split(',')[0]
+            post_location = post_user['location']
+            post_location = Location.from_string(post_location)
+        
             #match 'location' to user's 'location' 
-            if str(post_location) in str(user_prov):
+            if post_location.province == user_location.province:
                 doc_data['id'] = doc.id  # Include document ID
                 results.append(doc_data)
         
