@@ -222,7 +222,7 @@ export default function Profile() {
             alt=""
           />
           <div id="profileBannerContents">
-            <p className="nameEditor">
+            <div className="nameEditor">
               {onMainProfile && !editingName ? (
                 <>
                   <p className="profileName">
@@ -296,7 +296,7 @@ export default function Profile() {
                   </>
                 )
               )}
-            </p>
+            </div>
             {onMainProfile && (
               <>
                 <p>{userInfo.username}</p>

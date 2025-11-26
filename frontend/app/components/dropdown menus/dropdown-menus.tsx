@@ -16,9 +16,28 @@ export function MainNavMenu() {
     setAnchorEl(null);
   };
 
-  function handleLogOut(event: React.MouseEvent<HTMLLIElement, MouseEvent>): void {
+  async function handleLogOut(
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
+  ): Promise<void> {
+    // close the menu
     handleClose();
-    // log out logic
+    try {
+      // log out logic
+      const resp = await fetch("http://localhost:8000/auth/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // VERY IMPORTANT: accept cookie
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        throw new Error(err.detail || "Log out failed");
+      } else {
+        console.log("logged out");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
   return (
@@ -90,7 +109,9 @@ export function MainNavMenu() {
           <div className="menu-icon">
             <img src="assets\icons\Logout icon.svg" />
           </div>
-          <div className="menu-text" style={{ color: "#c10058"}}>Log out</div>
+          <div className="menu-text" style={{ color: "#c10058" }}>
+            Log out
+          </div>
         </MenuItem>
       </Menu>
       {/* Render modal outside the Menu so it isn't unmounted when the Menu closes */}
@@ -167,7 +188,7 @@ export function PetSelectionMenu() {
     color: "inherit",
     font: "inherit",
     display: "flex",
-    width: '100%'
+    width: "100%",
     // margin: "10px",
   };
 
