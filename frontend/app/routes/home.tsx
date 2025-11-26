@@ -3,6 +3,8 @@ import type { Route } from "./+types/home";
 import Header from "../components/header/header";
 import VotingCard from "../components/voting-card/voting-card";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { authCheck } from "../utils/authCheck";
+
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -23,8 +25,26 @@ interface Post {
 }
 
 export default function Home() {
+  const [authorized, setAuthorized] = useState<boolean | null>(null);
   const matches = useMediaQuery("(min-width: 600px)");
-    const [animateKey, setAnimateKey] = useState(0);
+  const [animateKey, setAnimateKey] = useState(0);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await authCheck();
+        setAuthorized(true);
+      } catch (e) {
+        // Not authenticated — redirect to login.
+        window.location.href = "/login";
+      }
+    })();
+  }, []);
+
+  if (authorized === null) {
+    // Still checking; render nothing (avoids showing protected content).
+    return null;
+  }
 
   const handleAnyVote = () => {
     // increment to retrigger animation in children

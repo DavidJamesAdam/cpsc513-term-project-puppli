@@ -7,6 +7,8 @@ import aboutIcon from "../components/settings/icons/about.svg";
 import userIcon from "../components/settings/icons/user.svg";
 import ChangePasswordModal from "~/components/change-password-modal/change-password-modal";
 import FAQModal from "~/components/faq-modal/faq-modal";
+import { authCheck } from "../utils/authCheck";
+import { useEffect, useState } from "react";
 import ChangeEmailModal from "~/components/change-email-modal/change-email-modal";
 
 export function meta({}: Route.MetaArgs) {
@@ -19,6 +21,23 @@ export function meta({}: Route.MetaArgs) {
 const version = "1.0.0";
 
 export default function Settings() {
+  const [authorized, setAuthorized] = useState<boolean | null>(null);
+  useEffect(() => {
+    (async () => {
+      try {
+        await authCheck();
+        setAuthorized(true);
+      } catch (e) {
+        // Not authenticated — redirect to login.
+        window.location.href = "/login";
+      }
+    })();
+  }, []);
+
+  if (authorized === null) {
+    // Still checking; render nothing (avoids showing protected content).
+    return null;
+  }
   return (
     <>
       <Header />

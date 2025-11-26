@@ -1,7 +1,7 @@
 import type { Route } from "./+types/profile";
 import Header from "../components/header/header";
 import "../styles/profile.css";
-import { useState, type ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import settingsIcon from "../components/settings/icons/settings.svg";
 import defaultProfilePicture from "../components/profile/defaultPFP.svg";
 import postIcon from "../components/profile/postIcon.svg";
@@ -18,6 +18,7 @@ import SaveAndCancelButtons from "~/components/saveAndCancelButtons";
 import UploadModal from "~/components/upload-modal/upload-modal";
 import ProfileBanner from "~/components/profile/profileBanner";
 import DeleteSubProfileModal from "~/components/profile/deleteSubProfileModal";
+import { authCheck } from "../utils/authCheck";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -27,6 +28,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Profile() {
+  const [authorized, setAuthorized] = useState<boolean | null>(null);
   // test data
   const [petInfo1, setPetInfo1] = useState({
     name: "Pet 1",
@@ -59,6 +61,43 @@ export default function Profile() {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
+  // keeps track of whether we are on a sub profile or not
+  const [onMainProfile, setOnMainProfile] = useState(true);
+  const [onPetOneSubPage, setOnPetOneSubPage] = useState(false);
+
+  // keep track of what is in the text field when editing the user bio
+  const [editingBio, setEditingBio] = useState(false);
+  const [editedBio, setEditedBio] = useState<string>(userInfo.bio ?? "");
+
+  // keep track of what is in the text field when editing the user name
+  const [editingName, setEditingName] = useState(false);
+  const [editedName, setEditedName] = useState<string>(userInfo.username ?? "");
+
+  // keep track of what is in the text field when editing the pet's name
+  const [editingPetName, setEditingPetName] = useState(false);
+  const [editedPetName, setEditedPetName] = useState<string>(
+    onPetOneSubPage ? petInfo1.name : petInfo2.name
+  );
+
+  const [currentPet, setCurrentPet] = useState(petInfo1);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await authCheck();
+        setAuthorized(true);
+      } catch (e) {
+        // Not authenticated — redirect to login.
+        window.location.href = "/login";
+      }
+    })();
+  }, []);
+
+  if (authorized === null) {
+    // Still checking; render nothing (avoids showing protected content).
+    return null;
+  }
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -67,14 +106,6 @@ export default function Profile() {
   };
 
   const maxCharacters = 50;
-
-  // keeps track of whether we are on a sub profile or not
-  const [onMainProfile, setOnMainProfile] = useState(true);
-  const [onPetOneSubPage, setOnPetOneSubPage] = useState(false);
-
-  // keep track of what is in the text field when editing the user bio
-  const [editingBio, setEditingBio] = useState(false);
-  const [editedBio, setEditedBio] = useState<string>(userInfo.bio ?? "");
 
   // saves edited bio to DB
   const handleSaveBio = (saved: boolean) => {
@@ -89,10 +120,6 @@ export default function Profile() {
     setEditedBio(userInfo.bio);
   };
 
-  // keep track of what is in the text field when editing the user name
-  const [editingName, setEditingName] = useState(false);
-  const [editedName, setEditedName] = useState<string>(userInfo.username ?? "");
-
   // saves edited name to DB
   const handleSaveName = (saved: boolean) => {
     if (saved) {
@@ -105,12 +132,6 @@ export default function Profile() {
     setEditingName(false);
     setEditedName(userInfo.username);
   };
-
-  // keep track of what is in the text field when editing the pet's name
-  const [editingPetName, setEditingPetName] = useState(false);
-  const [editedPetName, setEditedPetName] = useState<string>(
-    onPetOneSubPage ? petInfo1.name : petInfo2.name
-  );
 
   // saves edited pet name to DB
   const handleSavePetName = (saved: boolean) => {
@@ -130,8 +151,6 @@ export default function Profile() {
     setEditingPetName(false);
     setEditedPetName(onPetOneSubPage ? petInfo1.name : petInfo2.name);
   };
-
-  const [currentPet, setCurrentPet] = useState(petInfo1);
 
   // updates the state to know whether we are on main or sub profiles
   function changeProfilePage(): void {
