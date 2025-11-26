@@ -38,6 +38,8 @@ export function MainNavMenu() {
     } catch (error) {
       console.error("Error:", error);
     }
+    // redirect to login page
+    window.location.href = "/login";
   }
 
   return (
