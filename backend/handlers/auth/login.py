@@ -55,25 +55,25 @@ async def session_login(request: Request):
     )
     return response
 
+# Alternative to redirecting on frontend
+# @router.get("/require")
+# async def require_auth(request: Request):
+#     """
+#     Endpoint intended for full-page navigations: if the incoming request
+#     (from the browser) does not include a valid `session` cookie, this
+#     will redirect the browser to the frontend login page. If authenticated,
+#     returns a small JSON payload with the uid.
+#     """
+#     session_cookie = request.cookies.get("session")
+#     if not session_cookie:
+#         origin = request.headers.get("origin") or "http://localhost:5173"
+#         login_url = origin.rstrip("/") + "/login"
+#         return RedirectResponse(url=login_url, status_code=302)
 
-@router.get("/require")
-async def require_auth(request: Request):
-    """
-    Endpoint intended for full-page navigations: if the incoming request
-    (from the browser) does not include a valid `session` cookie, this
-    will redirect the browser to the frontend login page. If authenticated,
-    returns a small JSON payload with the uid.
-    """
-    session_cookie = request.cookies.get("session")
-    if not session_cookie:
-        origin = request.headers.get("origin") or "http://localhost:5173"
-        login_url = origin.rstrip("/") + "/login"
-        return RedirectResponse(url=login_url, status_code=302)
-
-    try:
-        decoded = await run_in_threadpool(admin_auth.verify_session_cookie, session_cookie, True)
-        return {"status": "ok", "uid": decoded.get("uid")}
-    except Exception:
-        origin = request.headers.get("origin") or "http://localhost:5173"
-        login_url = origin.rstrip("/") + "/login"
-        return RedirectResponse(url=login_url, status_code=302)
+#     try:
+#         decoded = await run_in_threadpool(admin_auth.verify_session_cookie, session_cookie, True)
+#         return {"status": "ok", "uid": decoded.get("uid")}
+#     except Exception:
+#         origin = request.headers.get("origin") or "http://localhost:5173"
+#         login_url = origin.rstrip("/") + "/login"
+#         return RedirectResponse(url=login_url, status_code=302)

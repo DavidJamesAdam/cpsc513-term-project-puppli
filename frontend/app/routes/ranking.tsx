@@ -21,8 +21,6 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Ranking() {
-  // Hooks must run in the same order on every render. Declare all hooks
-  // first to avoid hook-order errors.
   const [authorized, setAuthorized] = useState<boolean | null>(null);
   // keeps track of which tab we are on
   const [value, setValue] = useState(0);
