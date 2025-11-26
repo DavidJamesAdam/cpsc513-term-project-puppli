@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from firebase_service import db
+from routers.root import router as root_router
 from handlers.auth.login import router as auth_login_router
 from handlers.auth.logout import router as auth_logout_router
 from handlers.posts.getPosts import router as get_posts_router
@@ -36,6 +37,7 @@ app.add_middleware(
 )
 
 # Include routers
+app.include_router(root_router)
 app.include_router(auth_login_router)
 app.include_router(auth_logout_router)
 app.include_router(get_posts_router)
