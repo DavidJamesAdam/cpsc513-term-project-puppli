@@ -15,7 +15,6 @@ interface EditAboutModalProps {
     toy: string;
   };
   userInfo: {
-    name: string;
     username: string;
     bio: string;
     first: number;
@@ -47,13 +46,13 @@ export default function EditAboutModal({
   const handleClose = () => setOpen(false);
   const handleSubmit = () => {
     // update the DB with this updated object
-      const newPetInfo = {
-        name: petInfo.name,
-        breed: breed,
-        bday: bday,
-        treat: treat,
-        toy: toy,
-      };
+    const newPetInfo = {
+      name: petInfo.name,
+      breed: breed,
+      bday: bday,
+      treat: treat,
+      toy: toy,
+    };
     // TODO: This function would send off the user's request to update the pets information
     setOpen(false);
   };
@@ -284,9 +283,7 @@ export default function EditAboutModal({
             </p>
             <br></br>
             <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
-              <p style={{ fontSize: "24px" }}>
-                Owner: {userInfo.name} - {userInfo.username}
-              </p>
+              <p style={{ fontSize: "24px" }}>Owner: {userInfo.username}</p>
             </div>
             <br></br>
             <p style={{ fontSize: "24px" }}>Favourite Toy:</p>

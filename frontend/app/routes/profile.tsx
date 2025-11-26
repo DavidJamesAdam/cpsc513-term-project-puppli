@@ -45,7 +45,6 @@ export default function Profile() {
   });
 
   const [userInfo, setUserInfo] = useState({
-    name: "Name",
     username: "username",
     bio: "About me!!!!",
     first: 4,
@@ -92,7 +91,7 @@ export default function Profile() {
 
   // keep track of what is in the text field when editing the user name
   const [editingName, setEditingName] = useState(false);
-  const [editedName, setEditedName] = useState<string>(userInfo.name ?? "");
+  const [editedName, setEditedName] = useState<string>(userInfo.username ?? "");
 
   // saves edited name to DB
   const handleSaveName = (saved: boolean) => {
@@ -104,7 +103,7 @@ export default function Profile() {
     }
     // either button clicked should disable editing mode on user name
     setEditingName(false);
-    setEditedName(userInfo.name);
+    setEditedName(userInfo.username);
   };
 
   // keep track of what is in the text field when editing the pet's name
@@ -226,7 +225,7 @@ export default function Profile() {
               {onMainProfile && !editingName ? (
                 <>
                   <p className="profileName">
-                    {userInfo.name}
+                    {userInfo.username}
                     <Button onClick={setEditNameMode}>
                       <img
                         src={editIcon}
@@ -245,7 +244,7 @@ export default function Profile() {
                       variant="standard"
                       onChange={saveNameEditingContent}
                       value={editedName}
-                      placeholder={userInfo.name ?? "Enter your name..."}
+                      placeholder={userInfo.username ?? "Enter your name..."}
                       slotProps={{
                         input: {
                           disableUnderline: true,
@@ -298,12 +297,9 @@ export default function Profile() {
               )}
             </div>
             {onMainProfile && (
-              <>
-                <p>{userInfo.username}</p>
-                <Button id="settingsButton" onClick={navigateToSettings}>
-                  <img src={settingsIcon} alt="" />
-                </Button>
-              </>
+              <Button id="settingsButton" onClick={navigateToSettings}>
+                <img src={settingsIcon} alt="" />
+              </Button>
             )}
           </div>
         </div>
@@ -318,7 +314,7 @@ export default function Profile() {
               />
               <br></br>
               <p>
-                <span>More about {userInfo.name}</span>
+                <span>More about {userInfo.username}</span>
                 {!editingBio ? (
                   <Button onClick={setEditBioMode}>
                     <img src={editIcon} alt="" id="editIcon" />
@@ -411,9 +407,7 @@ export default function Profile() {
               <div className="oddItem">Breed: {currentPet.breed}</div>
               <div className="evenItem">Birthday: {currentPet.bday}</div>
               <div className="oddItem">Favourite Treat: {currentPet.treat}</div>
-              <div className="evenItem">
-                Owner: {userInfo.name} - {userInfo.username}
-              </div>
+              <div className="evenItem">Owner: {userInfo.username}</div>
               <div className="oddItem">Favourite Toy: {currentPet.toy}</div>
             </div>
             <Divider
