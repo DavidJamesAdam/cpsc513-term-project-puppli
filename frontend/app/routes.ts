@@ -5,7 +5,6 @@ export default [
   route("settings", "routes/settings.tsx"),
   route("login", "routes/login.tsx"),
   route("signup", "routes/signup.tsx"),
-  route("message", "routes/message.tsx"),
   route("ranking", "routes/ranking.tsx"),
   route("profile", "routes/profile.tsx"),
 ] satisfies RouteConfig;
