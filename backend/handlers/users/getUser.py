@@ -1,12 +1,13 @@
 from firebase_service import db
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from utils.authCheck import check_auth
 
 router = APIRouter()
 
 @router.get("/users")
-def read_users():
+def read_users(user=Depends(check_auth)):
     try:
-        # Get all documents from 'test' collection
+        # Get all documents from 'users' collection
         docs = db.collection('users').stream()
 
         # Convert documents to dictionary format

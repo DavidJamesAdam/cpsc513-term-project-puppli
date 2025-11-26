@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-from handlers.auth.login import loginUser
 from handlers.posts.getPosts import read_posts
 from handlers.root import read_root
 from handlers.users.getUser import read_users
@@ -17,9 +16,9 @@ def get_root():
     return read_root()
 
 #user routes
-@router.get("/users")
-def get_users():
-    return read_users()
+# @router.get("/users")
+# def get_users():
+#     return read_users()
 
 @router.post("/users")
 async def post_user(user: User):

@@ -8,6 +8,8 @@ import userIcon from "../components/settings/icons/user.svg";
 import ChangePasswordModal from "~/components/change-password-modal/change-password-modal";
 import ChangeUsernameModal from "~/components/change-username-modal/change-username-modal";
 import FAQModal from "~/components/faq-modal/faq-modal";
+import { authCheck } from "../utils/authCheck";
+import { useEffect, useState } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -20,32 +22,52 @@ const pathToSettingsIcons = "./icons/";
 
 const version = "1.0.0";
 
-function getIconPath(name : string) {
-  return (pathToSettingsIcons + name + ".svg");
+function getIconPath(name: string) {
+  return pathToSettingsIcons + name + ".svg";
 }
 
 export default function Settings() {
+  const [authorized, setAuthorized] = useState<boolean | null>(null);
+  useEffect(() => {
+    (async () => {
+      try {
+        await authCheck();
+        setAuthorized(true);
+      } catch (e) {
+        // Not authenticated — redirect to login.
+        window.location.href = "/login";
+      }
+    })();
+  }, []);
+
+  if (authorized === null) {
+    // Still checking; render nothing (avoids showing protected content).
+    return null;
+  }
   return (
     <>
       <Header />
-      <main style={{ backgroundColor: "var{--bg-color}", padding: "60px"}}>
+      <main style={{ backgroundColor: "var{--bg-color}", padding: "60px" }}>
         <div className="settings">
-            <img src={settingsIcon} alt="" />
-            <h1 className="optionTitle">Settings</h1>
+          <img src={settingsIcon} alt="" />
+          <h1 className="optionTitle">Settings</h1>
         </div>
         <div className="listOptions">
-          <SettingOption settingName={"Notifications"} enabled={true}></SettingOption>
+          <SettingOption
+            settingName={"Notifications"}
+            enabled={true}
+          ></SettingOption>
           <div className="options">
-              <img src={userIcon} alt="" />
-              <h1 className="optionTitle">User</h1>
+            <img src={userIcon} alt="" />
+            <h1 className="optionTitle">User</h1>
           </div>
           <div className="userOptions">
-            <ChangeUsernameModal/>
-            <ChangePasswordModal/>
+            <ChangeUsernameModal />
+            <ChangePasswordModal />
           </div>
-          <FAQModal/>
+          <FAQModal />
           <div className="options">
-              <span id="version">Version: {version}</span>
+            <span id="version">Version: {version}</span>
           </div>
         </div>
       </main>
