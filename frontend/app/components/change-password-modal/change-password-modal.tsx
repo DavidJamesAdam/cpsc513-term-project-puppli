@@ -52,21 +52,19 @@ export default function ChangePasswordModal() {
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
     width: "50%",
-    height: "60%",
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     backgroundColor: "rgba(224, 205, 178, 1)",
     position: "absolute",
-    transform: "translate(50%, 40%)",
+    transform: "translate(50%, 20%)",
   };
 
   const modalStyleMobile = {
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
     width: "100%",
-    height: "55%",
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
@@ -208,7 +206,7 @@ export default function ChangePasswordModal() {
               >
                 <Button sx={closeButtonStyle} onClick={handleClose}>
                   <img
-                    style={{ height: "inherit" }}
+                    style={{ scale: "50%" }}
                     src="assets\icons\Close icon.svg"
                   />
                 </Button>
@@ -435,7 +433,7 @@ export default function ChangePasswordModal() {
               >
                 <Button sx={closeButtonStyle} onClick={handleClose}>
                   <img
-                    style={{ height: "inherit" }}
+                    style={{ scale: "50%" }}
                     src="assets\icons\Close icon.svg"
                   />
                 </Button>
