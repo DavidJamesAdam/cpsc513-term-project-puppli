@@ -210,7 +210,7 @@ export default function SignUp() {
                 {emailErrorMsg}
               </p>
               <br></br>
-              <p className="signupInput">Pick a Username </p>
+              <p className="signupInput">Pick a Username</p>
               <TextField
                 className="input"
                 variant="standard"

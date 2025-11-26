@@ -125,7 +125,7 @@ export default function Profile() {
     if (saved) {
       setEditedName(editedName);
       // update local object (since data from DB is not available yet)
-      setUserInfo((prev) => ({ ...prev, name: editedName }));
+      setUserInfo((prev) => ({ ...prev, username: editedName }));
       // TODO: save to DB
     }
     // either button clicked should disable editing mode on user name
@@ -269,7 +269,7 @@ export default function Profile() {
                           disableUnderline: true,
                           style: { color: "#675844" },
                         },
-                        htmlInput: { maxLength: maxCharacters },
+                        htmlInput: { maxLength: maxCharacters, minLength: 1 },
                       }}
                     />
                     <SaveAndCancelButtons onAction={handleSaveName} />
