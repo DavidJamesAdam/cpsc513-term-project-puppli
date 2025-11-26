@@ -141,6 +141,8 @@ export default function SignUp() {
       userName: username,
       email: email,
       password: password,
+      provinceName: provinceName,
+      cityName: cityName,
     };
 
     console.log(`Account info:\n${JSON.stringify(newAccount)}`);
@@ -153,8 +155,8 @@ export default function SignUp() {
           userName: newAccount.userName,
           email: newAccount.email,
           password: newAccount.password,
-          provinceName: provinceName,
-          cityName: cityName,
+          provinceName: newAccount.provinceName,
+          cityName: newAccount.cityName,
         }),
       });
 

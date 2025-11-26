@@ -17,6 +17,8 @@ class User(BaseModel):
     email: str
     password: str
     displayName: str | None = None
+    provinceName: str
+    cityName: str
 
     # Password Validation
     @field_validator("password")
@@ -41,6 +43,8 @@ async def create_user(user: User):
     email = user_dict["email"].strip().lower()
     password = user_dict["password"]
     username = user_dict["userName"].strip()
+    province = user_dict["provinceName"]
+    city = user_dict["cityName"]
 
     # 1) Create the Firebase Auth user (password stored/managed by Auth)
     try:
@@ -56,7 +60,7 @@ async def create_user(user: User):
 
     # 2) Finalize: within a transaction confirm reservation matches and write profile + attach uid to username doc
     @gcfirestore.transactional
-    def _finalize_txn(transaction, user_ref, uid, user_dict, email, username):
+    def _finalize_txn(transaction, user_ref, uid, user_dict, email, username, city, province):
         transaction.set(
             user_ref,
             {
@@ -65,12 +69,13 @@ async def create_user(user: User):
                 "userName": username,
                 "displayName": user_dict.get("displayName") or "",
                 "createdAt": gcfirestore.SERVER_TIMESTAMP,
+                "location": f"{city}, {province}"
             },
         )
 
     try:
         txn2 = db.transaction()
-        await run_in_threadpool(_finalize_txn, txn2, user_ref, uid, user_dict, email, username)
+        await run_in_threadpool(_finalize_txn, txn2, user_ref, uid, user_dict, email, username, city, province)
     except ValueError as ve:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail=str(ve))
