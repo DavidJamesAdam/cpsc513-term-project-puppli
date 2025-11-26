@@ -54,14 +54,6 @@ export default function SignUp() {
   // used to validate input
   const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   const space = " ";
-  const allowedChars = [
-    "-",
-    "_",
-    ".",
-    ..."abcdefghijklmnopqrstuvwxyz",
-    ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-    ..."0123456789",
-  ];
 
   // set error messages for each field
   useEffect(() => {
@@ -78,10 +70,6 @@ export default function SignUp() {
 
     if (username === "") {
       setUsernameErrorMsg("Username cannot be empty.");
-      setHasUsernameError(true);
-    } else if (![...username].every((chr) => allowedChars.includes(chr))) {
-      // not true that (every character in username is an allowed character)
-      setUsernameErrorMsg("Username must consist of a-Z, 0-9, '.', '-', '_'");
       setHasUsernameError(true);
     } else {
       setUsernameErrorMsg("");
@@ -222,10 +210,7 @@ export default function SignUp() {
                 {emailErrorMsg}
               </p>
               <br></br>
-              <p className="signupInput">
-                Pick a Username{" "}
-                <span className="helpText">(Max 50 Characters)</span>
-              </p>
+              <p className="signupInput">Pick a Username </p>
               <TextField
                 className="input"
                 variant="standard"
