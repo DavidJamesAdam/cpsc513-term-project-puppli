@@ -4,6 +4,8 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import UploadModal from "../upload-modal/upload-modal";
+import { useEffect, useState } from "react";
+import { GetCountries, GetState, GetCity } from "react-country-state-city";
 
 export function MainNavMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -16,7 +18,9 @@ export function MainNavMenu() {
     setAnchorEl(null);
   };
 
-  function handleLogOut(event: React.MouseEvent<HTMLLIElement, MouseEvent>): void {
+  function handleLogOut(
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
+  ): void {
     handleClose();
     // log out logic
   }
@@ -90,7 +94,9 @@ export function MainNavMenu() {
           <div className="menu-icon">
             <img src="assets\icons\Logout icon.svg" />
           </div>
-          <div className="menu-text" style={{ color: "#c10058"}}>Log out</div>
+          <div className="menu-text" style={{ color: "#c10058" }}>
+            Log out
+          </div>
         </MenuItem>
       </Menu>
       {/* Render modal outside the Menu so it isn't unmounted when the Menu closes */}
@@ -167,7 +173,7 @@ export function PetSelectionMenu() {
     color: "inherit",
     font: "inherit",
     display: "flex",
-    width: '100%'
+    width: "100%",
     // margin: "10px",
   };
 
@@ -198,5 +204,160 @@ export function PetSelectionMenu() {
         <MenuItem>Pet</MenuItem>
       </Menu>
     </div>
+  );
+}
+
+export function LocationMenu({
+  onLocationChange,
+}: {
+  onLocationChange?: (loc: {
+    stateName?: string | null;
+    cityName?: string | null;
+  }) => void;
+}) {
+  // Use separate anchors so opening one menu doesn't open the others
+  const [anchorState, setAnchorState] = React.useState<null | HTMLElement>(
+    null
+  );
+  const [anchorCity, setAnchorCity] = React.useState<null | HTMLElement>(
+    null
+  );
+  const openState = Boolean(anchorState);
+  const openCity = Boolean(anchorCity);
+  const handleStateClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    // ensure city menu is closed when opening state menu
+    setAnchorCity(null);
+    setAnchorState(event.currentTarget);
+  };
+  const handleStateClose = () => setAnchorState(null);
+  const handleCityClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    // ensure state menu is closed when opening city menu
+    setAnchorState(null);
+    setAnchorCity(event.currentTarget);
+  };
+  const handleCityClose = () => setAnchorCity(null);
+  const [currentState, setcurrentState] = useState<string | number | null>(
+    null
+  );
+  const [state, setState] = useState<string | number | null>(null);
+  const [city, setCity] = useState<string | number | null>(null);
+  const [stateList, setStateList] = useState<any[]>([]);
+  const [citiesList, setCitiesList] = useState<any[]>([]);
+  useEffect(() => {
+      GetState(parseInt("39")).then((result) => {
+        setStateList(result || []);
+      });
+  }, ["39"]);
+  useEffect(() => {
+    if (currentState)
+      GetCity(parseInt("39"), parseInt(currentState as any)).then(
+        (result) => {
+          setCitiesList(result || []);
+        }
+      );
+  }, [currentState]);
+
+  const buttonStyle = {
+    borderRadius: "100px",
+    border: "1px #FF84A4 solid",
+    backgroundColor: "#FFC2CF",
+    color: "inherit",
+    font: "inherit",
+    display: "flex",
+    width: "100%",
+    // margin: "10px",
+  };
+
+  return (
+    <>
+      <div>
+        <Button
+          className="buttonStyle"
+          aria-controls={openState ? "state-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={openState ? "true" : undefined}
+          onClick={handleStateClick}
+          sx={buttonStyle}
+        >
+          {/* Select a Province */}
+          {stateList.find((c: any) => c.id == state)?.name || "Select a province"}
+        </Button>
+        <Menu
+          className="menu"
+          id="state-menu"
+          anchorEl={anchorState}
+          open={openState}
+          onClose={handleStateClose}
+          slotProps={{
+            list: {
+              "aria-labelledby": "basic-button",
+            },
+          }}
+          style={{width: "40%"}}
+        >
+          {stateList.map((_state: any) => (
+          <MenuItem style={{fontSize: 'inherit', color: "inherit", width: '100%'}}
+            key={_state.id}
+            onClick={() => {
+              setState(_state.id);
+              setcurrentState(_state.id);
+              handleStateClose();
+              // notify parent about selected province (clear city)
+              onLocationChange?.({
+                stateName: _state.name,
+                cityName: null,
+              });
+            }}
+          >
+            {_state.name}
+          </MenuItem>
+        ))}
+        </Menu>
+        <br/>
+        <Button
+          className="buttonStyle"
+          aria-controls={openCity ? "city-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={openCity ? "true" : undefined}
+          onClick={handleCityClick}
+          sx={buttonStyle}
+        >
+          {/* Select a City */}
+          {citiesList.find((c: any) => c.id == city)?.name || "Select a city"}
+        </Button>
+
+        <Menu
+          className="menu"
+          id="city-menu"
+          anchorEl={anchorCity}
+          open={openCity}
+          onClose={handleCityClose}
+          slotProps={{
+            list: {
+              "aria-labelledby": "basic-button",
+            },
+          }}
+          style={{width: "40%"}}
+        >
+          {citiesList.map((_city: any) => (
+          <MenuItem style={{fontSize: 'inherit', color: "inherit", width: '100%'}}
+            key={_city.id}
+            onClick={() => {
+              setCity(_city.id);
+              handleCityClose();
+              // notify parent about selected city
+              onLocationChange?.({
+                stateName: stateList.find((s) => s.id == state)?.name ?? null,
+                cityName: _city.name,
+              });
+            }}
+          >
+            {_city.name}
+          </MenuItem>
+        ))}
+        </Menu>
+
+      </div>
+    </>
   );
 }

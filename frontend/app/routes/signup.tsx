@@ -13,6 +13,7 @@ import showIcon from "../components/login/show.svg";
 import hideIcon from "../components/login/hide.svg";
 import { useEffect, useState } from "react";
 import TemporaryNotification from "~/components/temporaryNotification";
+import { LocationMenu } from "~/components/dropdown menus/dropdown-menus";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "login" }, { name: "description", content: "Sign-up page" }];
@@ -45,6 +46,10 @@ export default function SignUp() {
 
   // keep track of any errors on the entire page
   const [hasFormErrors, setHasFormErrors] = useState(false);
+
+  // track selected province / city names from LocationMenu
+  const [provinceName, setProvinceName] = useState<string | null>(null);
+  const [cityName, setCityName] = useState<string | null>(null);
 
   // used to validate input
   const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
@@ -148,6 +153,8 @@ export default function SignUp() {
           userName: newAccount.userName,
           email: newAccount.email,
           password: newAccount.password,
+          provinceName: provinceName,
+          cityName: cityName,
         }),
       });
 
@@ -178,6 +185,11 @@ export default function SignUp() {
     setTimeout(() => {
       setShowTempNotif(false);
     }, 5000);
+  }
+
+  function handleLocationChange(loc: any) {
+    setProvinceName(loc.stateName ?? null);
+    setCityName(loc.cityName ?? null);
   }
 
   return (
@@ -265,6 +277,7 @@ export default function SignUp() {
                 {passwordErrorMsg}
               </p>
               <br></br>
+              <LocationMenu onLocationChange={handleLocationChange} />
             </CardContent>
             <CardActions className="buttons">
               <Button
