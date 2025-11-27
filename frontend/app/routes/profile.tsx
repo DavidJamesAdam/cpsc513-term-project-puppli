@@ -47,11 +47,12 @@ export default function Profile() {
   });
 
   const [userInfo, setUserInfo] = useState({
+    name: "Name",
     username: "username",
     bio: "About me!!!!",
-    first: 4,
-    second: 7,
-    third: 0,
+    gold: 4,
+    silver: 7,
+    bronze: 0,
     pet1: petInfo1,
     pet2: petInfo2,
   });
@@ -71,7 +72,7 @@ export default function Profile() {
 
   // keep track of what is in the text field when editing the user name
   const [editingName, setEditingName] = useState(false);
-  const [editedName, setEditedName] = useState<string>(userInfo.username ?? "");
+  const [editedName, setEditedName] = useState<string>(userInfo.name ?? "");
 
   // keep track of what is in the text field when editing the pet's name
   const [editingPetName, setEditingPetName] = useState(false);
@@ -125,12 +126,12 @@ export default function Profile() {
     if (saved) {
       setEditedName(editedName);
       // update local object (since data from DB is not available yet)
-      setUserInfo((prev) => ({ ...prev, username: editedName }));
+      setUserInfo((prev) => ({ ...prev, name: editedName }));
       // TODO: save to DB
     }
     // either button clicked should disable editing mode on user name
     setEditingName(false);
-    setEditedName(userInfo.username);
+    setEditedName(userInfo.name);
   };
 
   // saves edited pet name to DB
@@ -244,7 +245,7 @@ export default function Profile() {
               {onMainProfile && !editingName ? (
                 <>
                   <p className="profileName">
-                    {userInfo.username}
+                    {userInfo.name}
                     <Button onClick={setEditNameMode}>
                       <img
                         src={editIcon}
@@ -263,7 +264,7 @@ export default function Profile() {
                       variant="standard"
                       onChange={saveNameEditingContent}
                       value={editedName}
-                      placeholder={userInfo.username ?? "Enter your name..."}
+                      placeholder={userInfo.name ?? "Enter your name..."}
                       slotProps={{
                         input: {
                           disableUnderline: true,
@@ -316,9 +317,12 @@ export default function Profile() {
               )}
             </div>
             {onMainProfile && (
-              <Button id="settingsButton" onClick={navigateToSettings}>
-                <img src={settingsIcon} alt="" />
-              </Button>
+              <>
+                <p>{userInfo.username}</p>
+                <Button id="settingsButton" onClick={navigateToSettings}>
+                  <img src={settingsIcon} alt="" />
+                </Button>
+              </>
             )}
           </div>
         </div>
@@ -327,9 +331,9 @@ export default function Profile() {
             <Container id="aboutContainer">
               <p>Awards</p>
               <ProfileBanner
-                first={userInfo.first}
-                second={userInfo.second}
-                third={userInfo.third}
+                first={userInfo.gold}
+                second={userInfo.silver}
+                third={userInfo.bronze}
               />
               <br></br>
               <p>
@@ -426,7 +430,9 @@ export default function Profile() {
               <div className="oddItem">Breed: {currentPet.breed}</div>
               <div className="evenItem">Birthday: {currentPet.bday}</div>
               <div className="oddItem">Favourite Treat: {currentPet.treat}</div>
-              <div className="evenItem">Owner: {userInfo.username}</div>
+              <div className="evenItem">
+                Owner: {userInfo.name} - {userInfo.username}
+              </div>
               <div className="oddItem">Favourite Toy: {currentPet.toy}</div>
             </div>
             <Divider

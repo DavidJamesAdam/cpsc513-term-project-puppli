@@ -15,11 +15,12 @@ interface EditAboutModalProps {
     toy: string;
   };
   userInfo: {
+    name: string;
     username: string;
     bio: string;
-    first: number;
-    second: number;
-    third: number;
+    gold: number;
+    silver: number;
+    bronze: number;
     pet1?: {
       name: string;
       breed: string;
@@ -283,7 +284,9 @@ export default function EditAboutModal({
             </p>
             <br></br>
             <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
-              <p style={{ fontSize: "24px" }}>Owner: {userInfo.username}</p>
+              <p style={{ fontSize: "24px" }}>
+                Owner: {userInfo.name} - {userInfo.username}
+              </p>
             </div>
             <br></br>
             <p style={{ fontSize: "24px" }}>Favourite Toy:</p>
