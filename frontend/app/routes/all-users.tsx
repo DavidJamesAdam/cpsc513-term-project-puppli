@@ -33,8 +33,16 @@ export async function loader(_: Route.LoaderArgs) {
 export default function AllUsers() {
   const users = useLoaderData() as Array<Record<string, any>> | undefined;
 
-  function deleteUser() {
-    const resp = fetch
+  async function deleteUser(uid: String) {
+    const resp = await fetch("http://localhost:8000/users", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid: uid }),
+    });
+
+    if(!resp.ok){
+
+    }
   }
 
   return (
@@ -61,14 +69,15 @@ export default function AllUsers() {
                   <TableCell>
                     <strong>{u.email}</strong>
                   </TableCell>
+                  <TableCell>{u.bio ? <div>{u.bio}</div> : null}</TableCell>
+                  <TableCell>{u.location}</TableCell>
                   <TableCell>
-                    {u.bio ? <div>{u.bio}</div> : null}
-                  </TableCell>
-                  <TableCell>
-                    {u.location}
-                  </TableCell>
-                  <TableCell>
-                    <Button style={{backgroundColor: 'red', color: 'white'}}>Delete</Button>
+                    <Button
+                      style={{ backgroundColor: "red", color: "white" }}
+                      onClick={deleteUser(u.id)}
+                    >
+                      Delete
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))
