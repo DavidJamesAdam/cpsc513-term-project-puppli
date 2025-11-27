@@ -5,6 +5,7 @@ import VotingCard from "../components/voting-card/voting-card";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { authCheck } from "../utils/authCheck";
 import Link from "@mui/material/Link";
+import LoginHeader from "~/components/header/loginHeader";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -55,7 +56,7 @@ export default function Home() {
     <div
       style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
     >
-      <Header />
+      {authorized ? <Header /> : <LoginHeader />}
       {matches ? (
         <>
           {!authorized && (
