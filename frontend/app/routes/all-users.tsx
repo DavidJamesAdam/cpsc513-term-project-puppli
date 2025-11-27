@@ -33,6 +33,10 @@ export async function loader(_: Route.LoaderArgs) {
 export default function AllUsers() {
   const users = useLoaderData() as Array<Record<string, any>> | undefined;
 
+  function deleteUser() {
+    const resp = fetch
+  }
+
   return (
     <div>
       <Header />
