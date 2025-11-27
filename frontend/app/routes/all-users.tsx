@@ -1,6 +1,13 @@
 import Header from "~/components/header/header";
 import type { Route } from "./+types/all-users";
 import { useLoaderData } from "react-router";
+import TableContainer from "@mui/material/TableContainer";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import Button from "@mui/material/Button";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -29,19 +36,46 @@ export default function AllUsers() {
   return (
     <div>
       <Header />
-      <h1>All Users</h1>
-      {users && users.length > 0 ? (
-        <ul>
-          {users.map((u) => (
-            <li key={u.id ?? JSON.stringify(u)}>
-              <strong>{u.username ?? u.displayName ?? u.id}</strong>
-              {u.about ? <div>{u.about}</div> : null}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No users found.</p>
-      )}
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>User</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Bio</TableCell>
+              <TableCell>Location</TableCell>
+              <TableCell>Delete?</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users && users.length > 0 ? (
+              users.map((u) => (
+                <TableRow key={u.id ?? JSON.stringify(u)}>
+                  <TableCell>
+                    <strong>{u.username ?? u.displayName ?? u.id}</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>{u.email}</strong>
+                  </TableCell>
+                  <TableCell>
+                    {u.bio ? <div>{u.bio}</div> : null}
+                  </TableCell>
+                  <TableCell>
+                    {u.location}
+                  </TableCell>
+                  <TableCell>
+                    <Button style={{backgroundColor: 'red', color: 'white'}}>Delete</Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell>No users found.</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 }
