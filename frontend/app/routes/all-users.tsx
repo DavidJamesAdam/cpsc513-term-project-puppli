@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Button from "@mui/material/Button";
+import { useState } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -32,16 +33,32 @@ export async function loader(_: Route.LoaderArgs) {
 
 export default function AllUsers() {
   const users = useLoaderData() as Array<Record<string, any>> | undefined;
+  // Keep a local, mutable copy so we can remove a deleted user from the UI immediately
+  const [localUsers, setLocalUsers] = useState<Array<Record<string, any>>>(users ?? []);
 
-  async function deleteUser(uid: String) {
-    const resp = await fetch("http://localhost:8000/users", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ uid: uid }),
-    });
+  async function deleteUser(uid: string | undefined) {
+    if (!uid) {
+      console.error("No uid provided for delete");
+      return;
+    }
 
-    if(!resp.ok){
+    try {
+      const resp = await fetch("http://localhost:8000/users", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ uid }),
+      });
 
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        console.error("Failed to delete user:", err);
+        return;
+      }
+
+      // Remove the user from local state so UI updates immediately
+      setLocalUsers((prev) => prev.filter((u) => u.id !== uid));
+    } catch (e) {
+      console.error("Error deleting user", e);
     }
   }
 
@@ -60,8 +77,8 @@ export default function AllUsers() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users && users.length > 0 ? (
-              users.map((u) => (
+            {localUsers && localUsers.length > 0 ? (
+              localUsers.map((u) => (
                 <TableRow key={u.id ?? JSON.stringify(u)}>
                   <TableCell>
                     <strong>{u.username ?? u.displayName ?? u.id}</strong>
@@ -74,7 +91,7 @@ export default function AllUsers() {
                   <TableCell>
                     <Button
                       style={{ backgroundColor: "red", color: "white" }}
-                      onClick={deleteUser(u.id)}
+                      onClick={() => deleteUser(u.id)}
                     >
                       Delete
                     </Button>

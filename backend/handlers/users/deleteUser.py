@@ -21,7 +21,9 @@ async def delete_user(request: Request):
     doc_ref = db.collection(collection_name).document(uid)
 
     try:
+        # Delete from Firebase Authentication
         auth.delete_user(uid)
+        # Delete from database
         doc_ref.delete()
         return {"deleted": uid}
     except Exception as e:
