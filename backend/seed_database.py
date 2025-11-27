@@ -129,13 +129,13 @@ def generate_pet(user_id, pet_index):
     ]
 
     return {
-        "UserId": user_id,
+        "userId": user_id,
         "name": random.choice(pet_names),
         "breed": breed,
-        "birthday": birthday,
-        "favouriteTreat": random.choice(FAVOURITE_TREATS),
-        "favouriteToy": random.choice(FAVOURITE_TOYS),
         "about": fake.sentence(nb_words=10)
+        "birthday": birthday,
+        "favouriteToy": random.choice(FAVOURITE_TOYS),
+        "favouriteTreat": random.choice(FAVOURITE_TREATS),
     }
 
 def generate_post(user_id, pet_id, pet_name, post_index):
@@ -170,7 +170,7 @@ def generate_post(user_id, pet_id, pet_name, post_index):
     caption = random.choice(POST_CAPTIONS).format(name=pet_name)
 
     return {
-        "UserId": user_id,
+        "userId": user_id,
         "petId": pet_id,
         "imageUrl": get_pet_image_url(post_index),
         "caption": caption,

@@ -4,6 +4,7 @@ from handlers.root import read_root
 from handlers.users.getUser import read_users
 from handlers.users.postUser import create_user, User
 from handlers.posts.postVote import post_vote
+from handlers.pets.createSubprofile import create_subprofile, PetCreate
 from fastapi import APIRouter, Request
 
 router = APIRouter()
@@ -29,3 +30,7 @@ async def get_posts():
 @router.post("/posts/{postId}")
 async def posts_vote(postId: str):
     return await post_vote(postId)
+
+@router.post("/profile")
+async def post_profile(pet: PetCreate):
+    return await create_subprofile(pet)
