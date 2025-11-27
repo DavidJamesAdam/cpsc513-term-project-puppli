@@ -7,6 +7,7 @@ from handlers.posts.postVote import post_vote
 from handlers.posts.rankGlobal import rank_global as rank_g
 from handlers.posts.rankCity import rank_city as rank_c
 from handlers.posts.rankProvince import rank_province as rank_p
+from handlers.pets.createSubprofile import create_subprofile, PetCreate
 from fastapi import APIRouter, Request
 
 router = APIRouter()
@@ -30,6 +31,11 @@ async def post_user(user: User):
 async def posts_vote(postId: str):
     return await post_vote(postId)
 
+<<<<<<< backend/routers/root.py
+@router.post("/profile")
+async def post_profile(pet: PetCreate):
+    return await create_subprofile(pet)
+=======
 #rank routes
 @router.get("/posts/rank/global")
 async def rank_global():
@@ -42,3 +48,4 @@ async def rank_prov(location: str):
 @router.get("/posts/rank/city/{location}")
 async def rank_city(location: str):
     return await rank_c(location)
+>>>>>>> backend/routers/root.py
