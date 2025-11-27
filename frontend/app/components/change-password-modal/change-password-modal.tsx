@@ -28,6 +28,8 @@ export default function ChangePasswordModal() {
     setPasswordErrorMsg("");
     // reset show password toggle
     setShow(false);
+    setShowNewPass(false);
+    setShowReEnterPass(false);
     setOpen(false);
   };
   const handleSubmit = () => {
@@ -41,8 +43,10 @@ export default function ChangePasswordModal() {
     }
   };
 
-  // controls state of the password input field
-  const [show, setShow] = React.useState(true);  
+  // controls state of the password input fields
+  const [show, setShow] = React.useState(false);
+  const [showNewPass, setShowNewPass] = React.useState(false);
+  const [showReEnterPass, setShowReEnterPass] = React.useState(false);
 
   const modalStyle = {
     borderRadius: "40px",
@@ -100,12 +104,14 @@ export default function ChangePasswordModal() {
   const [newPassword, setNewPassword] = React.useState("");
   const [newPassReEnter, setNewPassReEnter] = React.useState("");
   const [password, setPassword] = React.useState("");
-  
+
   // keeps track of error and error messages
   const [newPasswordErrorMsg, setNewPasswordErrorMsg] = React.useState("");
   const [hasNewPasswordError, setHasNewPasswordError] = React.useState(true);
-  const [newPassReEnterErrorMsg, setNewPassReEnterErrorMsg] = React.useState("");
-  const [hasNewPassReEnterError, setHasNewPassReEnterError] = React.useState(true);
+  const [newPassReEnterErrorMsg, setNewPassReEnterErrorMsg] =
+    React.useState("");
+  const [hasNewPassReEnterError, setHasNewPassReEnterError] =
+    React.useState(true);
   const [passwordErrorMsg, setPasswordErrorMsg] = React.useState("");
   const [hasPasswordError, setHasPasswordError] = React.useState(false);
 
@@ -128,6 +134,9 @@ export default function ChangePasswordModal() {
     } else if (newPassword.includes(space)) {
       setNewPasswordErrorMsg("New password cannot have a space.");
       setHasNewPasswordError(true);
+    } else if (newPassword.length < 8) {
+      setNewPasswordErrorMsg("New password must have at least 8 characters.");
+      setHasNewPasswordError(true);
     } else {
       setNewPasswordErrorMsg("");
       setHasNewPasswordError(false);
@@ -148,7 +157,7 @@ export default function ChangePasswordModal() {
     if (password === "") {
       setPasswordErrorMsg("");
       setHasPasswordError(false);
-    } 
+    }
   }, [newPassword, newPassReEnter, password]);
 
   // disable submit button if any error exists
@@ -259,7 +268,12 @@ export default function ChangePasswordModal() {
                     }}
                   />
                   <p
-                    style={{ fontSize: "1.3vw", color: "red", paddingLeft: "5px", lineHeight: "1.05" }}
+                    style={{
+                      fontSize: "1.3vw",
+                      color: "red",
+                      paddingLeft: "5px",
+                      lineHeight: "1.05",
+                    }}
                   >
                     {passwordErrorMsg}
                   </p>
@@ -290,16 +304,34 @@ export default function ChangePasswordModal() {
                     }}
                     variant="standard"
                     onChange={onNewPasswordChange}
-                    type="text"
+                    type={showNewPass ? "text" : "password"}
                     slotProps={{
                       input: {
                         disableUnderline: true,
                         style: { color: "#675844" },
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => setShowNewPass(!showNewPass)}
+                            >
+                              {showNewPass ? (
+                                <img src={showIcon} alt="Show" />
+                              ) : (
+                                <img src={hideIcon} alt="Hide" />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
                       },
                     }}
                   />
                   <p
-                    style={{ fontSize: "1.3vw", color: "red", paddingLeft: "5px", lineHeight: "1.05" }}
+                    style={{
+                      fontSize: "1.3vw",
+                      color: "red",
+                      paddingLeft: "5px",
+                      lineHeight: "1.05",
+                    }}
                   >
                     {newPasswordErrorMsg}
                   </p>
@@ -320,7 +352,7 @@ export default function ChangePasswordModal() {
                     Please re-enter new password:
                   </label>
                   <TextField
-                    type="text"
+                    type={showReEnterPass ? "text" : "password"}
                     name="reenterPass"
                     style={{
                       border: "1px solid rgba(255, 132, 164, 1)",
@@ -335,11 +367,31 @@ export default function ChangePasswordModal() {
                       input: {
                         disableUnderline: true,
                         style: { color: "#675844" },
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() =>
+                                setShowReEnterPass(!showReEnterPass)
+                              }
+                            >
+                              {showReEnterPass ? (
+                                <img src={showIcon} alt="Show" />
+                              ) : (
+                                <img src={hideIcon} alt="Hide" />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
                       },
                     }}
                   />
                   <p
-                    style={{ fontSize: "1.3vw", color: "red", paddingLeft: "5px", lineHeight: "1.05" }}
+                    style={{
+                      fontSize: "1.3vw",
+                      color: "red",
+                      paddingLeft: "5px",
+                      lineHeight: "1.05",
+                    }}
                   >
                     {newPassReEnterErrorMsg}
                   </p>
@@ -443,7 +495,12 @@ export default function ChangePasswordModal() {
                     }}
                   />
                   <p
-                    style={{ fontSize: "2vw", color: "red", paddingLeft: "5px", lineHeight: "1.05" }}
+                    style={{
+                      fontSize: "2vw",
+                      color: "red",
+                      paddingLeft: "5px",
+                      lineHeight: "1.05",
+                    }}
                   >
                     {passwordErrorMsg}
                   </p>
@@ -464,7 +521,7 @@ export default function ChangePasswordModal() {
                     Please enter new password:
                   </label>
                   <TextField
-                    type="text"
+                    type={showNewPass ? "text" : "password"}
                     name="newPass"
                     style={{
                       border: "1px solid rgba(255, 132, 164, 1)",
@@ -479,11 +536,29 @@ export default function ChangePasswordModal() {
                       input: {
                         disableUnderline: true,
                         style: { color: "#675844" },
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => setShowNewPass(!showNewPass)}
+                            >
+                              {showNewPass ? (
+                                <img src={showIcon} alt="Show" />
+                              ) : (
+                                <img src={hideIcon} alt="Hide" />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
                       },
                     }}
                   />
                   <p
-                    style={{ fontSize: "2vw", color: "red", paddingLeft: "5px", lineHeight: "1.05" }}
+                    style={{
+                      fontSize: "2vw",
+                      color: "red",
+                      paddingLeft: "5px",
+                      lineHeight: "1.05",
+                    }}
                   >
                     {newPasswordErrorMsg}
                   </p>
@@ -504,7 +579,7 @@ export default function ChangePasswordModal() {
                     Please re-enter new password:
                   </label>
                   <TextField
-                    type="text"
+                    type={showReEnterPass ? "text" : "password"}
                     name="reenterPass"
                     style={{
                       border: "1px solid rgba(255, 132, 164, 1)",
@@ -519,11 +594,31 @@ export default function ChangePasswordModal() {
                       input: {
                         disableUnderline: true,
                         style: { color: "#675844" },
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() =>
+                                setShowReEnterPass(!showReEnterPass)
+                              }
+                            >
+                              {showReEnterPass ? (
+                                <img src={showIcon} alt="Show" />
+                              ) : (
+                                <img src={hideIcon} alt="Hide" />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
                       },
                     }}
                   />
                   <p
-                    style={{ fontSize: "2vw", color: "red", paddingLeft: "5px", lineHeight: "1.05" }}
+                    style={{
+                      fontSize: "2vw",
+                      color: "red",
+                      paddingLeft: "5px",
+                      lineHeight: "1.05",
+                    }}
                   >
                     {newPassReEnterErrorMsg}
                   </p>

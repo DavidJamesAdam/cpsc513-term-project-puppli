@@ -6,6 +6,12 @@ from pydantic import BaseModel
 
 from firebase_service import db
 from routers.root import router as root_router
+from handlers.auth.login import router as auth_login_router
+from handlers.auth.logout import router as auth_logout_router
+from handlers.posts.getPosts import router as get_posts_router
+from handlers.users.getUser import router as get_user_router
+from handlers.users.postUser import router as post_user_router
+from utils.authCheck import router as auth_check_router
 
 
 @asynccontextmanager
@@ -24,7 +30,8 @@ app = FastAPI(lifespan=lifespan)
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],  # React dev server ports
+    allow_origins=["http://localhost:5173",
+                   "http://localhost:3000"],  # React dev server ports
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
@@ -32,6 +39,13 @@ app.add_middleware(
 
 # Include routers
 app.include_router(root_router)
+app.include_router(auth_login_router)
+app.include_router(auth_logout_router)
+app.include_router(get_posts_router)
+app.include_router(get_user_router)
+app.include_router(post_user_router)
+app.include_router(auth_check_router)
+
 
 @app.get("/test", response_model=List[Dict[str, Any]])
 async def get_test_collection():
@@ -52,7 +66,8 @@ async def get_test_collection():
 
         return results
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error fetching data: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error fetching data: {str(e)}")
 
 
 @app.get("/test/{document_id}")
@@ -65,22 +80,26 @@ async def get_test_document(document_id: str):
 
         if doc.exists:
             doc_data = doc.to_dict()
-            doc_data['id'] = doc.id # type: ignore
+            doc_data['id'] = doc.id  # type: ignore
             return doc_data
         else:
             raise HTTPException(status_code=404, detail="Document not found")
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error fetching document: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error fetching document: {str(e)}")
+
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
+
 class TestItem(BaseModel):
     test: str
     id: int
+
 
 @app.post("/test")
 async def post_test(item_id: TestItem):
@@ -88,4 +107,5 @@ async def post_test(item_id: TestItem):
         doc = db.collection('test').add(item_id.model_dump())
         return {"message": "Document added successfully"},
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error adding item: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error adding item: {str(e)}")

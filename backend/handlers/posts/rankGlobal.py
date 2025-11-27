@@ -1,14 +1,8 @@
 from firebase_service import db
-from fastapi import APIRouter, HTTPException
+from fastapi import FastAPI, HTTPException
 
-router = APIRouter()
-
-@router.get("/posts")
-async def read_posts():
-    """
-    Retrieve all documents from the 'posts' collection
-    Returns a list of all posts with their IDs
-    """
+async def rank_global():
+    
     try:
         # Get all documents from 'posts' collection
         docs = db.collection('posts').stream()
@@ -19,6 +13,9 @@ async def read_posts():
             doc_data = doc.to_dict()
             doc_data['id'] = doc.id  # Include document ID
             results.append(doc_data)
+        
+        #sort from highest to lowest number of votes
+        results.sort(key=lambda x: x.get('voteCount', 0), reverse=True)
 
         return results
     except Exception as e:

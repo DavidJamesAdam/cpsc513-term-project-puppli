@@ -132,8 +132,8 @@ export default function CreateSubProfileModal() {
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="Edit about modal"
-        aria-describedby="Modal that allows user to edit pet information"
+        aria-labelledby="Create sub-profile modal"
+        aria-describedby="Modal that allows user to create a new sub-profile"
       >
         <Card sx={modalStyle}>
           <Button sx={closeButtonStyle} onClick={handleClose}>
