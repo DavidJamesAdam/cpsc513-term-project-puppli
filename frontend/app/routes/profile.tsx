@@ -29,13 +29,14 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Profile() {
   const [authorized, setAuthorized] = useState<boolean | null>(null);
-  // test data
+
+  // Pet info from database
   const [petInfo1, setPetInfo1] = useState({
-    name: "Pet 1",
-    breed: "Golden Retriver",
-    bday: "March 5",
-    treat: "Bone",
-    toy: "Ball",
+    name: "",
+    breed: "",
+    bday: "",
+    treat: "",
+    toy: "",
   });
 
   const [petInfo2, setPetInfo2] = useState({
@@ -87,6 +88,36 @@ export default function Profile() {
       try {
         await authCheck();
         setAuthorized(true);
+
+        // Fetch pets for the logged-in user
+        const petsResponse = await fetch("http://localhost:8000/pets", {
+          credentials: "include",
+        });
+
+        if (petsResponse.ok) {
+          const petsData = await petsResponse.json();
+
+          // Map fetched pets to petInfo1 and petInfo2
+          if (petsData.length > 0) {
+            setPetInfo1({
+              name: petsData[0].name || "",
+              breed: petsData[0].breed || "",
+              bday: petsData[0].birthday || "",
+              treat: petsData[0].favouriteTreat || "",
+              toy: petsData[0].favouriteToy || "",
+            });
+          }
+
+          if (petsData.length > 1) {
+            setPetInfo2({
+              name: petsData[1].name || "",
+              breed: petsData[1].breed || "",
+              bday: petsData[1].birthday || "",
+              treat: petsData[1].favouriteTreat || "",
+              toy: petsData[1].favouriteToy || "",
+            });
+          }
+        }
       } catch (e) {
         // Not authenticated — redirect to login.
         window.location.href = "/login";
