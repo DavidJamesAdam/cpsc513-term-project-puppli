@@ -1,6 +1,22 @@
 .vscode
 .venv
 .env
-__pycache__
-keys/
+
+# Python
+__pycache__/
 .__pycache__
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+
+# IDEs
+.idea/
+.vscode/
+
+# macOS
+.DS_Store
+
+# Private Keys
+keys/
