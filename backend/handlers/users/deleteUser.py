@@ -11,14 +11,18 @@ log = logging.getLogger(__name__)
 @router.delete("/users")
 async def delete_user(request: Request):
     body = await request.json()
-    docs = db.collection('users').stream()
 
     uid = body.get("uid")
     if not uid:
         raise HTTPException(status_code=400, detail="Missing 'uid' in request body")
 
+    collection_name = 'users'
+
+    doc_ref = db.collection(collection_name).document(uid)
+
     try:
         auth.delete_user(uid)
+        doc_ref.delete()
         return {"deleted": uid}
     except Exception as e:
         # log.exception("Error deleting user %s", uid)
