@@ -175,14 +175,61 @@ export function NotificationMenu() {
   );
 }
 
-export function PetSelectionMenu() {
+export function PetSelectionMenu({
+  onPetChange,
+}: {
+  onPetChange?: (petId: string, petName: string) => void;
+} = {}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [selectedPet, setSelectedPet] = React.useState<string>("Select Pet");
+  const [pets, setPets] = React.useState<Array<{ id: string; name: string }>>([]);
+  const [loading, setLoading] = React.useState<boolean>(true);
   const open = Boolean(anchorEl);
+
+  // Fetch pets from backend when component mounts
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/pets", {
+          method: "GET",
+          credentials: "include", // Include cookies for authentication
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Map backend data to the format we need
+          const formattedPets = data.map((pet: any) => ({
+            id: pet.id,
+            name: pet.name || "Unnamed Pet",
+          }));
+          setPets(formattedPets);
+        } else {
+          console.error("Failed to fetch pets:", response.statusText);
+          setPets([]);
+        }
+      } catch (error) {
+        console.error("Error fetching pets:", error);
+        setPets([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPets();
+  }, []);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handlePetSelect = (petId: string, petName: string) => {
+    setSelectedPet(petName);
+    handleClose();
+    onPetChange?.(petId, petName);
   };
 
   const buttonStyle = {
@@ -205,12 +252,13 @@ export function PetSelectionMenu() {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         sx={buttonStyle}
+        disabled={loading}
       >
-        Pick a pet
+        {loading ? "Loading..." : selectedPet}
       </Button>
       <Menu
         className="menu"
-        id="notification-menu"
+        id="pet-selection-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -220,7 +268,21 @@ export function PetSelectionMenu() {
           },
         }}
       >
-        <MenuItem>Pet</MenuItem>
+        {pets.length > 0 ? (
+          pets.map((pet) => (
+            <MenuItem
+              key={pet.id}
+              style={{ fontSize: "inherit", color: "inherit", width: "100%" }}
+              onClick={() => handlePetSelect(pet.id, pet.name)}
+            >
+              {pet.name}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disabled style={{ fontSize: "inherit", color: "inherit" }}>
+            No pets found
+          </MenuItem>
+        )}
       </Menu>
     </div>
   );
