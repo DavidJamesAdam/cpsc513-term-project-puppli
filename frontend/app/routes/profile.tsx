@@ -461,10 +461,7 @@ export default function Profile() {
               <div className="oddItem">Breed: {currentPet.breed}</div>
               <div className="evenItem">Birthday: {currentPet.bday}</div>
               <div className="oddItem">Favourite Treat: {currentPet.treat}</div>
-              <div className="evenItem">
-                Owner: {userInfo.name} - {userInfo.username}
-              </div>
-              <div className="oddItem">Favourite Toy: {currentPet.toy}</div>
+              <div className="evenItem">Favourite Toy: {currentPet.toy}</div>
             </div>
             <Divider
               className="divider"
