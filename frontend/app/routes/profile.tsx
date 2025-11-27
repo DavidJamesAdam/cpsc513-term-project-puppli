@@ -51,9 +51,9 @@ export default function Profile() {
     name: "",
     username: "",
     bio: "",
-    first: 0,
-    second: 0,
-    third: 0,
+    gold: 0,
+    silver: 0,
+    bronze: 0,
     pet1: petInfo1,
     pet2: petInfo2,
   });
@@ -292,7 +292,7 @@ export default function Profile() {
             alt=""
           />
           <div id="profileBannerContents">
-            <p className="nameEditor">
+            <div className="nameEditor">
               {onMainProfile && !editingName ? (
                 <>
                   <p className="profileName">
@@ -321,7 +321,7 @@ export default function Profile() {
                           disableUnderline: true,
                           style: { color: "#675844" },
                         },
-                        htmlInput: { maxLength: maxCharacters },
+                        htmlInput: { maxLength: maxCharacters, minLength: 1 },
                       }}
                     />
                     <SaveAndCancelButtons onAction={handleSaveName} />
@@ -366,7 +366,7 @@ export default function Profile() {
                   </>
                 )
               )}
-            </p>
+            </div>
             {onMainProfile && (
               <>
                 <p>{userInfo.username}</p>
@@ -382,13 +382,13 @@ export default function Profile() {
             <Container id="aboutContainer">
               <p>Awards</p>
               <ProfileBanner
-                first={userInfo.first}
-                second={userInfo.second}
-                third={userInfo.third}
+                first={userInfo.gold}
+                second={userInfo.silver}
+                third={userInfo.bronze}
               />
               <br></br>
               <p>
-                <span>More about {userInfo.name}</span>
+                <span>More about {userInfo.username}</span>
                 {!editingBio ? (
                   <Button onClick={setEditBioMode}>
                     <img src={editIcon} alt="" id="editIcon" />

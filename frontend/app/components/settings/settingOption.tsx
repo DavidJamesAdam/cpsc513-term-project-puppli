@@ -16,7 +16,7 @@ function getIcon(name: string, enabled?: boolean) {
     return notificationsDisabledIcon;
   } else if (name === "Notifications" && enabled === true) {
     return notificationsEnabledIcon;
-  } else if (name === "Change username") {
+  } else if (name === "Change email") {
     return usernameIcon;
   } else if (name === "Change password") {
     return passwordIcon;

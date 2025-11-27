@@ -10,7 +10,7 @@ import showIcon from "../login/show.svg";
 import hideIcon from "../login/hide.svg";
 import TextField from "@mui/material/TextField";
 
-export default function ChangeUsernameModal() {
+export default function ChangeEmailModal() {
   // TODO: get from DB to prepopulate
   const userPassword = "formDB";
 
@@ -19,8 +19,8 @@ export default function ChangeUsernameModal() {
   const handleOpen = () => setOpen(true);
   // reset all error catching on modal close
   const handleClose = () => {
-    setHasUsernameError(true);
-    setUsernameErrorMsg("");
+    setHasEmailError(true);
+    setEmailErrorMsg("");
     setHasPasswordError(false);
     setPasswordErrorMsg("");
     // reset show password toggle
@@ -33,7 +33,7 @@ export default function ChangeUsernameModal() {
       setHasPasswordError(true);
       setPasswordErrorMsg("Incorrect password.");
     } else {
-      // This function would send off the user's request to change username
+      // This function would send off the user's request to change email
       setOpen(false);
     }
   };
@@ -46,7 +46,6 @@ export default function ChangeUsernameModal() {
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
     width: "50%",
-    height: "40%",
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
@@ -61,7 +60,6 @@ export default function ChangeUsernameModal() {
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
     width: "100%",
-    height: "35%",
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
@@ -96,12 +94,12 @@ export default function ChangeUsernameModal() {
   };
 
   // max 50 characters, no special characters
-  const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
   // keeps track of error and error messages
-  const [usernameErrorMsg, setUsernameErrorMsg] = React.useState("");
-  const [hasUsernameError, setHasUsernameError] = React.useState(true);
+  const [emailErrorMsg, setEmailErrorMsg] = React.useState("");
+  const [hasEmailError, setHasEmailError] = React.useState(true);
   const [passwordErrorMsg, setPasswordErrorMsg] = React.useState("");
   const [hasPasswordError, setHasPasswordError] = React.useState(false);
 
@@ -115,33 +113,38 @@ export default function ChangeUsernameModal() {
     ..."0123456789",
   ];
 
-  // set error messages for the new username field and password field
+  // set error messages for the new email field and password field
   React.useEffect(() => {
-    if (username === "") {
-      setUsernameErrorMsg("Username cannot be empty.");
-      setHasUsernameError(true);
-    } else if (![...username].every((chr) => allowedChars.includes(chr))) {
-      // not true that (every character in username is an allowed character)
-      setUsernameErrorMsg("Username must consist of a-Z, 0-9, '.', '-', '_'");
-      setHasUsernameError(true);
+    if (email === "") {
+      setEmailErrorMsg("Email cannot be empty.");
+      setHasEmailError(true);
+    } else if (!validateEmailStructure(email)) {
+      setEmailErrorMsg("Email structure incorrect (ex. yourname@example.com).");
+      setHasEmailError(true);
     } else {
-      setUsernameErrorMsg("");
-      setHasUsernameError(false);
+      setEmailErrorMsg("");
+      setHasEmailError(false);
     }
 
     if (password === "") {
       setPasswordErrorMsg("");
       setHasPasswordError(false);
-    } 
-  }, [username, password]);
+    }
+  }, [email, password]);
 
   // functions to update inputs being saved
-  function onUsernameChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setUsername(event.currentTarget.value);
+  function onEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setEmail(event.currentTarget.value);
   }
 
   function onPasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
     setPassword(event.currentTarget.value);
+  }
+
+  // used to validate structure of the email input
+  function validateEmailStructure(email: string) {
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return pattern.test(email);
   }
 
   return (
@@ -149,13 +152,13 @@ export default function ChangeUsernameModal() {
       {matches ? (
         <div>
           <Button onClick={handleOpen} sx={openButtonStyle}>
-            <SettingOption settingName={"Change username"}></SettingOption>
+            <SettingOption settingName={"Change email"}></SettingOption>
           </Button>
           <Modal
             open={open}
             onClose={handleClose}
-            aria-labelledby="Change Username modal"
-            aria-describedby="Modal that allows user to change their username"
+            aria-labelledby="Change Email modal"
+            aria-describedby="Modal that allows user to change their email"
           >
             <Box sx={modalStyle}>
               <div
@@ -170,7 +173,7 @@ export default function ChangeUsernameModal() {
               >
                 <Button sx={closeButtonStyle} onClick={handleClose}>
                   <img
-                    style={{ height: "100%" }}
+                    style={{ scale: "50%" }}
                     src="assets\icons\Close icon.svg"
                   />
                 </Button>
@@ -195,15 +198,15 @@ export default function ChangeUsernameModal() {
                   }}
                 >
                   <label
-                    htmlFor="newUsername"
+                    htmlFor="newEmail"
                     style={{ paddingLeft: "15px", fontSize: "2vw" }}
                   >
-                    Please enter new Username:{" "}<span style={{fontSize: "1.5vw"}}>(Max 50 Characters)</span>
+                    Please enter new email address:{" "}
                   </label>
                   <input
                     type="text"
-                    name="newUsername"
-                    onChange={onUsernameChange}
+                    name="newEmail"
+                    onChange={onEmailChange}
                     style={{
                       border: "1px solid rgba(255, 132, 164, 1)",
                       borderRadius: "100px",
@@ -212,12 +215,16 @@ export default function ChangeUsernameModal() {
                       padding: "8px 12px",
                       boxSizing: "border-box",
                     }}
-                    maxLength={ maxCharacters }
+                    maxLength={maxCharacters}
                   />
                   <p
-                    style={{ fontSize: "1.3vw", color: "red", paddingLeft: "5px" }}
+                    style={{
+                      fontSize: "1.3vw",
+                      color: "red",
+                      paddingLeft: "5px",
+                    }}
                   >
-                    {usernameErrorMsg}
+                    {emailErrorMsg}
                   </p>
                 </div>
                 <div
@@ -266,7 +273,11 @@ export default function ChangeUsernameModal() {
                     }}
                   />
                   <p
-                    style={{ fontSize: "1.3vw", color: "red", paddingLeft: "5px" }}
+                    style={{
+                      fontSize: "1.3vw",
+                      color: "red",
+                      paddingLeft: "5px",
+                    }}
                   >
                     {passwordErrorMsg}
                   </p>
@@ -277,7 +288,7 @@ export default function ChangeUsernameModal() {
                     id="submit"
                     sx={submitButtonStyle}
                     onClick={handleSubmit}
-                    disabled={hasUsernameError}
+                    disabled={hasEmailError}
                   >
                     Submit
                   </Button>
@@ -289,13 +300,13 @@ export default function ChangeUsernameModal() {
       ) : (
         <div>
           <Button onClick={handleOpen} sx={openButtonStyle}>
-            <SettingOption settingName={"Change username"}></SettingOption>
+            <SettingOption settingName={"Change email"}></SettingOption>
           </Button>
           <Modal
             open={open}
             onClose={handleClose}
-            aria-labelledby="Change Username modal"
-            aria-describedby="Modal that allows user to change their username"
+            aria-labelledby="Change Email modal"
+            aria-describedby="Modal that allows user to change their email"
           >
             <Box sx={modalStyleMobile}>
               <div
@@ -310,7 +321,7 @@ export default function ChangeUsernameModal() {
               >
                 <Button sx={closeButtonStyle} onClick={handleClose}>
                   <img
-                    style={{ height: "100%" }}
+                    style={{ scale: "50%" }}
                     src="assets\icons\Close icon.svg"
                   />
                 </Button>
@@ -335,15 +346,15 @@ export default function ChangeUsernameModal() {
                   }}
                 >
                   <label
-                    htmlFor="newUsername"
+                    htmlFor="newEmail"
                     style={{ paddingLeft: "15px", fontSize: "2vw" }}
                   >
-                    Please enter new Username:{" "}<span style={{fontSize: "1.5vw"}}>(Max 50 Characters)</span>
+                    Please enter new email address:{" "}
                   </label>
                   <input
                     type="text"
-                    name="newUsername"
-                    onChange={onUsernameChange}
+                    name="newEmail"
+                    onChange={onEmailChange}
                     style={{
                       border: "1px solid rgba(255, 132, 164, 1)",
                       borderRadius: "100px",
@@ -352,12 +363,16 @@ export default function ChangeUsernameModal() {
                       padding: "8px 12px",
                       boxSizing: "border-box",
                     }}
-                    maxLength={ maxCharacters }
+                    maxLength={maxCharacters}
                   />
                   <p
-                    style={{ fontSize: "2vw", color: "red", paddingLeft: "5px" }}
+                    style={{
+                      fontSize: "2vw",
+                      color: "red",
+                      paddingLeft: "5px",
+                    }}
                   >
-                    {usernameErrorMsg}
+                    {emailErrorMsg}
                   </p>
                 </div>
                 <div
@@ -406,7 +421,11 @@ export default function ChangeUsernameModal() {
                     }}
                   />
                   <p
-                    style={{ fontSize: "2vw", color: "red", paddingLeft: "5px" }}
+                    style={{
+                      fontSize: "2vw",
+                      color: "red",
+                      paddingLeft: "5px",
+                    }}
                   >
                     {passwordErrorMsg}
                   </p>
@@ -417,7 +436,7 @@ export default function ChangeUsernameModal() {
                     id="submit"
                     sx={submitButtonStyle}
                     onClick={handleSubmit}
-                    disabled={hasUsernameError}
+                    disabled={hasEmailError}
                   >
                     Submit
                   </Button>
