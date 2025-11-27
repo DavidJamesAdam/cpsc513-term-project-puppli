@@ -48,11 +48,11 @@ export default function Profile() {
   });
 
   const [userInfo, setUserInfo] = useState({
-    name: "Name",
-    username: "username",
-    bio: "About me!!!!",
-    first: 4,
-    second: 7,
+    name: "",
+    username: "",
+    bio: "",
+    first: 0,
+    second: 0,
     third: 0,
     pet1: petInfo1,
     pet2: petInfo2,
@@ -88,6 +88,26 @@ export default function Profile() {
       try {
         await authCheck();
         setAuthorized(true);
+
+        // Fetch user profile data for the logged-in user
+        const userResponse = await fetch("http://localhost:8000/user/me", {
+          credentials: "include",
+        });
+
+        if (userResponse.ok) {
+          const userData = await userResponse.json();
+
+          // Update user info with fetched data
+          setUserInfo((prev) => ({
+            ...prev,
+            name: userData.displayName || "",
+            username: userData.userName || "",
+            bio: userData.bio || "",
+            first: userData.totalGold || 0,
+            second: userData.totalSilver || 0,
+            third: userData.totalBronze || 0,
+          }));
+        }
 
         // Fetch pets for the logged-in user
         const petsResponse = await fetch("http://localhost:8000/pets", {
