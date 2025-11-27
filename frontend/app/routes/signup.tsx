@@ -33,6 +33,8 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   // max 50 characters, no special characters
   const [username, setUsername] = useState("");
+  // 50 char limit, cannot be empty
+  const [displayName, setDisplayName] = useState("");
   // needs at least one letter, any characters allowed
   const [password, setPassword] = useState("");
 
@@ -41,6 +43,8 @@ export default function SignUp() {
   const [hasEmailError, setHasEmailError] = useState(false);
   const [usernameErrorMsg, setUsernameErrorMsg] = useState("");
   const [hasUsernameError, setHasUsernameError] = useState(false);
+  const [displayNameErrorMsg, setDisplayNameErrorMsg] = useState("");
+  const [hasDisplayNameError, setHasDisplayNameError] = useState(false);
   const [passwordErrorMsg, setPasswordErrorMsg] = useState("");
   const [hasPasswordError, setHasPasswordError] = useState(false);
 
@@ -88,6 +92,14 @@ export default function SignUp() {
       setHasUsernameError(false);
     }
 
+    if (displayName === "") {
+      setDisplayNameErrorMsg("Display name cannot be empty.");
+      setHasDisplayNameError(true);
+    } else {
+      setDisplayNameErrorMsg("");
+      setHasDisplayNameError(false);
+    }
+
     if (password === "") {
       setPasswordErrorMsg("Password cannot be empty.");
       setHasPasswordError(true);
@@ -105,16 +117,21 @@ export default function SignUp() {
       setPasswordErrorMsg("");
       setHasPasswordError(false);
     }
-  }, [email, username, password]);
+  }, [email, username, password, displayName]);
 
   // disable signup button if any error exists
   useEffect(() => {
-    if (hasEmailError || hasUsernameError || hasPasswordError) {
+    if (
+      hasEmailError ||
+      hasUsernameError ||
+      hasPasswordError ||
+      hasDisplayNameError
+    ) {
       setHasFormErrors(true);
     } else {
       setHasFormErrors(false);
     }
-  }, [hasEmailError, hasUsernameError, hasPasswordError]);
+  }, [hasEmailError, hasUsernameError, hasPasswordError, hasDisplayNameError]);
 
   // functions to update inputs being saved
   function onEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -123,6 +140,10 @@ export default function SignUp() {
 
   function onUsernameChange(event: React.ChangeEvent<HTMLInputElement>) {
     setUsername(event.currentTarget.value);
+  }
+
+  function onDisplayNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setDisplayName(event.currentTarget.value);
   }
 
   function onPasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -243,6 +264,26 @@ export default function SignUp() {
                 style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}
               >
                 {usernameErrorMsg}
+              </p>
+              <br></br>
+              <p className="signupInput">What is your name?</p>
+              <TextField
+                className="input"
+                variant="standard"
+                onChange={onDisplayNameChange}
+                slotProps={{
+                  input: {
+                    disableUnderline: true,
+                    style: { color: "#675844" },
+                  },
+                  htmlInput: { maxLength: maxCharacters },
+                }}
+              />
+              <p
+                className="signupInput"
+                style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}
+              >
+                {displayNameErrorMsg}
               </p>
               <br></br>
               <p className="signupInput">
