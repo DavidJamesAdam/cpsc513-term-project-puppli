@@ -163,7 +163,41 @@ export function PetSelectionMenu({
 } = {}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedPet, setSelectedPet] = React.useState<string>("Select Pet");
+  const [pets, setPets] = React.useState<Array<{ id: string; name: string }>>([]);
+  const [loading, setLoading] = React.useState<boolean>(true);
   const open = Boolean(anchorEl);
+
+  // Fetch pets from backend when component mounts
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/pets", {
+          method: "GET",
+          credentials: "include", // Include cookies for authentication
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Map backend data to the format we need
+          const formattedPets = data.map((pet: any) => ({
+            id: pet.id,
+            name: pet.name || "Unnamed Pet",
+          }));
+          setPets(formattedPets);
+        } else {
+          console.error("Failed to fetch pets:", response.statusText);
+          setPets([]);
+        }
+      } catch (error) {
+        console.error("Error fetching pets:", error);
+        setPets([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPets();
+  }, []);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -190,12 +224,6 @@ export function PetSelectionMenu({
     // margin: "10px",
   };
 
-  // Placeholder pet data - will be replaced with backend data later
-  const pets = [
-    { id: "pet1", name: "Pet 1" },
-    { id: "pet2", name: "Pet 2" },
-  ];
-
   return (
     <div>
       <Button
@@ -205,8 +233,9 @@ export function PetSelectionMenu({
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         sx={buttonStyle}
+        disabled={loading}
       >
-        {selectedPet}
+        {loading ? "Loading..." : selectedPet}
       </Button>
       <Menu
         className="menu"
@@ -220,15 +249,21 @@ export function PetSelectionMenu({
           },
         }}
       >
-        {pets.map((pet) => (
-          <MenuItem
-            key={pet.id}
-            style={{ fontSize: "inherit", color: "inherit", width: "100%" }}
-            onClick={() => handlePetSelect(pet.id, pet.name)}
-          >
-            {pet.name}
+        {pets.length > 0 ? (
+          pets.map((pet) => (
+            <MenuItem
+              key={pet.id}
+              style={{ fontSize: "inherit", color: "inherit", width: "100%" }}
+              onClick={() => handlePetSelect(pet.id, pet.name)}
+            >
+              {pet.name}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disabled style={{ fontSize: "inherit", color: "inherit" }}>
+            No pets found
           </MenuItem>
-        ))}
+        )}
       </Menu>
     </div>
   );
