@@ -156,14 +156,27 @@ export function NotificationMenu() {
   );
 }
 
-export function PetSelectionMenu() {
+export function PetSelectionMenu({
+  onPetChange,
+}: {
+  onPetChange?: (petId: string, petName: string) => void;
+} = {}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [selectedPet, setSelectedPet] = React.useState<string>("Select Pet");
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handlePetSelect = (petId: string, petName: string) => {
+    setSelectedPet(petName);
+    handleClose();
+    onPetChange?.(petId, petName);
   };
 
   const buttonStyle = {
@@ -177,6 +190,12 @@ export function PetSelectionMenu() {
     // margin: "10px",
   };
 
+  // Placeholder pet data - will be replaced with backend data later
+  const pets = [
+    { id: "pet1", name: "Pet 1" },
+    { id: "pet2", name: "Pet 2" },
+  ];
+
   return (
     <div>
       <Button
@@ -187,11 +206,11 @@ export function PetSelectionMenu() {
         onClick={handleClick}
         sx={buttonStyle}
       >
-        Pick a pet
+        {selectedPet}
       </Button>
       <Menu
         className="menu"
-        id="notification-menu"
+        id="pet-selection-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -201,7 +220,15 @@ export function PetSelectionMenu() {
           },
         }}
       >
-        <MenuItem>Pet</MenuItem>
+        {pets.map((pet) => (
+          <MenuItem
+            key={pet.id}
+            style={{ fontSize: "inherit", color: "inherit", width: "100%" }}
+            onClick={() => handlePetSelect(pet.id, pet.name)}
+          >
+            {pet.name}
+          </MenuItem>
+        ))}
       </Menu>
     </div>
   );
