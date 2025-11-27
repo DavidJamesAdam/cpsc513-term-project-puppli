@@ -266,7 +266,10 @@ export default function SignUp() {
                 {usernameErrorMsg}
               </p>
               <br></br>
-              <p className="signupInput">What is your name?</p>
+              <p className="signupInput">
+                What is your name?{" "}
+                <span className="helpText">(Max 50 Characters)</span>
+              </p>
               <TextField
                 className="input"
                 variant="standard"
