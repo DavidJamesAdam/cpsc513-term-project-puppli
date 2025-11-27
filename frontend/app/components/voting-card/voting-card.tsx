@@ -4,13 +4,20 @@ import CommentModal from "../comment-modal/comment-modal";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState, useEffect, useRef } from "react";
 import "./styles.css";
+import disabledVoteIcon from "./icons/disabled_vote.svg";
+import disabledLikeIcon from "./icons/disabled_like.svg";
 
 type VotingCardProps = {
   animateKey?: number;
   onVote?: () => void;
+  authorized: boolean;
 };
 
-export default function VotingCard({ animateKey, onVote }: VotingCardProps) {
+export default function VotingCard({
+  animateKey,
+  onVote,
+  authorized,
+}: VotingCardProps) {
   const [isFadedOut, setIsFadedOut] = useState(false);
   const [isPopped, setIsPopped] = useState(false);
   const [plusOnes, setPlusOnes] = useState<number[]>([]);
@@ -113,20 +120,36 @@ export default function VotingCard({ animateKey, onVote }: VotingCardProps) {
               justifyContent: "space-around",
             }}
           >
-            <CommentModal />
+            <CommentModal authorized={authorized} />
             <div style={{ position: "relative", display: "inline-block" }}>
-              <Button id="favorite-button" onClick={handleFavoriteButtonClick}>
-                <img src="assets\icons\heart icon.svg" />
-              </Button>
+              {authorized ? (
+                <Button
+                  id="favorite-button"
+                  onClick={handleFavoriteButtonClick}
+                >
+                  <img src="assets\icons\heart icon.svg" />
+                </Button>
+              ) : (
+                <Button id="favorite-button">
+                  <img src={disabledLikeIcon} />
+                </Button>
+              )}
+
               {plusOnes.map((id) => (
                 <span key={id} className="plus-one">
                   +1
                 </span>
               ))}
             </div>
-            <Button id="vote-button" onClick={handleVoteButtonClick}>
-              <img src="assets\icons\vote icon.svg" />
-            </Button>
+            {authorized ? (
+              <Button id="vote-button" onClick={handleVoteButtonClick}>
+                <img src="assets\icons\vote icon.svg" />
+              </Button>
+            ) : (
+              <Button id="vote-button">
+                <img src={disabledVoteIcon} />
+              </Button>
+            )}
           </div>
         </div>
       ) : (
@@ -176,13 +199,25 @@ export default function VotingCard({ animateKey, onVote }: VotingCardProps) {
               justifyContent: "space-evenly",
             }}
           >
-            <CommentModal />
-            <Button id="favorite-button" onClick={handleFavoriteButtonClick}>
-              <img src="assets\icons\heart icon.svg" />
-            </Button>
-            <Button id="vote-button" onClick={handleVoteButtonClick}>
-              <img src="assets\icons\vote icon.svg" />
-            </Button>
+            <CommentModal authorized={authorized} />
+            {authorized ? (
+              <Button id="favorite-button" onClick={handleFavoriteButtonClick}>
+                <img src="assets\icons\heart icon.svg" />
+              </Button>
+            ) : (
+              <Button id="favorite-button">
+                <img src={disabledLikeIcon} />
+              </Button>
+            )}
+            {authorized ? (
+              <Button id="vote-button" onClick={handleVoteButtonClick}>
+                <img src="assets\icons\vote icon.svg" />
+              </Button>
+            ) : (
+              <Button id="vote-button">
+                <img src={disabledVoteIcon} />
+              </Button>
+            )}
           </div>
         </div>
       )}
