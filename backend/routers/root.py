@@ -31,11 +31,10 @@ async def post_user(user: User):
 async def posts_vote(postId: str):
     return await post_vote(postId)
 
-<<<<<<< backend/routers/root.py
 @router.post("/profile")
 async def post_profile(pet: PetCreate):
     return await create_subprofile(pet)
-=======
+
 #rank routes
 @router.get("/posts/rank/global")
 async def rank_global():
@@ -48,4 +47,4 @@ async def rank_prov(location: str):
 @router.get("/posts/rank/city/{location}")
 async def rank_city(location: str):
     return await rank_c(location)
->>>>>>> backend/routers/root.py
+

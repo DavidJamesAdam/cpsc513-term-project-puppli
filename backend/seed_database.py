@@ -20,14 +20,21 @@ from firebase_service import db
 
 # Canadian cities for user locations
 LOCATIONS = [
-    "Calgary, AB",
-    "Vancouver, BC",
-    "Toronto, ON",
-    "Montreal, QC",
-    "Edmonton, AB",
-    "Ottawa, ON",
-    "Winnipeg, MB",
-    "Halifax, NS"
+    "Calgary, Alberta",
+    "Edmonton, Alberta",
+    "Vancouver, British Columbia",
+    "Winnipeg, Manitoba",
+    "Saint John, New Brunswick",
+    "Labrador City, Newfoundland and Labrador",
+    "Yellowknife, Northwest Territories",
+    "Halifax, Nova Scotia",
+    "Iqaluit, Nunavut",
+    "Toronto, Ontario",
+    "Ottawa, Ontario",
+    "Charlottetown, Prince Edward Island",
+    "Montreal, Quebec",
+    "Saskatoon, Saskatchewan",
+    "Whitehorse, Yukon"
 ]
 
 # Dog breeds
@@ -102,16 +109,17 @@ def generate_user(user_index):
     username = generate_username()
 
     return {
-        "usernameLower": username.lower(),
+        "role": "admin" if user_index == 1 else "user",
         "email": f"{username}@example.com",
         "displayName": f"{first_name} {last_name}",
-        "avatarUrl": f"https://i.pravatar.cc/150?u={username}",
-        "bio": fake.sentence(nb_words=8),
+        "usernameLower": username.lower(),
         "location": random.choice(LOCATIONS),
+        "bio": fake.sentence(nb_words=8),
+        "notificationsEnabled": random.choice([True, False]),
         "totalGold": 0,  # Will be calculated after posts
         "totalSilver": 0,
         "totalBronze": 0,
-        "notificationsEnabled": random.choice([True, False])
+        "avatarUrl": f"https://i.pravatar.cc/150?u={username}"
     }
 
 def generate_pet(user_id, pet_index):
@@ -132,10 +140,10 @@ def generate_pet(user_id, pet_index):
         "userId": user_id,
         "name": random.choice(pet_names),
         "breed": breed,
-        "about": fake.sentence(nb_words=10)
+        "about": fake.sentence(nb_words=10),
         "birthday": birthday,
         "favouriteToy": random.choice(FAVOURITE_TOYS),
-        "favouriteTreat": random.choice(FAVOURITE_TREATS),
+        "favouriteTreat": random.choice(FAVOURITE_TREATS)
     }
 
 def generate_post(user_id, pet_id, pet_name, post_index):
