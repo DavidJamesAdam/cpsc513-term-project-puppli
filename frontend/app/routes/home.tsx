@@ -65,6 +65,7 @@ export default function Home() {
                 alignSelf: "center",
                 paddingTop: "30px",
               }}
+              className="blinking-text"
             >
               To like, comment, or vote, please{" "}
               <Link className="link" href="signup">

@@ -218,7 +218,13 @@ export default function SignUp() {
   return (
     <>
       <LoginHeader />
-      <main style={{ backgroundColor: "var{--bg-color}", paddingTop: "60px" }}>
+      <main
+        style={{
+          backgroundColor: "var{--bg-color}",
+          paddingTop: "60px",
+          paddingBottom: "60px",
+        }}
+      >
         <div className="loginBox">
           <Card className="card" sx={{ maxWidth: 785 }}>
             <h1>Sign-up</h1>
@@ -342,6 +348,11 @@ export default function SignUp() {
           Already have an account?{" "}
           <Link className="link" href="login">
             Log-in here
+          </Link>
+        </p>
+        <p className="redirectLink">
+          <Link className="link" href="/">
+            <b>View as Guest</b>
           </Link>
         </p>
         <TemporaryNotification
