@@ -103,9 +103,9 @@ export default function Profile() {
             name: userData.displayName || "",
             username: userData.userName || "",
             bio: userData.bio || "",
-            first: userData.totalGold || 0,
-            second: userData.totalSilver || 0,
-            third: userData.totalBronze || 0,
+            gold: userData.totalGold || 0,
+            silver: userData.totalSilver || 0,
+            bronze: userData.totalBronze || 0,
           }));
         }
 
