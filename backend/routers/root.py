@@ -10,6 +10,7 @@ from handlers.users.updateUser import get_user as get_u
 from handlers.users.updateUser import update_user as update_u
 from handlers.posts.rankProvince import rank_province as rank_p
 from handlers.pets.createSubprofile import create_subprofile, PetCreate
+from handlers.pets.updatePet import update_pet as update_p
 from fastapi import APIRouter, Request
 
 router = APIRouter()
@@ -59,4 +60,9 @@ async def rank_prov(location: str):
 @router.get("/posts/rank/city/{location}")
 async def rank_city(location: str):
     return await rank_c(location)
+
+#pet routes
+@router.patch("/pet/update/{pet_id}")
+async def update_pet(pet_id: str, updated_fields: dict):
+    return await update_p(pet_id, updated_fields)
 
