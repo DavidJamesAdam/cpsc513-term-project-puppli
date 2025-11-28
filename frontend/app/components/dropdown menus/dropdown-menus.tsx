@@ -18,11 +18,30 @@ export function MainNavMenu() {
     setAnchorEl(null);
   };
 
-  function handleLogOut(
+  async function handleLogOut(
     event: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ): void {
+  ): Promise<void> {
+    // close the menu
     handleClose();
-    // log out logic
+    try {
+      // log out logic
+      const resp = await fetch("http://localhost:8000/auth/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // VERY IMPORTANT: accept cookie
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        throw new Error(err.detail || "Log out failed");
+      } else {
+        console.log("logged out");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    // redirect to login page
+    window.location.href = "/login";
   }
 
   return (
@@ -156,14 +175,61 @@ export function NotificationMenu() {
   );
 }
 
-export function PetSelectionMenu() {
+export function PetSelectionMenu({
+  onPetChange,
+}: {
+  onPetChange?: (petId: string, petName: string) => void;
+} = {}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [selectedPet, setSelectedPet] = React.useState<string>("Select Pet");
+  const [pets, setPets] = React.useState<Array<{ id: string; name: string }>>([]);
+  const [loading, setLoading] = React.useState<boolean>(true);
   const open = Boolean(anchorEl);
+
+  // Fetch pets from backend when component mounts
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/pets", {
+          method: "GET",
+          credentials: "include", // Include cookies for authentication
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Map backend data to the format we need
+          const formattedPets = data.map((pet: any) => ({
+            id: pet.id,
+            name: pet.name || "Unnamed Pet",
+          }));
+          setPets(formattedPets);
+        } else {
+          console.error("Failed to fetch pets:", response.statusText);
+          setPets([]);
+        }
+      } catch (error) {
+        console.error("Error fetching pets:", error);
+        setPets([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPets();
+  }, []);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handlePetSelect = (petId: string, petName: string) => {
+    setSelectedPet(petName);
+    handleClose();
+    onPetChange?.(petId, petName);
   };
 
   const buttonStyle = {
@@ -186,12 +252,13 @@ export function PetSelectionMenu() {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         sx={buttonStyle}
+        disabled={loading}
       >
-        Pick a pet
+        {loading ? "Loading..." : selectedPet}
       </Button>
       <Menu
         className="menu"
-        id="notification-menu"
+        id="pet-selection-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -201,7 +268,21 @@ export function PetSelectionMenu() {
           },
         }}
       >
-        <MenuItem>Pet</MenuItem>
+        {pets.length > 0 ? (
+          pets.map((pet) => (
+            <MenuItem
+              key={pet.id}
+              style={{ fontSize: "inherit", color: "inherit", width: "100%" }}
+              onClick={() => handlePetSelect(pet.id, pet.name)}
+            >
+              {pet.name}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disabled style={{ fontSize: "inherit", color: "inherit" }}>
+            No pets found
+          </MenuItem>
+        )}
       </Menu>
     </div>
   );
@@ -219,9 +300,7 @@ export function LocationMenu({
   const [anchorState, setAnchorState] = React.useState<null | HTMLElement>(
     null
   );
-  const [anchorCity, setAnchorCity] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [anchorCity, setAnchorCity] = React.useState<null | HTMLElement>(null);
   const openState = Boolean(anchorState);
   const openCity = Boolean(anchorCity);
   const handleStateClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -244,17 +323,15 @@ export function LocationMenu({
   const [stateList, setStateList] = useState<any[]>([]);
   const [citiesList, setCitiesList] = useState<any[]>([]);
   useEffect(() => {
-      GetState(parseInt("39")).then((result) => {
-        setStateList(result || []);
-      });
+    GetState(parseInt("39")).then((result) => {
+      setStateList(result || []);
+    });
   }, ["39"]);
   useEffect(() => {
     if (currentState)
-      GetCity(parseInt("39"), parseInt(currentState as any)).then(
-        (result) => {
-          setCitiesList(result || []);
-        }
-      );
+      GetCity(parseInt("39"), parseInt(currentState as any)).then((result) => {
+        setCitiesList(result || []);
+      });
   }, [currentState]);
 
   const buttonStyle = {
@@ -280,7 +357,8 @@ export function LocationMenu({
           sx={buttonStyle}
         >
           {/* Select a Province */}
-          {stateList.find((c: any) => c.id == state)?.name || "Select a province"}
+          {stateList.find((c: any) => c.id == state)?.name ||
+            "Select a province"}
         </Button>
         <Menu
           className="menu"
@@ -293,27 +371,28 @@ export function LocationMenu({
               "aria-labelledby": "basic-button",
             },
           }}
-          style={{width: "40%"}}
+          style={{ width: "40%" }}
         >
           {stateList.map((_state: any) => (
-          <MenuItem style={{fontSize: 'inherit', color: "inherit", width: '100%'}}
-            key={_state.id}
-            onClick={() => {
-              setState(_state.id);
-              setcurrentState(_state.id);
-              handleStateClose();
-              // notify parent about selected province (clear city)
-              onLocationChange?.({
-                stateName: _state.name,
-                cityName: null,
-              });
-            }}
-          >
-            {_state.name}
-          </MenuItem>
-        ))}
+            <MenuItem
+              style={{ fontSize: "inherit", color: "inherit", width: "100%" }}
+              key={_state.id}
+              onClick={() => {
+                setState(_state.id);
+                setcurrentState(_state.id);
+                handleStateClose();
+                // notify parent about selected province (clear city)
+                onLocationChange?.({
+                  stateName: _state.name,
+                  cityName: null,
+                });
+              }}
+            >
+              {_state.name}
+            </MenuItem>
+          ))}
         </Menu>
-        <br/>
+        <br />
         <Button
           className="buttonStyle"
           aria-controls={openCity ? "city-menu" : undefined}
@@ -337,26 +416,26 @@ export function LocationMenu({
               "aria-labelledby": "basic-button",
             },
           }}
-          style={{width: "40%"}}
+          style={{ width: "40%" }}
         >
           {citiesList.map((_city: any) => (
-          <MenuItem style={{fontSize: 'inherit', color: "inherit", width: '100%'}}
-            key={_city.id}
-            onClick={() => {
-              setCity(_city.id);
-              handleCityClose();
-              // notify parent about selected city
-              onLocationChange?.({
-                stateName: stateList.find((s) => s.id == state)?.name ?? null,
-                cityName: _city.name,
-              });
-            }}
-          >
-            {_city.name}
-          </MenuItem>
-        ))}
+            <MenuItem
+              style={{ fontSize: "inherit", color: "inherit", width: "100%" }}
+              key={_city.id}
+              onClick={() => {
+                setCity(_city.id);
+                handleCityClose();
+                // notify parent about selected city
+                onLocationChange?.({
+                  stateName: stateList.find((s) => s.id == state)?.name ?? null,
+                  cityName: _city.name,
+                });
+              }}
+            >
+              {_city.name}
+            </MenuItem>
+          ))}
         </Menu>
-
       </div>
     </>
   );

@@ -75,7 +75,7 @@
   line-height: 1;
 }
 
-.voting-page{
+.voting-page {
   width: auto;
   height: 100%;
   display: flex;
@@ -109,5 +109,20 @@ body {
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+}
 
+@keyframes blink-animation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.blinking-text {
+  animation: blink-animation 4s infinite;
 }
