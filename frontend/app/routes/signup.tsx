@@ -162,6 +162,7 @@ export default function SignUp() {
       userName: username,
       email: email,
       password: password,
+      displayName: displayName,
       provinceName: provinceName,
       cityName: cityName,
     };
@@ -176,6 +177,7 @@ export default function SignUp() {
           userName: newAccount.userName,
           email: newAccount.email,
           password: newAccount.password,
+          displayName: newAccount.displayName,
           provinceName: newAccount.provinceName,
           cityName: newAccount.cityName,
         }),
