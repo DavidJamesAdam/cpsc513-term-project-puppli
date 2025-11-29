@@ -13,6 +13,11 @@ p {
   color: var(--font-color);
 }
 
+span {
+  font-size: 32px;
+  color: var(--font-color);
+}
+
 #profileBanner {
   background-color: #e0cdb2;
   display: flex;

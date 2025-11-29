@@ -461,7 +461,7 @@ export default function Profile() {
                 third={userInfo.bronze}
               />
               <br></br>
-              <p>
+              <div>
                 <span>More about {userInfo.username}</span>
                 {!editingBio ? (
                   <Button onClick={setEditBioMode}>
@@ -470,7 +470,7 @@ export default function Profile() {
                 ) : (
                   <SaveAndCancelButtons onAction={handleSaveBio} />
                 )}
-              </p>
+              </div>
               {userInfo.bio && !editingBio ? (
                 <p style={{ fontSize: "24px" }}>{userInfo.bio}</p>
               ) : (
