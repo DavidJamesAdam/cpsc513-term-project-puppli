@@ -34,14 +34,8 @@ export default function VotingCard({
   const [isFadedOut, setIsFadedOut] = useState(false);
   const [isPopped, setIsPopped] = useState(false);
   const [plusOnes, setPlusOnes] = useState<number[]>([]);
-  const [voteCount, setVoteCount] = useState(post?.voteCount || 0);
   const matches = useMediaQuery("(min-width: 600px)");
   const firstRunRef = useRef(true);
-
-  // Update voteCount when post changes
-  useEffect(() => {
-    setVoteCount(post?.voteCount || 0);
-  }, [post]);
   const handleCommentButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -86,29 +80,11 @@ export default function VotingCard({
     };
   }, [animateKey]);
 
-  const handleVoteButtonClick = async (
+  const handleVoteButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     // Vote for specific picture
-    if (!post) return;
-
-    try {
-      const response = await fetch(`http://localhost:8000/posts/vote/${post.id}`, {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        // Increment vote count locally
-        setVoteCount((prev) => prev + 1);
-        // Trigger parent's onVote callback to refresh posts
-        if (onVote) onVote();
-      } else {
-        console.error("Error voting on post:", response.status);
-      }
-    } catch (error) {
-      console.error("Failed to vote on post:", error);
-    }
+    if (onVote) onVote();
   };
   return (
     <>
@@ -158,20 +134,6 @@ export default function VotingCard({
                 src={"assets/icons/ant-design--picture-outlined.svg"}
                 style={{ width: "90%", height: "auto" }}
               />
-            )}
-            {post && (
-              <div style={{
-                position: "absolute",
-                bottom: "10px",
-                left: "10px",
-                backgroundColor: "rgba(0, 0, 0, 0.6)",
-                color: "white",
-                padding: "5px 10px",
-                borderRadius: "10px",
-                fontSize: "12px",
-              }}>
-                Votes: {voteCount}
-              </div>
             )}
           </div>
           <div
@@ -265,20 +227,6 @@ export default function VotingCard({
                 src={"assets/icons/ant-design--picture-outlined.svg"}
                 style={{ width: "90%", height: "auto" }}
               />
-            )}
-            {post && (
-              <div style={{
-                position: "absolute",
-                bottom: "10px",
-                left: "10px",
-                backgroundColor: "rgba(0, 0, 0, 0.6)",
-                color: "white",
-                padding: "5px 10px",
-                borderRadius: "10px",
-                fontSize: "12px",
-              }}>
-                Votes: {voteCount}
-              </div>
             )}
           </div>
           <div
