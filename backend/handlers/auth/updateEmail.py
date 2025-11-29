@@ -19,9 +19,14 @@ def update_email(update: EmailUpdate):
         #update email in Firebase Auth
         auth.update_user(uid, email=update.new_email)
 
+        #update profile document in firestore 
+        user_ref = db.collection("users").document(uid)
+        user_ref.update({"email": update.new_email})
+
         return {"status": "success", "message": "Email updated successfully"}
 
     except auth.EmailAlreadyExistsError:
         raise HTTPException(status_code=400, detail="Email already in use")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+ 
