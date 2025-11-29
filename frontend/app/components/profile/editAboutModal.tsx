@@ -7,6 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import TextField from "@mui/material/TextField";
 
 interface EditAboutModalProps {
+  onPetOneSubPage: boolean;
   petInfo: {
     name: string;
     breed: string;
@@ -39,22 +40,51 @@ interface EditAboutModalProps {
 }
 
 export default function EditAboutModal({
+  onPetOneSubPage,
   petInfo,
   userInfo,
 }: EditAboutModalProps) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleSubmit = () => {
-    // update the DB with this updated object
-    const newPetInfo = {
-      name: petInfo.name,
-      breed: breed,
-      bday: bday,
-      treat: treat,
-      toy: toy,
-    };
-    // TODO: This function would send off the user's request to update the pets information
+  // This function would send off the user's request to update the pets information
+  const handleSubmit = async () => {
+    // Fetch pets for the logged-in user
+      const petsResponse = await fetch("http://localhost:8000/pets", {
+        credentials: "include",
+      });
+
+      // if successful, we can do the update
+      if (petsResponse.ok) {
+        const petsData = await petsResponse.json();
+
+        // by defualt use pet1 id
+        let petID = petsData[0].id;
+
+        // but if on sub profile 2, get second pet's id
+        if (!onPetOneSubPage) {
+          petID = petsData[1].id;
+        }
+
+        // save all the fields in the modal to the DB based on the pet id
+        const updateNameResponse = await fetch(`http://localhost:8000/pet/update/${petID}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", },
+          body: JSON.stringify({ 
+            breed: breed,
+            birthday: bday,
+            favouriteToy: toy,
+            favouriteTreat: treat,
+          }),
+        });
+
+        // if failed, print to console
+        if (!updateNameResponse.ok) {
+          console.error("Error updating pet name.");
+        }
+      }
+
+    // close modal when done  
     setOpen(false);
   };
   const maxCharacters = 50;

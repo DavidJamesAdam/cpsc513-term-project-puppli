@@ -551,7 +551,7 @@ export default function Profile() {
         ) : (
           <>
             <div id="petInfoContainer">
-              <EditAboutModal petInfo={currentPet} userInfo={userInfo} />
+              <EditAboutModal onPetOneSubPage={onPetOneSubPage} petInfo={currentPet} userInfo={userInfo} />
               <div className="oddItem">Breed: {currentPet.breed}</div>
               <div className="evenItem">Birthday: {currentPet.bday}</div>
               <div className="oddItem">Favourite Treat: {currentPet.treat}</div>
