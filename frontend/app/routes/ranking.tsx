@@ -14,6 +14,7 @@ import { authCheck } from "~/utils/authCheck";
 import TableCell from "@mui/material/TableCell";
 import Paper from "@mui/material/Paper";
 import TableBody from "@mui/material/TableBody";
+import petPFP from "../components/profile/defaultPetPFP.svg";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -123,7 +124,7 @@ export default function Ranking() {
                 key={index}
                 className={index % 2 === 0 ? "evenItem" : "oddItem"}
               >
-                <TableCell>
+                <TableCell className="badge">
                   {(index + 1) < 4 ? (
                     <img src={getBadge(index + 1)} alt="" />
                   ) : (
@@ -133,7 +134,7 @@ export default function Ranking() {
                 <TableCell>
                   <div className="petItem">
                     <h1 className="name">{row.name}</h1>
-                    <img src={rankOneIcon} alt="example.svg" />
+                    <img src={petPFP} alt="example.svg" />
                   </div>
                 </TableCell>
               </TableRow>
