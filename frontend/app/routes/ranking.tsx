@@ -10,8 +10,10 @@ import TableRow from "@mui/material/TableRow";
 import rankOneIcon from "../components/rankings/rankOne.svg";
 import rankTwoIcon from "../components/rankings/rankTwo.svg";
 import rankThreeIcon from "../components/rankings/rankThree.svg";
-import RankItem from "~/components/rankings/rankItem";
 import { authCheck } from "~/utils/authCheck";
+import TableCell from "@mui/material/TableCell";
+import Paper from "@mui/material/Paper";
+import TableBody from "@mui/material/TableBody";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -74,6 +76,26 @@ export default function Ranking() {
     setValue(value);
   }
 
+  // gets the correct svg based the rank
+  function getBadge(rank: number) {
+    if (rank === 1) {
+      return rankOneIcon;
+    } else if (rank === 2) {
+      return rankTwoIcon;
+    } else if (rank === 3) {
+      return rankThreeIcon;
+    }
+  }
+
+  // creates a custom svg with the given rank
+  function getCustomBadge(rank: number) {
+    return (
+      <Paper id="customBadge" variant="outlined">
+        {rank}
+      </Paper>
+    );
+  }
+
   return (
     <>
       <Header />
@@ -94,14 +116,29 @@ export default function Ranking() {
           <Tab label="Local" className="filterTab" />
         </Tabs>
         <Table>
-          {data.map((row, index) => (
-            <TableRow
-              key={index}
-              className={index % 2 === 0 ? "evenItem" : "oddItem"}
-            >
-              <RankItem petName={row.name} rank={index + 1}></RankItem>
-            </TableRow>
-          ))}
+          <TableBody>
+            {data.map((row, index) => (
+              <TableRow
+                style={{ display: "flex", flexDirection: "row", justifyContent:"space-between", padding: "0px 40px", }}
+                key={index}
+                className={index % 2 === 0 ? "evenItem" : "oddItem"}
+              >
+                <TableCell>
+                  {(index + 1) < 4 ? (
+                    <img src={getBadge(index + 1)} alt="" />
+                  ) : (
+                    getCustomBadge(index + 1)
+                  )}
+                </TableCell>
+                <TableCell>
+                  <div className="petItem">
+                    <h1 className="name">{row.name}</h1>
+                    <img src={rankOneIcon} alt="example.svg" />
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
       </main>
     </>
