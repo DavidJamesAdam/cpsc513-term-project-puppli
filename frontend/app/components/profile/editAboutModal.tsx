@@ -18,9 +18,9 @@ interface EditAboutModalProps {
     name: string;
     username: string;
     bio: string;
-    first: number;
-    second: number;
-    third: number;
+    gold: number;
+    silver: number;
+    bronze: number;
     pet1?: {
       name: string;
       breed: string;
@@ -47,13 +47,13 @@ export default function EditAboutModal({
   const handleClose = () => setOpen(false);
   const handleSubmit = () => {
     // update the DB with this updated object
-      const newPetInfo = {
-        name: petInfo.name,
-        breed: breed,
-        bday: bday,
-        treat: treat,
-        toy: toy,
-      };
+    const newPetInfo = {
+      name: petInfo.name,
+      breed: breed,
+      bday: bday,
+      treat: treat,
+      toy: toy,
+    };
     // TODO: This function would send off the user's request to update the pets information
     setOpen(false);
   };

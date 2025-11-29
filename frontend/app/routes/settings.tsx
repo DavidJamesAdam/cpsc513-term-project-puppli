@@ -6,10 +6,10 @@ import settingsIcon from "../components/settings/icons/settings.svg";
 import aboutIcon from "../components/settings/icons/about.svg";
 import userIcon from "../components/settings/icons/user.svg";
 import ChangePasswordModal from "~/components/change-password-modal/change-password-modal";
-import ChangeUsernameModal from "~/components/change-username-modal/change-username-modal";
 import FAQModal from "~/components/faq-modal/faq-modal";
 import { authCheck } from "../utils/authCheck";
 import { useEffect, useState } from "react";
+import ChangeEmailModal from "~/components/change-email-modal/change-email-modal";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -18,13 +18,7 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-const pathToSettingsIcons = "./icons/";
-
 const version = "1.0.0";
-
-function getIconPath(name: string) {
-  return pathToSettingsIcons + name + ".svg";
-}
 
 export default function Settings() {
   const [authorized, setAuthorized] = useState<boolean | null>(null);
@@ -62,11 +56,13 @@ export default function Settings() {
             <h1 className="optionTitle">User</h1>
           </div>
           <div className="userOptions">
-            <ChangeUsernameModal />
+            <ChangeEmailModal />
             <ChangePasswordModal />
           </div>
           <FAQModal />
           <div className="options">
+            <img src={aboutIcon} alt="" />
+            <h1 className="optionTitle">About</h1>
             <span id="version">Version: {version}</span>
           </div>
         </div>
