@@ -3,9 +3,7 @@ from fastapi import APIRouter, HTTPException
 
 router = APIRouter()
 
-#update pet info
-#accepts a dict of fields with new values, not all fields need to be provided, just the ones that are changing
-
+#delete pet subprofile
 async def delete_pet(pet_id: str):
 
     try:
