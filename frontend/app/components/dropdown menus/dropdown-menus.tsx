@@ -7,7 +7,7 @@ import UploadModal from "../upload-modal/upload-modal";
 import { useEffect, useState } from "react";
 import { GetState, GetCity } from "react-country-state-city";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 export function MainNavMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

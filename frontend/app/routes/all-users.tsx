@@ -9,6 +9,7 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Button from "@mui/material/Button";
 import { useState } from "react";
+import ConfirmDeletionModal from "~/components/confirm-modal/confirm-modal";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -35,6 +36,8 @@ export default function AllUsers() {
   const users = useLoaderData() as Array<Record<string, any>> | undefined;
   // Keep a local, mutable copy so we can remove a deleted user from the UI immediately
   const [localUsers, setLocalUsers] = useState<Array<Record<string, any>>>(users ?? []);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUid, setSelectedUid] = useState<string | undefined>(undefined);
 
   async function deleteUser(uid: string | undefined) {
     if (!uid) {
@@ -91,7 +94,10 @@ export default function AllUsers() {
                   <TableCell>
                     <Button
                       style={{ backgroundColor: "red", color: "white" }}
-                      onClick={() => deleteUser(u.id)}
+                      onClick={() => {
+                        setSelectedUid(u.id);
+                        setIsModalOpen(true);
+                      }}
                     >
                       Delete
                     </Button>
@@ -106,6 +112,15 @@ export default function AllUsers() {
           </TableBody>
         </Table>
       </TableContainer>
+        <ConfirmDeletionModal
+          open={isModalOpen}
+          uid={selectedUid}
+          onClose={() => setIsModalOpen(false)}
+          onConfirm={async (uid) => {
+            await deleteUser(uid);
+            setIsModalOpen(false);
+          }}
+        />
     </div>
   );
 }
