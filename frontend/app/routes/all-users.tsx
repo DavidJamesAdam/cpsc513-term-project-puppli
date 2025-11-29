@@ -60,8 +60,6 @@ export default function AllUsers() {
 
         const user = await resp.json();
 
-        console.log(user);
-
         // check role
         if (user.role !== "admin") {
           // not authorized -> go to profile
