@@ -47,6 +47,16 @@ export function MainNavMenu() {
       });
     } catch (error) {
       console.error("Error:", error);
+      toast.error("Logout unsuccessful", {
+        style: {
+          borderRadius: "100px",
+          width: "100%",
+          fontSize: "2em",
+          backgroundColor: "#e0cdb2",
+          border: "1px solid rgba(255, 132, 164, 1)",
+        },
+        duration: 3000,
+      });
     }
     // redirect to login page
     navigate("/login");
