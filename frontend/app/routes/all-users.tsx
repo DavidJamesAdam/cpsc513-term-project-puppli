@@ -10,6 +10,7 @@ import TableBody from "@mui/material/TableBody";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import ConfirmDeletionModal from "~/components/confirm-modal/confirm-modal";
+import toast from "react-hot-toast";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -57,6 +58,24 @@ export default function AllUsers() {
         console.error("Failed to delete user:", err);
         return;
       }
+      toast.promise(
+        Promise.resolve(resp),
+        {
+          loading: "Deleting...",
+          success: "User Deleted",
+          error: (err: Error) => `User deletion failed: ${err.message}`,
+        },
+        {
+          style: {
+            borderRadius: "100px",
+            width: "100%",
+            fontSize: "2em",
+            backgroundColor: "#e0cdb2",
+            border: "1px solid rgba(255, 132, 164, 1)",
+          },
+          duration: 3000,
+        }
+      );
 
       // Remove the user from local state so UI updates immediately
       setLocalUsers((prev) => prev.filter((u) => u.id !== uid));
