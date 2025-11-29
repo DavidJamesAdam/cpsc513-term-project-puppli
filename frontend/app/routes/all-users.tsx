@@ -12,6 +12,10 @@ import { useEffect, useState } from "react";
 import ConfirmDeletionModal from "~/components/confirm-modal/confirm-modal";
 import toast from "react-hot-toast";
 import { authCheck } from "~/utils/authCheck";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -45,6 +49,7 @@ export default function AllUsers() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUid, setSelectedUid] = useState<string | undefined>(undefined);
   const [authorized, setAuthorized] = useState<boolean | null>(null);
+  const matches = useMediaQuery("(min-width: 600px)");
 
   const navigate = useNavigate();
 
@@ -125,50 +130,91 @@ export default function AllUsers() {
   return (
     <div>
       <Header />
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>User</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Bio</TableCell>
-              <TableCell>Location</TableCell>
-              <TableCell>Delete?</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {localUsers && localUsers.length > 0 ? (
-              localUsers.map((u) => (
-                <TableRow key={u.id ?? JSON.stringify(u)}>
-                  <TableCell>
-                    <strong>{u.username ?? u.displayName ?? u.id}</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>{u.email}</strong>
-                  </TableCell>
-                  <TableCell>{u.bio ? <div>{u.bio}</div> : null}</TableCell>
-                  <TableCell>{u.location}</TableCell>
-                  <TableCell>
-                    <Button
-                      style={{ backgroundColor: "red", color: "white" }}
-                      onClick={() => {
-                        setSelectedUid(u.id);
-                        setIsModalOpen(true);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
+      {matches ? (
+        <TableContainer>
+          <Table>
+            <TableHead>
               <TableRow>
-                <TableCell>No users found.</TableCell>
+                <TableCell>User</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Bio</TableCell>
+                <TableCell>Location</TableCell>
+                <TableCell>Delete?</TableCell>
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {localUsers && localUsers.length > 0 ? (
+                localUsers.map((u) => (
+                  <TableRow key={u.id ?? JSON.stringify(u)}>
+                    <TableCell>
+                      <strong>{u.username ?? u.displayName ?? u.id}</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>{u.email}</strong>
+                    </TableCell>
+                    <TableCell>{u.bio ? <div>{u.bio}</div> : null}</TableCell>
+                    <TableCell>{u.location}</TableCell>
+                    <TableCell>
+                      <Button
+                        style={{ backgroundColor: "red", color: "white" }}
+                        onClick={() => {
+                          setSelectedUid(u.id);
+                          setIsModalOpen(true);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell>No users found.</TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <div style={{ padding: 12 }}>
+          {localUsers.map((u) => (
+            <Card key={u.id} sx={{ mb: 2 }}>
+              <CardContent>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <div>
+                    <div style={{ fontWeight: 700 }}>
+                      {u.username ?? u.displayName ?? u.id}
+                    </div>
+                    <div style={{ color: "#666", fontSize: 13 }}>{u.email}</div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontSize: 13 }}>{u.location}</div>
+                  </div>
+                </div>
+
+                {u.bio ? (
+                  <div style={{ marginTop: 8, color: "#444" }}>{u.bio}</div>
+                ) : null}
+              </CardContent>
+
+              <CardActions>
+                <Button
+                  sx={{ backgroundColor: "red", color: "white" }}
+                  onClick={() => {
+                    setSelectedUid(u.id);
+                    setIsModalOpen(true);
+                  }}
+                >
+                  Delete
+                </Button>
+              </CardActions>
+            </Card>
+          ))}
+        </div>
+      )}
+
       <ConfirmDeletionModal
         open={isModalOpen}
         uid={selectedUid}

@@ -35,14 +35,16 @@ export default function ConfirmDeletionModal({ open, uid, onClose, onConfirm }: 
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
     width: "100%",
-    height: "60%",
+    height: "25%",
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    textAlign: "center",
     backgroundColor: "rgba(224, 205, 178, 1)",
     position: "absolute",
-    transform: "translate(0%, 30%)",
+    transform: "translate(0%, 120%)",
+    fontSize: "calc(3vh + 3vw)",
   };
 
   const buttonStyle = {
