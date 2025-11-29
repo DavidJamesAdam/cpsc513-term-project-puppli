@@ -14,6 +14,7 @@ import showIcon from "../components/login/show.svg";
 import hideIcon from "../components/login/hide.svg";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
+import toast from 'react-hot-toast';
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "login" }, { name: "description", content: "Login page" }];
@@ -59,33 +60,39 @@ export default function Login() {
 
   // if log-in is verified, redirect using to home page
   async function handleLogIn() {
-    // TODO: if email and password matches data in DB, permit log in request
+    let userCredential;
     // 1) Sign in with Firebase client SDK
-    const userCredential = await signInWithEmailAndPassword(
-      auth!,
-      email,
-      password
-    );
+    try{
+      userCredential = await signInWithEmailAndPassword(
+        auth!,
+        email,
+        password
+      );
+    }catch(e){
+      toast.error('Invalid username or password.');
+    }
     // 2) Get fresh ID token
-    const idToken = await userCredential.user.getIdToken(
+    const idToken = await userCredential!.user.getIdToken(
       /* forceRefresh */ true
     );
 
-    // 3) Send idToken to backend to exchange for session cookie
-    const resp = await fetch("http://localhost:8000/auth/sessionLogin", {
+    try{
+      // 3) Send idToken to backend to exchange for session cookie
+      const resp = await fetch("http://localhost:8000/auth/sessionLogin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include", // VERY IMPORTANT: accept cookie
       body: JSON.stringify({ idToken }),
     });
 
-    if (!resp.ok) {
-      const err = await resp.json().catch(() => ({}));
-      throw new Error(err.detail || "Session login failed");
+    toast.success('Login successful!');
+    } catch (e) {
+      console.log(e)
     }
+
+
     // redirect to home (voting) page
     window.location.href = "/";
-    return resp.json();
   }
   return (
     <>
