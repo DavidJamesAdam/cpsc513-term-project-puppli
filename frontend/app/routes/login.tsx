@@ -15,6 +15,8 @@ import hideIcon from "../components/login/hide.svg";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 import toast from 'react-hot-toast';
+import { useNavigate } from "react-router";
+import handleLogIn from "~/utils/loginFunction";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "login" }, { name: "description", content: "Login page" }];
@@ -37,6 +39,7 @@ export default function Login() {
   // keep track of any errors on the entire page
   const [hasFormErrors, setHasFormErrors] = useState(false);
   const [formErrorMsg, setFormErrorMsg] = useState("");
+  const navigate = useNavigate();
 
   // display error on log-in if password mismatch or email does not exist
   useEffect(() => {
@@ -59,47 +62,16 @@ export default function Login() {
   }
 
   // if log-in is verified, redirect using to home page
-  async function handleLogIn() {
-    let userCredential;
-    // 1) Sign in with Firebase client SDK
-    try{
-      userCredential = await signInWithEmailAndPassword(
-        auth!,
-        email,
-        password
-      );
-    }catch(e){
-      toast.error('Invalid username or password.');
-    }
-    // 2) Get fresh ID token
-    const idToken = await userCredential!.user.getIdToken(
-      /* forceRefresh */ true
-    );
-
-    try{
-      // 3) Send idToken to backend to exchange for session cookie
-      const resp = await fetch("http://localhost:8000/auth/sessionLogin", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include", // VERY IMPORTANT: accept cookie
-      body: JSON.stringify({ idToken }),
-    });
-
-    toast.success('Login successful!');
-    } catch (e) {
-      console.log(e)
-    }
-
-
-    // redirect to home (voting) page
-    window.location.href = "/";
+  function login() {
+    handleLogIn(auth, email, password, navigate);
   }
+
   return (
     <>
       <LoginHeader />
       <main style={{ backgroundColor: "var{--bg-color}", paddingTop: "60px" }}>
         <div className="loginBox">
-          <Card className="card" sx={{ maxWidth: 785 }}>
+          <Card className="card" sx={{ maxWidth: 785, border: "1px solid rgba(255, 132, 164, 1)", }}>
             <h1>Log-in</h1>
             <p style={{ fontSize: "18px", color: "red", paddingLeft: "5px" }}>
               {formErrorMsg}
@@ -110,6 +82,7 @@ export default function Login() {
                 className="input"
                 variant="standard"
                 onChange={onEmailChange}
+                sx = {{border: '1px solid rgba(120, 114, 111, 1)',}}
                 slotProps={{
                   input: {
                     disableUnderline: true,
@@ -124,6 +97,7 @@ export default function Login() {
                 variant="standard"
                 type={show ? "text" : "password"}
                 onChange={onPasswordChange}
+                sx = {{border: '1px solid rgba(120, 114, 111, 1)'}}
                 slotProps={{
                   input: {
                     disableUnderline: true,
@@ -148,7 +122,8 @@ export default function Login() {
                 size="medium"
                 variant="contained"
                 className="enterButton"
-                onClick={handleLogIn}
+                onClick={login}
+                sx = {{border: "1px solid rgba(147, 191, 191, 1)",}}
               >
                 Enter
               </Button>

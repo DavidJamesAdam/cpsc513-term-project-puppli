@@ -36,7 +36,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <Links />
         </head>
         <body>
-          <Toaster />
+          <Toaster position="bottom-right" reverseOrder={true}/>
           {children}
           <ScrollRestoration />
           <Scripts />
