@@ -231,7 +231,7 @@ export default function Profile() {
   };
 
   // saves edited pet name to DB
-  const handleSavePetName = (saved: boolean) => {
+  const handleSavePetName = async (saved: boolean) => {
     if (saved) {
       setEditedPetName(editedPetName);
       // update local object (since data from DB is not available yet)
@@ -242,7 +242,36 @@ export default function Profile() {
         setPetInfo2((prev) => ({ ...prev, name: editedPetName }));
         setUserInfo((prev) => ({ ...prev, pet2: petInfo2 }));
       }
-      // TODO: save to DB
+
+      // Fetch pets for the logged-in user
+      const petsResponse = await fetch("http://localhost:8000/pets", {
+        credentials: "include",
+      });
+
+      // if successful, we can do the update
+      if (petsResponse.ok) {
+        const petsData = await petsResponse.json();
+
+        // by defualt use pet1 id
+        let petID = petsData[0].id;
+
+        // but if on sub profile 2, get second pet's id
+        if (!onPetOneSubPage) {
+          petID = petsData[1].id;
+        }
+
+        // save the pet's name in the text field to the DB based on the pet id
+        const updateNameResponse = await fetch(`http://localhost:8000/pet/update/${petID}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", },
+          body: JSON.stringify({ name: editedPetName, }),
+        });
+
+        // if failed, print to console
+        if (!updateNameResponse.ok) {
+          console.error("Error updating pet name.");
+        }
+      }
     }
     // either button clicked should disable editing mode on user name
     setEditingPetName(false);
