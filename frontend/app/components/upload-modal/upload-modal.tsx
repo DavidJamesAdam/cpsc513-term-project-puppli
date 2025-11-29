@@ -84,18 +84,15 @@ export default function UploadModal({
       return;
     }
 
-    try {
-      // Upload to Firebase Storage
-      const timestamp = Date.now();
-      const storageRef = ref(
-        storage!,
-        `posts/${timestamp}_${selectedFile.name}`
-      );
-      await uploadBytes(storageRef, selectedFile);
-      const imageUrl = await getDownloadURL(storageRef);
+    // Upload to Firebase Storage
+    const timestamp = Date.now();
+    const storageRef = ref(storage!, `posts/${timestamp}_${selectedFile.name}`);
+    await uploadBytes(storageRef, selectedFile);
+    const imageUrl = await getDownloadURL(storageRef);
 
-      // Create post via backend API
-      const response = await fetch("http://localhost:8000/posts", {
+    try {
+      // Create post via backend API. Build the fetch promise first (do not await yet)
+      const uploadPromise = fetch("http://localhost:8000/posts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -104,24 +101,47 @@ export default function UploadModal({
           petId: selectedPetId,
           imageUrl,
         }),
+      }).then(async (resp) => {
+        if (!resp.ok) {
+          const err = await resp.json().catch(() => ({}));
+          throw new Error(err.detail || "Error when uploading");
+        }
+        return resp.json();
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || "Failed to create post");
-      }
+      // Let react-hot-toast track the promise lifecycle
+      toast.promise(
+        uploadPromise,
+        {
+          loading: "Uploading",
+          success: "Uploaded",
+          error: (err: Error) => `Upload failed: ${err.message}`,
+        },
+        {
+          style: {
+            borderRadius: "100px",
+            width: "100%",
+            fontSize: "2em",
+            backgroundColor: "#e0cdb2",
+            border: "1px solid rgba(255, 132, 164, 1)",
+          },
+          duration: 3000,
+        }
+      );
 
-      const result = await response.json();
+      // Await the result (this will re-throw if the promise rejected)
+      const result = await uploadPromise;
       console.log("Post created successfully:", result);
-      toast.success(<b>Photo uploaded!</b>);
-      alert("Photo uploaded successfully!");
-      handleClose();
     } catch (error) {
       console.error("Upload failed:", error);
       alert(
         `Upload failed: ${error instanceof Error ? error.message : "Unknown error"}`
       );
     }
+
+    console.log("Post created successfully:");
+    // alert("Photo uploaded successfully!");
+    handleClose();
   };
 
   const modalStyle = {
