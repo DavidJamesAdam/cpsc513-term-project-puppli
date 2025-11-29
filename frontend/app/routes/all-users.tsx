@@ -1,6 +1,6 @@
 import Header from "~/components/header/header";
 import type { Route } from "./+types/all-users";
-import { useLoaderData } from "react-router";
+import { useLoaderData, redirect, useNavigate } from "react-router";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -8,9 +8,10 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Button from "@mui/material/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ConfirmDeletionModal from "~/components/confirm-modal/confirm-modal";
 import toast from "react-hot-toast";
+import { authCheck } from "~/utils/authCheck";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -20,6 +21,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function loader(_: Route.LoaderArgs) {
+  // fetch all users (could be optimized server-side)
   const resp = await fetch("http://localhost:8000/users", {
     method: "GET",
     headers: { "Content-Type": "application/json" },
@@ -30,15 +32,53 @@ export async function loader(_: Route.LoaderArgs) {
   }
 
   const users = await resp.json();
+
   return users;
 }
 
 export default function AllUsers() {
   const users = useLoaderData() as Array<Record<string, any>> | undefined;
   // Keep a local, mutable copy so we can remove a deleted user from the UI immediately
-  const [localUsers, setLocalUsers] = useState<Array<Record<string, any>>>(users ?? []);
+  const [localUsers, setLocalUsers] = useState<Array<Record<string, any>>>(
+    users ?? []
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUid, setSelectedUid] = useState<string | undefined>(undefined);
+  const [authorized, setAuthorized] = useState<boolean | null>(null);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await authCheck();
+
+        // fetch current user profile
+        const resp = await fetch("http://localhost:8000/user/me", {
+          credentials: "include",
+        });
+
+        const user = await resp.json();
+
+        console.log(user);
+
+        // check role
+        if (user.role !== "admin") {
+          // not authorized -> go to profile
+          navigate("/profile", { replace: true });
+          return;
+        }
+        setAuthorized(true);
+      } catch (e) {
+        // window.location.href = "/login";
+        navigate("/login", { replace: true });
+      }
+    })();
+  }, [navigate]);
+
+  if (authorized === null) {
+    return null;
+  }
 
   async function deleteUser(uid: string | undefined) {
     if (!uid) {
@@ -131,15 +171,15 @@ export default function AllUsers() {
           </TableBody>
         </Table>
       </TableContainer>
-        <ConfirmDeletionModal
-          open={isModalOpen}
-          uid={selectedUid}
-          onClose={() => setIsModalOpen(false)}
-          onConfirm={async (uid) => {
-            await deleteUser(uid);
-            setIsModalOpen(false);
-          }}
-        />
+      <ConfirmDeletionModal
+        open={isModalOpen}
+        uid={selectedUid}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={async (uid) => {
+          await deleteUser(uid);
+          setIsModalOpen(false);
+        }}
+      />
     </div>
   );
 }
