@@ -5,7 +5,9 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import UploadModal from "../upload-modal/upload-modal";
 import { useEffect, useState } from "react";
-import { GetCountries, GetState, GetCity } from "react-country-state-city";
+import { GetState, GetCity } from "react-country-state-city";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export function MainNavMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -17,6 +19,7 @@ export function MainNavMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const navigate = useNavigate();
 
   async function handleLogOut(
     event: React.MouseEvent<HTMLLIElement, MouseEvent>
@@ -31,17 +34,22 @@ export function MainNavMenu() {
         credentials: "include", // VERY IMPORTANT: accept cookie
       });
 
-      if (!resp.ok) {
-        const err = await resp.json().catch(() => ({}));
-        throw new Error(err.detail || "Log out failed");
-      } else {
-        console.log("logged out");
-      }
+      console.log("logged out");
+      toast.success("Logout successful!", {
+        style: {
+          borderRadius: "100px",
+          width: "100%",
+          fontSize: "2em",
+          backgroundColor: "#e0cdb2",
+          border: "1px solid rgba(255, 132, 164, 1)",
+        },
+        duration: 3000,
+      });
     } catch (error) {
       console.error("Error:", error);
     }
     // redirect to login page
-    window.location.href = "/login";
+    navigate("/login");
   }
 
   return (
@@ -182,7 +190,9 @@ export function PetSelectionMenu({
 } = {}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedPet, setSelectedPet] = React.useState<string>("Select Pet");
-  const [pets, setPets] = React.useState<Array<{ id: string; name: string }>>([]);
+  const [pets, setPets] = React.useState<Array<{ id: string; name: string }>>(
+    []
+  );
   const [loading, setLoading] = React.useState<boolean>(true);
   const open = Boolean(anchorEl);
 
