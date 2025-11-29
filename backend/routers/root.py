@@ -6,7 +6,6 @@ from handlers.users.postUser import create_user, User
 from handlers.posts.postVote import post_vote
 from handlers.posts.rankGlobal import rank_global as rank_g
 from handlers.posts.rankCity import rank_city as rank_c
-from handlers.users.updateUser import get_user as get_u
 from handlers.users.updateUser import update_user as update_u
 from handlers.posts.rankProvince import rank_province as rank_p
 from handlers.pets.createSubprofile import create_subprofile, PetCreate
@@ -27,12 +26,6 @@ def get_root():
 @router.post("/users")
 async def post_user(user: User):
     return await create_user(user)
-
-#TEMP
-@router.get("/user/{user_id}")
-async def get_user(user_id: str):
-    return await get_u(user_id)
-
 
 # posts created by user routes
 
