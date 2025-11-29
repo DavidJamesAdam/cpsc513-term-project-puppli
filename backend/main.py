@@ -9,9 +9,11 @@ from routers.root import router as root_router
 from handlers.auth.login import router as auth_login_router
 from handlers.auth.logout import router as auth_logout_router
 from handlers.posts.getPosts import router as get_posts_router
+from handlers.posts.createPost import router as create_post_router
 from handlers.users.getUser import router as get_user_router
 from handlers.users.postUser import router as post_user_router
 from handlers.pets.getPets import router as get_pets_router
+from handlers.users.deleteUser import router as delete_user_router
 from utils.authCheck import router as auth_check_router
 
 
@@ -43,9 +45,11 @@ app.include_router(root_router)
 app.include_router(auth_login_router)
 app.include_router(auth_logout_router)
 app.include_router(get_posts_router)
+app.include_router(create_post_router)
 app.include_router(get_user_router)
 app.include_router(post_user_router)
 app.include_router(get_pets_router)
+app.include_router(delete_user_router)
 app.include_router(auth_check_router)
 
 

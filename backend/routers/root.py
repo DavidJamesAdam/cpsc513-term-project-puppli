@@ -6,11 +6,10 @@ from handlers.users.postUser import create_user, User
 from handlers.posts.postVote import post_vote
 from handlers.posts.rankGlobal import rank_global as rank_g
 from handlers.posts.rankCity import rank_city as rank_c
-#from handlers.users.updateUser import get_user as get_u
-from backend.handlers.pets.deleteSubprofile import delete_pet as delete_p
 from handlers.users.updateUser import update_user as update_u
 from handlers.posts.rankProvince import rank_province as rank_p
 from handlers.pets.createSubprofile import create_subprofile, PetCreate
+from handlers.pets.updatePet import update_pet as update_p
 from fastapi import APIRouter, Request
 
 router = APIRouter()
@@ -27,16 +26,6 @@ def get_root():
 @router.post("/users")
 async def post_user(user: User):
     return await create_user(user)
-
-#TEMP
-'''
-@router.get("/user/{user_id}")
-async def get_user(user_id: str):
-    return await get_u(user_id)
-'''
-@router.delete("/pet/delete/{pet_id}")
-async def delete_pet(pet_id: str):
-    return await delete_p(pet_id)
 
 # posts created by user routes
 
@@ -64,4 +53,9 @@ async def rank_prov(location: str):
 @router.get("/posts/rank/city/{location}")
 async def rank_city(location: str):
     return await rank_c(location)
+
+#pet routes
+@router.patch("/pet/update/{pet_id}")
+async def update_pet(pet_id: str, updated_fields: dict):
+    return await update_p(pet_id, updated_fields)
 

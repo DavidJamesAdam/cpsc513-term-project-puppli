@@ -137,6 +137,9 @@ export default function Profile() {
               toy: petsData[1].favouriteToy || "",
             });
           }
+        } else {
+          const errorData = await petsResponse.json();
+          console.error("Error fetching pets:", petsResponse.status, errorData);
         }
       } catch (e) {
         // Not authenticated — redirect to login.
@@ -425,7 +428,7 @@ export default function Profile() {
               <p>Pets</p>
               <div className="oddItem">
                 <div className="petItem">
-                  {userInfo.pet1 ? (
+                  {petInfo1.name ? (
                     <Button className="petName" onClick={goToSubProfileOne}>
                       {petInfo1.name}
                     </Button>
@@ -437,7 +440,7 @@ export default function Profile() {
               </div>
               <div className="evenItem">
                 <div className="petItem">
-                  {userInfo.pet2.name ? (
+                  {petInfo2.name ? (
                     <Button className="petName" onClick={goToSubProfileTwo}>
                       {petInfo2.name}
                     </Button>

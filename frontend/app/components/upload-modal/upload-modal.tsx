@@ -3,8 +3,11 @@ import "./styles.css";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 import { PetSelectionMenu } from "../dropdown menus/dropdown-menus";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../firebase";
 
 type UploadModalProps = {
   open?: boolean;
@@ -21,10 +24,13 @@ export default function UploadModal({
 }: UploadModalProps) {
   const matches = useMediaQuery("(min-width: 600px)");
   const [internalOpen, setInternalOpen] = useState(false);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedPetId, setSelectedPetId] = useState<string>("");
+  const [caption, setCaption] = useState<string>("");
   const isControlled = propOpen !== undefined;
   const open = isControlled ? propOpen! : internalOpen;
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleOpen = () => {
     if (onOpen) onOpen();
@@ -35,24 +41,80 @@ export default function UploadModal({
     if (onClose) onClose();
     if (!isControlled) setInternalOpen(false);
     setImage(null);
+    setSelectedFile(null);
+    setCaption("");
+    setSelectedPetId("");
   };
 
   const handleFileBrowser = () => {
-    fileInputRef.current.click();
+    fileInputRef.current?.click();
   };
 
-  const handlePicturePreview = (event) => {
-    const selectedFile = event.target.files[0];
-    if (event.target.files && event.target.files[0]) {
-      console.log("Selected file:", selectedFile.name);
-      setImage(URL.createObjectURL(event.target.files[0]));
+  const handlePicturePreview = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      console.log("Selected file:", file.name);
+      setSelectedFile(file);
+      setImage(URL.createObjectURL(file));
     }
   };
 
-  const handlePictureUpload = () => {
-    // Upload picture to database
-    setImage(null);
-    handleClose();
+  const handlePetChange = (petId: string, petName: string) => {
+    setSelectedPetId(petId);
+    console.log("Selected pet:", petName, petId);
+  };
+
+  const handleCaptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCaption(event.target.value);
+  };
+
+  const handlePictureUpload = async () => {
+    // Validate inputs
+    if (!selectedFile) {
+      alert("Please select a picture first");
+      return;
+    }
+    if (!selectedPetId) {
+      alert("Please select a pet");
+      return;
+    }
+    if (!caption.trim()) {
+      alert("Please add a caption");
+      return;
+    }
+
+    try {
+      // Upload to Firebase Storage
+      const timestamp = Date.now();
+      const storageRef = ref(storage!, `posts/${timestamp}_${selectedFile.name}`);
+      await uploadBytes(storageRef, selectedFile);
+      const imageUrl = await getDownloadURL(storageRef);
+
+      // Create post via backend API
+      const response = await fetch("http://localhost:8000/posts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          caption,
+          petId: selectedPetId,
+          imageUrl,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || "Failed to create post");
+      }
+
+      const result = await response.json();
+      console.log("Post created successfully:", result);
+      alert("Photo uploaded successfully!");
+      handleClose();
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert(`Upload failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+    }
   };
 
   const modalStyle = {
@@ -198,7 +260,24 @@ export default function UploadModal({
                     paddingLeft: "3%",
                   }}
                 >
-                  <PetSelectionMenu />
+                  <PetSelectionMenu onPetChange={handlePetChange} />
+                  <TextField
+                    placeholder="Add a caption..."
+                    value={caption}
+                    onChange={handleCaptionChange}
+                    multiline
+                    rows={2}
+                    variant="outlined"
+                    fullWidth
+                    slotProps={{
+                      input: {
+                        style: {
+                          backgroundColor: "rgba(255, 255, 255, 0.8)",
+                          borderRadius: "8px"
+                        },
+                      },
+                    }}
+                  />
                   <Button sx={buttonStyle} onClick={handleFileBrowser}>
                     Select Picture
                   </Button>
@@ -302,7 +381,24 @@ export default function UploadModal({
                     boxSizing: "border-box",
                   }}
                 >
-                  <PetSelectionMenu />
+                  <PetSelectionMenu onPetChange={handlePetChange} />
+                  <TextField
+                    placeholder="Add a caption..."
+                    value={caption}
+                    onChange={handleCaptionChange}
+                    multiline
+                    rows={2}
+                    variant="outlined"
+                    fullWidth
+                    slotProps={{
+                      input: {
+                        style: {
+                          backgroundColor: "rgba(255, 255, 255, 0.8)",
+                          borderRadius: "8px"
+                        },
+                      },
+                    }}
+                  />
                   <Button sx={buttonStyle} onClick={handleFileBrowser}>
                     Select Picture
                   </Button>
