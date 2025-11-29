@@ -475,7 +475,7 @@ export default function Profile() {
                       {petInfo1.name}
                     </Button>
                   ) : (
-                    <></>
+                    <CreateSubProfileModal />
                   )}
                   <img src={defaultPetPFPMain} alt="" />
                 </div>
