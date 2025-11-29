@@ -29,7 +29,11 @@ export default function Home() {
   const [authorized, setAuthorized] = useState<boolean | null>(null);
   const matches = useMediaQuery("(min-width: 600px)");
   const [animateKey, setAnimateKey] = useState(0);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [selectedPosts, setSelectedPosts] = useState<[Post | null, Post | null]>([null, null]);
+  const [loading, setLoading] = useState(true);
 
+  // Fetch posts from backend
   useEffect(() => {
     (async () => {
       try {
@@ -39,15 +43,51 @@ export default function Home() {
         // Not authenticated — display guest version of the page
         setAuthorized(false);
       }
+
+      // Fetch all posts
+      try {
+        const response = await fetch("http://localhost:8000/posts", {
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const postsData = await response.json();
+          setPosts(postsData);
+
+          // Select 2 random posts for initial display
+          if (postsData.length >= 2) {
+            selectRandomPosts(postsData);
+          }
+        } else {
+          console.error("Error fetching posts:", response.status);
+        }
+      } catch (error) {
+        console.error("Failed to fetch posts:", error);
+      } finally {
+        setLoading(false);
+      }
     })();
   }, []);
 
-  if (authorized === null) {
+  // Function to select 2 random posts
+  const selectRandomPosts = (postsList: Post[]) => {
+    if (postsList.length < 2) {
+      setSelectedPosts([null, null]);
+      return;
+    }
+
+    const shuffled = [...postsList].sort(() => Math.random() - 0.5);
+    setSelectedPosts([shuffled[0], shuffled[1]]);
+  };
+
+  if (authorized === null || loading) {
     // Still checking; render nothing (avoids showing protected content).
     return null;
   }
 
   const handleAnyVote = () => {
+    // Select new random posts after voting
+    selectRandomPosts(posts);
     // increment to retrigger animation in children
     setAnimateKey((k) => k + 1);
   };
@@ -79,17 +119,27 @@ export default function Home() {
             className="voting-page"
             style={{ display: "flex", flexDirection: "row", flex: 1 }}
           >
-            <VotingCard
-              animateKey={animateKey}
-              onVote={handleAnyVote}
-              authorized={authorized}
-            />
-            <h1 style={{ fontSize: "5vh" }}>VS</h1>
-            <VotingCard
-              animateKey={animateKey}
-              onVote={handleAnyVote}
-              authorized={authorized}
-            />
+            {selectedPosts[0] && selectedPosts[1] ? (
+              <>
+                <VotingCard
+                  animateKey={animateKey}
+                  onVote={handleAnyVote}
+                  authorized={authorized}
+                  post={selectedPosts[0]}
+                />
+                <h1 style={{ fontSize: "5vh" }}>VS</h1>
+                <VotingCard
+                  animateKey={animateKey}
+                  onVote={handleAnyVote}
+                  authorized={authorized}
+                  post={selectedPosts[1]}
+                />
+              </>
+            ) : (
+              <h1 style={{ fontSize: "3vh", alignSelf: "center", margin: "auto" }}>
+                Not enough posts available. Please upload some posts to start voting!
+              </h1>
+            )}
           </main>
         </>
       ) : (
@@ -104,17 +154,27 @@ export default function Home() {
             height: "100%",
           }}
         >
-          <VotingCard
-            animateKey={animateKey}
-            onVote={handleAnyVote}
-            authorized={authorized}
-          />
-          <h1 style={{ fontSize: "5vh" }}>VS</h1>
-          <VotingCard
-            animateKey={animateKey}
-            onVote={handleAnyVote}
-            authorized={authorized}
-          />
+          {selectedPosts[0] && selectedPosts[1] ? (
+            <>
+              <VotingCard
+                animateKey={animateKey}
+                onVote={handleAnyVote}
+                authorized={authorized}
+                post={selectedPosts[0]}
+              />
+              <h1 style={{ fontSize: "5vh" }}>VS</h1>
+              <VotingCard
+                animateKey={animateKey}
+                onVote={handleAnyVote}
+                authorized={authorized}
+                post={selectedPosts[1]}
+              />
+            </>
+          ) : (
+            <h1 style={{ fontSize: "3vh", alignSelf: "center", margin: "auto" }}>
+              Not enough posts available. Please upload some posts to start voting!
+            </h1>
+          )}
         </main>
       )}
     </div>

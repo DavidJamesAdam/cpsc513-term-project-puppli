@@ -7,16 +7,29 @@ import "./styles.css";
 import disabledVoteIcon from "./icons/disabled_vote.svg";
 import disabledLikeIcon from "./icons/disabled_like.svg";
 
+interface Post {
+  id: string;
+  UserId: string;
+  petId: string;
+  imageUrl: string;
+  caption: string;
+  createdAt: string;
+  voteCount: number;
+  favouriteCount: number;
+}
+
 type VotingCardProps = {
   animateKey?: number;
   onVote?: () => void;
   authorized: boolean;
+  post?: Post;
 };
 
 export default function VotingCard({
   animateKey,
   onVote,
   authorized,
+  post,
 }: VotingCardProps) {
   const [isFadedOut, setIsFadedOut] = useState(false);
   const [isPopped, setIsPopped] = useState(false);
@@ -102,12 +115,26 @@ export default function VotingCard({
               alignItems: "center",
               justifyContent: "center",
               overflow: "hidden",
+              position: "relative",
             }}
           >
-            <img
-              src={"assets/icons/ant-design--picture-outlined.svg"}
-              style={{ width: "90%", height: "auto" }}
-            />
+            {post?.imageUrl ? (
+              <img
+                src={post.imageUrl}
+                alt={post.caption}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: "40px"
+                }}
+              />
+            ) : (
+              <img
+                src={"assets/icons/ant-design--picture-outlined.svg"}
+                style={{ width: "90%", height: "auto" }}
+              />
+            )}
           </div>
           <div
             className="voting-card-options"
@@ -181,12 +208,26 @@ export default function VotingCard({
               alignItems: "center",
               justifyContent: "center",
               overflow: "hidden",
+              position: "relative",
             }}
           >
-            <img
-              src={"assets/icons/ant-design--picture-outlined.svg"}
-              style={{ width: "90%", height: "auto" }}
-            />
+            {post?.imageUrl ? (
+              <img
+                src={post.imageUrl}
+                alt={post.caption}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: "40px"
+                }}
+              />
+            ) : (
+              <img
+                src={"assets/icons/ant-design--picture-outlined.svg"}
+                style={{ width: "90%", height: "auto" }}
+              />
+            )}
           </div>
           <div
             id="menuOptions"
