@@ -163,12 +163,33 @@ export default function Profile() {
   const maxCharacters = 50;
 
   // saves edited bio to DB
-  const handleSaveBio = (saved: boolean) => {
+  const handleSaveBio = async (saved: boolean) => {
     if (saved) {
       setEditedBio(editedBio);
       // update local object (since data from DB is not available yet)
       setUserInfo((prev) => ({ ...prev, bio: editedBio }));
-      // TODO: save the bio in the text field to the user DB object.
+
+      // Fetch user profile data for the logged-in user
+      const userResponse = await fetch("http://localhost:8000/user/me", {
+        credentials: "include",
+      });
+
+      // if successful, we can do the update
+      if (userResponse.ok) {
+        const userData = await userResponse.json();
+
+        // save the bio in the text field to the DB based on the current user id
+        const updateBioResponse = await fetch(`http://localhost:8000/user/update/${userData.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", },
+          body: JSON.stringify({ bio: editedBio, }),
+        });
+
+        // if failed, print to console
+        if (!updateBioResponse.ok) {
+          console.error("Error updating bio.");
+        }
+      }
     }
     // either button clicked should disable editing mode on user bio
     setEditingBio(false);
@@ -176,12 +197,33 @@ export default function Profile() {
   };
 
   // saves edited name to DB
-  const handleSaveName = (saved: boolean) => {
+  const handleSaveName = async (saved: boolean) => {
     if (saved) {
       setEditedName(editedName);
       // update local object (since data from DB is not available yet)
       setUserInfo((prev) => ({ ...prev, name: editedName }));
-      // TODO: save to DB
+      
+      // Fetch user profile data for the logged-in user
+      const userResponse = await fetch("http://localhost:8000/user/me", {
+        credentials: "include",
+      });
+
+      // if successful, we can do the update
+      if (userResponse.ok) {
+        const userData = await userResponse.json();
+
+        // save the display name in the text field to the DB based on the current user id
+        const updateNameResponse = await fetch(`http://localhost:8000/user/update/${userData.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", },
+          body: JSON.stringify({ displayName: editedName, }),
+        });
+
+        // if failed, print to console
+        if (!updateNameResponse.ok) {
+          console.error("Error updating display name.");
+        }
+      }
     }
     // either button clicked should disable editing mode on user name
     setEditingName(false);
