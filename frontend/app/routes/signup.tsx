@@ -14,6 +14,10 @@ import hideIcon from "../components/login/hide.svg";
 import { useEffect, useState } from "react";
 import TemporaryNotification from "~/components/temporaryNotification";
 import { LocationMenu } from "~/components/dropdown menus/dropdown-menus";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
+import handleLogIn from "~/utils/loginFunction";
+import { auth } from "../../firebase";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "login" }, { name: "description", content: "Sign-up page" }];
@@ -47,6 +51,7 @@ export default function SignUp() {
   const [hasDisplayNameError, setHasDisplayNameError] = useState(false);
   const [passwordErrorMsg, setPasswordErrorMsg] = useState("");
   const [hasPasswordError, setHasPasswordError] = useState(false);
+  const navigate = useNavigate();
 
   // keep track of any errors on the entire page
   const [hasFormErrors, setHasFormErrors] = useState(false);
@@ -184,21 +189,40 @@ export default function SignUp() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        // show success temp notification
-        setShowTempNotif(true);
-        setTempNotifMsg("Sign-up successful!");
-        setRequestSuccessful(true);
-        // redirect to log-in page, use time-out to show tmep notif for success
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 3000);
+        // const data = await response.json();
+        // console.log(data);
+        // // show success temp notification
+        // setShowTempNotif(true);
+        // setTempNotifMsg("Sign-up successful!");
+        // setRequestSuccessful(true);
+        // // redirect to log-in page, use time-out to show tmep notif for success
+        // setTimeout(() => {
+        //   window.location.href = "/login";
+        // }, 3000);
+        toast.success("Sign-up successful!", {
+          style: {
+            borderRadius: "100px",
+            width: "100%",
+            fontSize: "2em",
+            backgroundColor: "#e0cdb2",
+            border: "1px solid rgba(255, 132, 164, 1)",
+          },
+          duration: 3000,
+        });
       } else {
         // show request failed temp notification
-        setShowTempNotif(true);
-        setTempNotifMsg("Sign-up unsuccessful.");
-        setRequestSuccessful(false);
+        // setShowTempNotif(true);
+        // setTempNotifMsg("Sign-up unsuccessful.");
+        // setRequestSuccessful(false);
+        toast.error("Sign-up unsucessful", {
+          style: {
+            borderRadius: "100px",
+            width: "100%",
+            fontSize: "2em",
+            backgroundColor: "#e0cdb2",
+            border: "1px solid rgba(255, 132, 164, 1)",
+          },
+        });
         // print to console
         throw new Error("Failed to send request");
       }
@@ -206,10 +230,12 @@ export default function SignUp() {
       console.error("Error:", error);
     }
 
-    // remove temp notif after 5 seconds
-    setTimeout(() => {
-      setShowTempNotif(false);
-    }, 5000);
+    // // remove temp notif after 5 seconds
+    // setTimeout(() => {
+    //   setShowTempNotif(false);
+    // }, 5000);
+    handleLogIn(auth, newAccount.email, newAccount.password);
+    navigate("/");
   }
 
   function handleLocationChange(loc: any) {

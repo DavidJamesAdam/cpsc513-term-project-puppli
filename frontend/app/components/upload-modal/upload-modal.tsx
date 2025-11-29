@@ -8,6 +8,7 @@ import { PetSelectionMenu } from "../dropdown menus/dropdown-menus";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebase";
+import toast from "react-hot-toast";
 
 type UploadModalProps = {
   open?: boolean;
@@ -86,7 +87,10 @@ export default function UploadModal({
     try {
       // Upload to Firebase Storage
       const timestamp = Date.now();
-      const storageRef = ref(storage!, `posts/${timestamp}_${selectedFile.name}`);
+      const storageRef = ref(
+        storage!,
+        `posts/${timestamp}_${selectedFile.name}`
+      );
       await uploadBytes(storageRef, selectedFile);
       const imageUrl = await getDownloadURL(storageRef);
 
@@ -109,11 +113,14 @@ export default function UploadModal({
 
       const result = await response.json();
       console.log("Post created successfully:", result);
+      toast.success(<b>Photo uploaded!</b>);
       alert("Photo uploaded successfully!");
       handleClose();
     } catch (error) {
       console.error("Upload failed:", error);
-      alert(`Upload failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+      alert(
+        `Upload failed: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
     }
   };
 
@@ -273,7 +280,7 @@ export default function UploadModal({
                       input: {
                         style: {
                           backgroundColor: "rgba(255, 255, 255, 0.8)",
-                          borderRadius: "8px"
+                          borderRadius: "8px",
                         },
                       },
                     }}
@@ -285,7 +292,10 @@ export default function UploadModal({
                     id="uploadButton"
                     sx={buttonStyle}
                     onClick={handlePictureUpload}
-                    style={{ backgroundColor: 'rgba(195, 189, 187, 1)', border: '1px solid rgba(120, 114, 111, 1)'}}
+                    style={{
+                      backgroundColor: "rgba(195, 189, 187, 1)",
+                      border: "1px solid rgba(120, 114, 111, 1)",
+                    }}
                   >
                     Upload
                   </Button>
@@ -334,7 +344,7 @@ export default function UploadModal({
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  alignItems: 'center',
+                  alignItems: "center",
                   height: "80%",
                   width: "80%",
                 }}
@@ -352,7 +362,7 @@ export default function UploadModal({
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    maxHeight: '70%'
+                    maxHeight: "70%",
                     // boxSizing: "border-box",
                   }}
                 >
@@ -377,7 +387,7 @@ export default function UploadModal({
                     flexDirection: "column",
                     justifyContent: "space-around",
                     width: "80%",
-                    height: '30%',
+                    height: "30%",
                     boxSizing: "border-box",
                   }}
                 >
@@ -394,7 +404,7 @@ export default function UploadModal({
                       input: {
                         style: {
                           backgroundColor: "rgba(255, 255, 255, 0.8)",
-                          borderRadius: "8px"
+                          borderRadius: "8px",
                         },
                       },
                     }}
@@ -406,7 +416,10 @@ export default function UploadModal({
                     id="uploadButton"
                     sx={buttonStyle}
                     onClick={handlePictureUpload}
-                    style={{ backgroundColor: 'rgba(195, 189, 187, 1)', border: '1px solid rgba(120, 114, 111, 1)'}}
+                    style={{
+                      backgroundColor: "rgba(195, 189, 187, 1)",
+                      border: "1px solid rgba(120, 114, 111, 1)",
+                    }}
                   >
                     Upload
                   </Button>
