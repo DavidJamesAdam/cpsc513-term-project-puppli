@@ -9,7 +9,6 @@ class EmailUpdate(BaseModel):
     id_token: str
     new_email: str
 
-@router.post("/update-email")
 def update_email(update: EmailUpdate):
     try:
         #verify user identity token, must be a new one!!! (not days old)
