@@ -87,3 +87,7 @@ p {
     border-color: var(--font-color);
     border-width: 5px;
 }
+
+.badge {
+    align-content: center;
+}
