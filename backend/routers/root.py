@@ -12,6 +12,7 @@ from handlers.pets.createSubprofile import create_subprofile, PetCreate
 from handlers.pets.updatePet import update_pet as update_p
 from handlers.pets.getPetByID import get_pet as get_p
 from handlers.pets.deleteSubprofile import delete_pet as delete_p
+from handlers.auth.updateEmail import update_email, EmailUpdate
 from fastapi import APIRouter, Request
 
 router = APIRouter()
@@ -21,6 +22,7 @@ def get_root():
     return read_root()
 
 #user routes
+
 # @router.get("/users")
 # def get_users():
 #     return read_users()
@@ -28,6 +30,12 @@ def get_root():
 @router.post("/users")
 async def post_user(user: User):
     return await create_user(user)
+
+@router.post("/user/update-email")
+async def post_update_email(request: Request):
+    data = await request.json()
+    update = EmailUpdate(**data)
+    return update_email(update)
 
 # posts created by user routes
 
@@ -44,6 +52,7 @@ async def update_user(user_id: str, updated_fields: dict):
     return await update_u(user_id, updated_fields)
 
 #rank routes
+
 @router.get("/posts/rank/global")
 async def rank_global():
     return await rank_g()
@@ -57,6 +66,7 @@ async def rank_city(location: str):
     return await rank_c(location)
 
 #pet routes
+
 @router.patch("/pet/update/{pet_id}")
 async def update_pet(pet_id: str, updated_fields: dict):
     return await update_p(pet_id, updated_fields)
