@@ -179,11 +179,14 @@ export default function Profile() {
         const userData = await userResponse.json();
 
         // save the bio in the text field to the DB based on the current user id
-        const updateBioResponse = await fetch(`http://localhost:8000/user/update/${userData.id}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json", },
-          body: JSON.stringify({ bio: editedBio, }),
-        });
+        const updateBioResponse = await fetch(
+          `http://localhost:8000/user/update/${userData.id}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ bio: editedBio }),
+          }
+        );
 
         // if failed, print to console
         if (!updateBioResponse.ok) {
@@ -202,7 +205,7 @@ export default function Profile() {
       setEditedName(editedName);
       // update local object (since data from DB is not available yet)
       setUserInfo((prev) => ({ ...prev, name: editedName }));
-      
+
       // Fetch user profile data for the logged-in user
       const userResponse = await fetch("http://localhost:8000/user/me", {
         credentials: "include",
@@ -213,11 +216,14 @@ export default function Profile() {
         const userData = await userResponse.json();
 
         // save the display name in the text field to the DB based on the current user id
-        const updateNameResponse = await fetch(`http://localhost:8000/user/update/${userData.id}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json", },
-          body: JSON.stringify({ displayName: editedName, }),
-        });
+        const updateNameResponse = await fetch(
+          `http://localhost:8000/user/update/${userData.id}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ displayName: editedName }),
+          }
+        );
 
         // if failed, print to console
         if (!updateNameResponse.ok) {
@@ -261,11 +267,14 @@ export default function Profile() {
         }
 
         // save the pet's name in the text field to the DB based on the pet id
-        const updateNameResponse = await fetch(`http://localhost:8000/pet/update/${petID}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json", },
-          body: JSON.stringify({ name: editedPetName, }),
-        });
+        const updateNameResponse = await fetch(
+          `http://localhost:8000/pet/update/${petID}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: editedPetName }),
+          }
+        );
 
         // if failed, print to console
         if (!updateNameResponse.ok) {
@@ -551,7 +560,11 @@ export default function Profile() {
         ) : (
           <>
             <div id="petInfoContainer">
-              <EditAboutModal onPetOneSubPage={onPetOneSubPage} petInfo={currentPet} userInfo={userInfo} />
+              <EditAboutModal
+                onPetOneSubPage={onPetOneSubPage}
+                petInfo={currentPet}
+                userInfo={userInfo}
+              />
               <div className="oddItem">Breed: {currentPet.breed}</div>
               <div className="evenItem">Birthday: {currentPet.bday}</div>
               <div className="oddItem">Favourite Treat: {currentPet.treat}</div>
