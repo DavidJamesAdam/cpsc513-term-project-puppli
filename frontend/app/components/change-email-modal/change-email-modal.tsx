@@ -12,6 +12,7 @@ import TextField from "@mui/material/TextField";
 import { auth } from "firebase";
 import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import toast from "react-hot-toast";
+import handleLogIn from "~/utils/loginFunction";
 
 export default function ChangeEmailModal() {
   const matches = useMediaQuery("(min-width: 600px)");
@@ -64,12 +65,10 @@ export default function ChangeEmailModal() {
         console.log("Error updating email.");
       } else {
         successful = true;
+        // automatically log user in again to get new session cookie with the new email if update was successful
+        // this prevents getting user logged out after the chnage
+        handleLogIn(auth, email, password);
       }
-
-      // reload client side to know that new email has been written to DB
-      await user.reload();
-      // give user new token so they don't get logged out after email change
-      await user.getIdToken(true);
 
       // show the temp notificaiton if successful
       toast.promise(
@@ -97,6 +96,14 @@ export default function ChangeEmailModal() {
     // if the whole operation was successful, close the modal
     if (successful) {
       // close modal when done
+      setOpen(false);
+      // reset everything in the modal
+      setHasEmailError(true);
+      setEmailErrorMsg("");
+      setHasPasswordError(false);
+      setPasswordErrorMsg("");
+      // reset show password toggle
+      setShow(false);
       setOpen(false);
     } else {
       // authentication must have gone wrong
@@ -194,6 +201,9 @@ export default function ChangeEmailModal() {
     }
 
     if (password === "") {
+      setPasswordErrorMsg("");
+      setHasPasswordError(false);
+    } else if (password) {
       setPasswordErrorMsg("");
       setHasPasswordError(false);
     }

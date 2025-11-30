@@ -28,9 +28,11 @@ export default function Ranking() {
   // keeps track of which tab we are on
   const [value, setValue] = useState(0);
 
-  const [globalList, setGlobalList] = useState([]);
-  const [provincialList, setProvincialList] = useState([]);
-  const [cityList, setCityList] = useState([]);
+  // list to store all global names
+  const [globalList, setGlobalList] = useState<string[]>([]);
+  const [provincialList, setProvincialList] = useState<string[]>([]);
+  const [cityList, setCityList] = useState<string[]>([]);
+  let data: string[] = [];
 
   useEffect(() => {
     (async () => {
@@ -66,12 +68,35 @@ export default function Ranking() {
             "http://localhost:8000/posts/rank/global"
           );
 
+          // extract info if response is ok
           if (globalResponse.ok) {
             const globalData = await globalResponse.json();
 
-            const onlyPetIds = globalData.map((item: any) => item.petId);
+            // only keep the unique pet ids in the json of all posts (a pet may have more than one post!)
+            const onlyPetIds = [
+              ...new Set(globalData.map((post: any) => post.petId)),
+            ];
 
-            setGlobalList(onlyPetIds);
+            // for every id, get the pet
+            const petNames = await Promise.all(
+              onlyPetIds.map(async (id: any) => {
+                const petResponse = await fetch(
+                  `http://localhost:8000/pet/${id}`
+                );
+
+                // if we successfully retrieved the data, extract the name and add to the list
+                if (petResponse.ok) {
+                  const petData = await petResponse.json();
+                  return petData.name;
+                } else {
+                  // otherwise the response failed, just return nothing
+                  return null;
+                }
+              })
+            );
+
+            // filter out nulls, set the list
+            setGlobalList(petNames.filter((name) => name !== null));
           }
 
           // // Fetch the json for the province rankings based on user's location
@@ -110,35 +135,6 @@ export default function Ranking() {
     return null;
   }
 
-  // test data
-  const data = [
-    {
-      rankIcon: rankOneIcon,
-      image: rankingIcon,
-      name: "Pet 1",
-    },
-    {
-      rankIcon: rankTwoIcon,
-      image: rankingIcon,
-      name: "Pet 2",
-    },
-    {
-      rankIcon: rankThreeIcon,
-      image: rankingIcon,
-      name: "Pet 3",
-    },
-    {
-      rankIcon: undefined,
-      image: rankingIcon,
-      name: "Pet 4",
-    },
-    {
-      rankIcon: undefined,
-      image: rankingIcon,
-      name: "Pet 5",
-    },
-  ];
-
   function changeTab(event: React.SyntheticEvent, value: any): void {
     // hightlight selected tab
     setValue(value);
@@ -162,6 +158,15 @@ export default function Ranking() {
         {rank}
       </Paper>
     );
+  }
+
+  // set to the correct data list based on the currently selected tab before rendering
+  if (value === 0) {
+    data = globalList;
+  } else if (value === 1) {
+    data = provincialList;
+  } else if (value === 2) {
+    data = cityList;
   }
 
   return (
@@ -205,7 +210,7 @@ export default function Ranking() {
                 </TableCell>
                 <TableCell>
                   <div className="petItem">
-                    <h1 className="name">{row.name}</h1>
+                    <h1 className="name">{row}</h1>
                     <img src={petPFP} alt="example.svg" />
                   </div>
                 </TableCell>
