@@ -65,11 +65,17 @@ async def create_user(user: User):
             user_ref,
             {
                 "uid": uid,
+                "avatarUrl": "",
+                "bio": "",
                 "email": email,
                 "userName": username,
                 "displayName": user_dict.get("displayName") or "",
                 "createdAt": gcfirestore.SERVER_TIMESTAMP,
-                "location": f"{city}, {province}"
+                "location": f"{city}, {province}",
+                "role": "user",
+                "totalBronze": 0,
+                "totalSilver": 0,
+                "totalGold": 0
             },
         )
 
