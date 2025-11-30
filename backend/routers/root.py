@@ -10,6 +10,7 @@ from handlers.users.updateUser import update_user as update_u
 from handlers.posts.rankProvince import rank_province as rank_p
 from handlers.pets.createSubprofile import create_subprofile, PetCreate
 from handlers.pets.updatePet import update_pet as update_p
+from handlers.pets.getPetByID import get_pet as get_p
 from handlers.pets.deleteSubprofile import delete_pet as delete_p
 from fastapi import APIRouter, Request
 
@@ -63,3 +64,7 @@ async def update_pet(pet_id: str, updated_fields: dict):
 @router.delete("/pet/delete/{pet_id}")
 async def delete_pet(pet_id: str):
     return await delete_p(pet_id)
+
+@router.get("/pet/{pet_id}")
+async def get_pet(pet_id: str):
+    return await get_p(pet_id)
