@@ -31,6 +31,14 @@ def get_root():
 async def post_user(user: User):
     return await create_user(user)
 
+'''
+for updating email and password, the JSON request body should have the following keys:
+{
+    "id_token": "user's Firebase ID token",
+    "new_email": "new email address"  # or "new_password": "new password"
+}
+'''
+
 @router.post("/user/update-email")
 async def post_update_email(request: Request):
     data = await request.json()
