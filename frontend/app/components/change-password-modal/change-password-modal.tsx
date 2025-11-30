@@ -72,12 +72,11 @@ export default function ChangePasswordModal() {
         console.log("Error updating email.");
       } else {
         successful = true;
+        // reload client side to know that new password has been written to DB
+        await user.reload();
+        // give user new token so they don't get logged out after password change
+        await user.getIdToken(true);
       }
-
-      // reload client side to know that new password has been written to DB
-      await user.reload();
-      // give user new token so they don't get logged out after password change
-      await user.getIdToken(true);
 
       // show the temp notificaiton if successful
       toast.promise(

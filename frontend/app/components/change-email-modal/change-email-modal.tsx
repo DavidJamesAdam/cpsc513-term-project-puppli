@@ -64,12 +64,11 @@ export default function ChangeEmailModal() {
         console.log("Error updating email.");
       } else {
         successful = true;
+        // reload client side to know that new email has been written to DB
+        await user.reload();
+        // give user new token so they don't get logged out after email change
+        await user.getIdToken(true);
       }
-
-      // reload client side to know that new email has been written to DB
-      await user.reload();
-      // give user new token so they don't get logged out after email change
-      await user.getIdToken(true);
 
       // show the temp notificaiton if successful
       toast.promise(
