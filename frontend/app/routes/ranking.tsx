@@ -69,36 +69,36 @@ export default function Ranking() {
           if (globalResponse.ok) {
             const globalData = await globalResponse.json();
 
-            const onlyPetId = globalData.map((item: any) => item.petId);
+            const onlyPetIds = globalData.map((item: any) => item.petId);
 
-            setGlobalList(onlyPetId);
+            setGlobalList(onlyPetIds);
           }
 
-          // Fetch the json for the province rankings based on user's location
-          const provinceResponse = await fetch(
-            `http://localhost:8000/posts/rank/province/${userLocation}`
-          );
+          // // Fetch the json for the province rankings based on user's location
+          // const provinceResponse = await fetch(
+          //   `http://localhost:8000/posts/rank/province/${userLocation}`
+          // );
 
-          if (provinceResponse.ok) {
-            const provincialData = await provinceResponse.json();
+          // if (provinceResponse.ok) {
+          //   const provincialData = await provinceResponse.json();
 
-            const onlyPetId = provincialData.map((item: any) => item.petId);
+          //   const onlyPetId = provincialData.map((item: any) => item.petId);
 
-            setProvincialList(onlyPetId);
-          }
+          //   setProvincialList(onlyPetId);
+          // }
 
-          // Fetch the json for the city rankings based on user's location
-          const cityResponse = await fetch(
-            `http://localhost:8000/posts/rank/city/${userLocation}`
-          );
+          // // Fetch the json for the city rankings based on user's location
+          // const cityResponse = await fetch(
+          //   `http://localhost:8000/posts/rank/city/${userLocation}`
+          // );
 
-          if (cityResponse.ok) {
-            const cityData = await cityResponse.json();
+          // if (cityResponse.ok) {
+          //   const cityData = await cityResponse.json();
 
-            const onlyPetId = cityData.map((item: any) => item.petId);
+          //   const onlyPetId = cityData.map((item: any) => item.petId);
 
-            setCityList(onlyPetId);
-          }
+          //   setCityList(onlyPetId);
+          // }
         }
       } catch (e) {
         console.log("Failed to fetch data for global rankings.");
