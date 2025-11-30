@@ -25,7 +25,7 @@ export function meta({}: Route.MetaArgs) {
 
 export default function SignUp() {
   // controls state of the password input field
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const maxCharacters = 50;
 
   // keep track of temporary notification state and message
@@ -58,7 +58,11 @@ export default function SignUp() {
 
   // track selected province / city names from LocationMenu
   const [provinceName, setProvinceName] = useState<string | null>(null);
+  const [locationErrorMsg, setLocationErrorMsg] = useState("");
+  const [hasProvinceError, setHasProvinceError] = useState(false);
   const [cityName, setCityName] = useState<string | null>(null);
+  const [cityErrorMsg, setCityErrorMsg] = useState("");
+  const [hasCityError, setHasCityError] = useState(false);
 
   // used to validate input
   const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
@@ -122,7 +126,17 @@ export default function SignUp() {
       setPasswordErrorMsg("");
       setHasPasswordError(false);
     }
-  }, [email, username, password, displayName]);
+
+    if (provinceName === null || cityName === null) {
+      setLocationErrorMsg("User must select a city and province");
+      setHasProvinceError(true);
+      setHasCityError(true);
+    } else {
+      setLocationErrorMsg("");
+      setHasProvinceError(false);
+      setHasCityError(false);
+    }
+  }, [email, username, password, displayName, provinceName, cityName]);
 
   // disable signup button if any error exists
   useEffect(() => {
@@ -130,13 +144,15 @@ export default function SignUp() {
       hasEmailError ||
       hasUsernameError ||
       hasPasswordError ||
-      hasDisplayNameError
+      hasDisplayNameError ||
+      hasProvinceError ||
+      hasCityError
     ) {
       setHasFormErrors(true);
     } else {
       setHasFormErrors(false);
     }
-  }, [hasEmailError, hasUsernameError, hasPasswordError, hasDisplayNameError]);
+  }, [hasEmailError, hasUsernameError, hasPasswordError, hasDisplayNameError, hasProvinceError, hasCityError]);
 
   // functions to update inputs being saved
   function onEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -160,6 +176,8 @@ export default function SignUp() {
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return pattern.test(email);
   }
+
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
   async function handleSignUp(): Promise<void> {
     // create new account with the validated info
@@ -188,18 +206,14 @@ export default function SignUp() {
         }),
       });
 
-      if (response.ok) {
-        // const data = await response.json();
-        // console.log(data);
-        // // show success temp notification
-        // setShowTempNotif(true);
-        // setTempNotifMsg("Sign-up successful!");
-        // setRequestSuccessful(true);
-        // // redirect to log-in page, use time-out to show tmep notif for success
-        // setTimeout(() => {
-        //   window.location.href = "/login";
-        // }, 3000);
-        toast.success("Sign-up successful!", {
+      toast.promise(
+        Promise.resolve(response),
+        {
+          loading: "Signing up...",
+          success: "Signup successful!",
+          error: (err: Error) => `User signup failed: ${err.message}`,
+        },
+        {
           style: {
             borderRadius: "100px",
             width: "100%",
@@ -208,33 +222,16 @@ export default function SignUp() {
             border: "1px solid rgba(255, 132, 164, 1)",
           },
           duration: 3000,
-        });
-      } else {
-        // show request failed temp notification
-        // setShowTempNotif(true);
-        // setTempNotifMsg("Sign-up unsuccessful.");
-        // setRequestSuccessful(false);
-        toast.error("Sign-up unsucessful", {
-          style: {
-            borderRadius: "100px",
-            width: "100%",
-            fontSize: "2em",
-            backgroundColor: "#e0cdb2",
-            border: "1px solid rgba(255, 132, 164, 1)",
-          },
-        });
-        // print to console
-        throw new Error("Failed to send request");
-      }
+        }
+      );
+
     } catch (error) {
       console.error("Error:", error);
     }
 
-    // // remove temp notif after 5 seconds
-    // setTimeout(() => {
-    //   setShowTempNotif(false);
-    // }, 5000);
-    handleLogIn(auth, newAccount.email, newAccount.password);
+    await sleep(500);
+
+    await handleLogIn(auth, newAccount.email, newAccount.password);
     navigate("/");
   }
 
@@ -358,6 +355,12 @@ export default function SignUp() {
               </p>
               <br></br>
               <LocationMenu onLocationChange={handleLocationChange} />
+                            <p
+                className="signupInput"
+                style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}
+              >
+                {locationErrorMsg}
+              </p>
             </CardContent>
             <CardActions className="buttons">
               <Button

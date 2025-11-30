@@ -7,7 +7,7 @@ import UploadModal from "../upload-modal/upload-modal";
 import { useEffect, useState } from "react";
 import { GetState, GetCity } from "react-country-state-city";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 export function MainNavMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -19,6 +19,34 @@ export function MainNavMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+
+  // Fetch current user role once on mount
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await fetch("http://localhost:8000/user/me", {
+          credentials: "include",
+        });
+        if (!mounted) return;
+        if (!res.ok) {
+          // Not authenticated or other error — hide admin link
+          setIsAdmin(false);
+          return;
+        }
+        const user = await res.json();
+        setIsAdmin(user.role === "admin");
+      } catch (e) {
+        console.error("Failed to fetch current user", e);
+        if (mounted) setIsAdmin(false);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
   const navigate = useNavigate();
 
   async function handleLogOut(
@@ -33,30 +61,28 @@ export function MainNavMenu() {
         headers: { "Content-Type": "application/json" },
         credentials: "include", // VERY IMPORTANT: accept cookie
       });
+      toast.promise(
+        Promise.resolve(resp),
+        {
+          loading: "Logging out...",
+          success: "Logout successful!",
+          error: (err: Error) => `Logout failed: ${err.message}`,
+        },
+        {
+          style: {
+            borderRadius: "100px",
+            width: "100%",
+            fontSize: "2em",
+            backgroundColor: "#e0cdb2",
+            border: "1px solid rgba(255, 132, 164, 1)",
+          },
+          duration: 3000,
+        }
+      );
 
       console.log("logged out");
-      toast.success("Logout successful!", {
-        style: {
-          borderRadius: "100px",
-          width: "100%",
-          fontSize: "2em",
-          backgroundColor: "#e0cdb2",
-          border: "1px solid rgba(255, 132, 164, 1)",
-        },
-        duration: 3000,
-      });
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Logout unsuccessful", {
-        style: {
-          borderRadius: "100px",
-          width: "100%",
-          fontSize: "2em",
-          backgroundColor: "#e0cdb2",
-          border: "1px solid rgba(255, 132, 164, 1)",
-        },
-        duration: 3000,
-      });
     }
     // redirect to login page
     navigate("/login");
@@ -117,7 +143,6 @@ export function MainNavMenu() {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            // Close the menu, then open the modal rendered outside the Menu
             handleClose();
             setUploadOpen(true);
           }}
@@ -127,6 +152,16 @@ export function MainNavMenu() {
           </div>
           <div className="menu-text">Upload</div>
         </MenuItem>
+        {isAdmin ? (
+          <MenuItem onClick={handleClose}>
+            <div className="menu-icon">
+              <img src="assets\icons\fontisto--list-2.svg" />
+            </div>
+            <Link className="menu-text" to="/all-users">
+              All users
+            </Link>
+          </MenuItem>
+        ) : null}
         <MenuItem onClick={handleLogOut}>
           <div className="menu-icon">
             <img src="assets\icons\Logout icon.svg" />
