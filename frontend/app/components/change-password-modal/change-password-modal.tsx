@@ -12,11 +12,9 @@ import hideIcon from "../login/hide.svg";
 import { auth } from "firebase";
 import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import toast from "react-hot-toast";
+import handleLogIn from "~/utils/loginFunction";
 
 export default function ChangePasswordModal() {
-  // TODO: get from DB to prepopulate
-  const userPassword = "formDB";
-
   const matches = useMediaQuery("(min-width: 600px)");
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -69,13 +67,25 @@ export default function ChangePasswordModal() {
 
       // catch errors
       if (!updatePassResponse.ok) {
-        console.log("Error updating email.");
+        console.log("Error updating password.");
       } else {
         successful = true;
-        // reload client side to know that new password has been written to DB
-        await user.reload();
-        // give user new token so they don't get logged out after password change
-        await user.getIdToken(true);
+        // automatically log user in again to get new session cookie with the new password if update was successful
+        // this prevents getting user logged out after the chnage
+        handleLogIn(auth, user.email, newPassword);
+        // reset everything in modal
+        setHasFormErrors(false);
+        setHasNewPasswordError(true);
+        setNewPasswordErrorMsg("");
+        setHasNewPassReEnterError(true);
+        setNewPassReEnterErrorMsg("");
+        setHasPasswordError(false);
+        setPasswordErrorMsg("");
+        // reset show password toggle
+        setShow(false);
+        setShowNewPass(false);
+        setShowReEnterPass(false);
+        setOpen(false);
       }
 
       // show the temp notificaiton if successful
@@ -222,6 +232,9 @@ export default function ChangePasswordModal() {
 
     // if current password field is empty, reset errors
     if (password === "") {
+      setPasswordErrorMsg("");
+      setHasPasswordError(false);
+    } else if (password) {
       setPasswordErrorMsg("");
       setHasPasswordError(false);
     }
