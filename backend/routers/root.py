@@ -12,6 +12,7 @@ from handlers.pets.createSubprofile import create_subprofile, PetCreate
 from handlers.pets.updatePet import update_pet as update_p
 from handlers.pets.deleteSubprofile import delete_pet as delete_p
 from handlers.auth.updateEmail import update_email, EmailUpdate
+from handlers.auth.updatePassword import update_password, PassUpdate 
 from fastapi import APIRouter, Request
 
 router = APIRouter()
@@ -35,6 +36,12 @@ async def post_update_email(request: Request):
     data = await request.json()
     update = EmailUpdate(**data)
     return update_email(update)
+
+@router.post("/user/update-password")
+async def post_update_pass(request: Request):
+    data = await request.json()
+    update = PassUpdate(**data)
+    return update_password(update)
 
 # posts created by user routes
 
