@@ -1,7 +1,10 @@
 from firebase_service import db
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, APIRouter
 from classes.location import Location
 
+router = APIRouter()
+
+@router.get("/posts/rank/province/{location}")
 #fix class use if location stored as JSON instead of string
 async def rank_province(user_location: str):
         

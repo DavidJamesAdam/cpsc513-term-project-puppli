@@ -28,6 +28,10 @@ export default function Ranking() {
   // keeps track of which tab we are on
   const [value, setValue] = useState(0);
 
+  const [globalList, setGlobalList] = useState([]);
+  const [provincialList, setProvincialList] = useState([]);
+  const [cityList, setCityList] = useState([]);
+
   useEffect(() => {
     (async () => {
       try {
@@ -35,6 +39,51 @@ export default function Ranking() {
         setAuthorized(true);
       } catch (e) {
         window.location.href = "/login";
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await authCheck();
+        setAuthorized(true);
+
+        // Fetch the json for the global rankings
+        const globalResponse = await fetch("http://localhost:8000/posts/rank/global");
+
+        if (globalResponse.ok) {
+          const globalData = await globalResponse.json();
+
+          const onlyPetId = globalData.map((item: any) => item.petId); 
+
+          setGlobalList(onlyPetId);
+        }
+
+        // // Fetch the json for the province rankings
+        // const provinceResponse = await fetch("http://localhost:8000/posts/rank/province");
+
+        // if (provinceResponse.ok) {
+        //   const provincialData = await provinceResponse.json();
+
+        //   const onlyPetId = provincialData.map((item: any) => item.petId); 
+
+        //   setProvincialList(onlyPetId);
+        // }
+
+        // // Fetch the json for the city rankings
+        // const cityResponse = await fetch("http://localhost:8000/posts/rank/city");
+
+        // if (cityResponse.ok) {
+        //   const cityData = await cityResponse.json();
+
+        //   const onlyPetId = cityData.map((item: any) => item.petId); 
+
+        //   setCityList(onlyPetId);
+        // }
+
+      } catch (e) {
+        console.log("Failed to fetch data for global rankings.")
       }
     })();
   }, []);
@@ -113,7 +162,7 @@ export default function Ranking() {
           variant="fullWidth"
         >
           <Tab label="Global" className="filterTab" />
-          <Tab label="Provincal" className="filterTab" />
+          <Tab label="Provincial" className="filterTab" />
           <Tab label="Local" className="filterTab" />
         </Tabs>
         <Table>

@@ -1,6 +1,9 @@
 from firebase_service import db
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, APIRouter
 
+router = APIRouter()
+
+@router.get("/posts/rank/global")
 async def rank_global():
     
     try:
