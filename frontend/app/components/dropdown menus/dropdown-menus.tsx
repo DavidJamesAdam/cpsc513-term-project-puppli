@@ -88,6 +88,8 @@ export function MainNavMenu() {
     navigate("/login");
   }
 
+  const menuStyle = {};
+
   const menuItemStyle = {
     display: "flex",
     alignItems: "center",
@@ -98,8 +100,6 @@ export function MainNavMenu() {
     fontFamily: "Itim",
     fontSize: "clamp(1rem, 2.5vw, 3rem)",
   };
-
-  const itemImageStyle = {};
 
   return (
     <div>
@@ -359,6 +359,14 @@ export function NotificationMenu() {
         open={open}
         onClose={handleClose}
         slotProps={{
+          paper: {
+            sx: {
+              backgroundColor: "#ffc2cf",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-around",
+            },
+          },
           list: {
             "aria-labelledby": "basic-button",
           },
@@ -460,6 +468,14 @@ export function PetSelectionMenu({
         open={open}
         onClose={handleClose}
         slotProps={{
+          paper: {
+            sx: {
+              backgroundColor: "#ffc2cf",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-around",
+            },
+          },
           list: {
             "aria-labelledby": "basic-button",
           },
@@ -564,6 +580,14 @@ export function LocationMenu({
           open={openState}
           onClose={handleStateClose}
           slotProps={{
+            paper: {
+              sx: {
+                backgroundColor: "#ffc2cf",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-around",
+              },
+            },
             list: {
               "aria-labelledby": "basic-button",
             },
@@ -609,6 +633,14 @@ export function LocationMenu({
           open={openCity}
           onClose={handleCityClose}
           slotProps={{
+            paper: {
+              sx: {
+                backgroundColor: "#ffc2cf",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-around",
+              },
+            },
             list: {
               "aria-labelledby": "basic-button",
             },
