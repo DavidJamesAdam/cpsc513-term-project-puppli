@@ -13,6 +13,7 @@ from handlers.pets.updatePet import update_pet as update_p
 from handlers.pets.getPetByID import get_pet as get_p
 from handlers.pets.deleteSubprofile import delete_pet as delete_p
 from handlers.auth.updateEmail import update_email, EmailUpdate
+from handlers.auth.updatePassword import update_password, PassUpdate 
 from fastapi import APIRouter, Request
 
 router = APIRouter()
@@ -31,11 +32,25 @@ def get_root():
 async def post_user(user: User):
     return await create_user(user)
 
+'''
+for updating email and password, the JSON request body should have the following keys:
+{
+    "id_token": "user's Firebase ID token",
+    "new_email": "new email address"  # or "new_password": "new password"
+}
+'''
+
 @router.post("/user/update-email")
 async def post_update_email(request: Request):
     data = await request.json()
     update = EmailUpdate(**data)
     return update_email(update)
+
+@router.post("/user/update-password")
+async def post_update_pass(request: Request):
+    data = await request.json()
+    update = PassUpdate(**data)
+    return update_password(update)
 
 # posts created by user routes
 
