@@ -88,6 +88,19 @@ export function MainNavMenu() {
     navigate("/login");
   }
 
+  const menuItemStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.75rem",
+    width: "100%",
+    borderRadius: "20px",
+    // padding: "10px",
+    fontFamily: "Itim",
+    fontSize: "clamp(1rem, 2.5vw, 3rem)",
+  };
+
+  const itemImageStyle = {};
+
   return (
     <div>
       <Button
@@ -112,30 +125,98 @@ export function MainNavMenu() {
         open={open}
         onClose={handleClose}
         slotProps={{
+          paper: {
+            sx: {
+              backgroundColor: "#ffc2cf",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-around",
+            },
+          },
           list: {
             "aria-labelledby": "basic-button",
+            sx: {
+              margin: "10px",
+            },
           },
         }}
       >
-        <MenuItem onClick={handleClose}>
-          <div className="menu-icon">
-            <img src="assets\icons\vote icon.svg" />
+        <MenuItem onClick={handleClose} sx={menuItemStyle}>
+          <div
+            className="menu-icon"
+            style={{
+              width: "clamp(1rem, 3.2vw, 2.25rem)",
+              height: "clamp(1rem, 3.2vw, 2.25rem)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flex: " 0 0 auto",
+            }}
+          >
+            <img
+              src="assets\icons\vote icon.svg"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                display: "block",
+                imageRendering: "-webkit-optimize-contrast",
+              }}
+            />
           </div>
           <Link className="menu-text" to="/">
             Vote
           </Link>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <div className="menu-icon">
-            <img src="assets\icons\Profile icon.svg" />
+        <MenuItem onClick={handleClose} sx={menuItemStyle}>
+          <div
+            className="menu-icon"
+            style={{
+              width: "clamp(1rem, 3.2vw, 2.25rem)",
+              height: "clamp(1rem, 3.2vw, 2.25rem)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flex: " 0 0 auto",
+            }}
+          >
+            <img
+              src="assets\icons\Profile icon.svg"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                display: "block",
+                imageRendering: "-webkit-optimize-contrast",
+              }}
+            />
           </div>
           <Link className="menu-text" to="/profile">
             Profile
           </Link>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <div className="menu-icon">
-            <img src="assets\icons\Rankings icon.svg" />
+        <MenuItem onClick={handleClose} sx={menuItemStyle}>
+          <div
+            className="menu-icon"
+            style={{
+              width: "clamp(1rem, 3.2vw, 2.25rem)",
+              height: "clamp(1rem, 3.2vw, 2.25rem)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flex: " 0 0 auto",
+            }}
+          >
+            <img
+              src="assets\icons\Rankings icon.svg"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                display: "block",
+                imageRendering: "-webkit-optimize-contrast",
+              }}
+            />
           </div>
           <Link className="menu-text" to="/ranking">
             Rankings
@@ -146,27 +227,88 @@ export function MainNavMenu() {
             handleClose();
             setUploadOpen(true);
           }}
+          sx={menuItemStyle}
         >
-          <div className="menu-icon">
-            <img src="assets\icons\Upload icon.svg" />
+          <div
+            className="menu-icon"
+            style={{
+              width: "clamp(1rem, 3.2vw, 2.25rem)",
+              height: "clamp(1rem, 3.2vw, 2.25rem)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flex: " 0 0 auto",
+            }}
+          >
+            <img
+              src="assets\icons\Upload icon.svg"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                display: "block",
+                imageRendering: "-webkit-optimize-contrast",
+              }}
+            />
           </div>
           <div className="menu-text">Upload</div>
         </MenuItem>
         {isAdmin ? (
-          <MenuItem onClick={handleClose}>
-            <div className="menu-icon">
-              <img src="assets\icons\fontisto--list-2.svg" />
+          <MenuItem onClick={handleClose} sx={menuItemStyle}>
+            <div
+              className="menu-icon"
+              style={{
+                width: "clamp(1rem, 3.2vw, 2.25rem)",
+                height: "clamp(1rem, 3.2vw, 2.25rem)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flex: " 0 0 auto",
+              }}
+            >
+              <img
+                src="assets\icons\fontisto--list-2.svg"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                  display: "block",
+                  imageRendering: "-webkit-optimize-contrast",
+                }}
+              />
             </div>
             <Link className="menu-text" to="/all-users">
               All users
             </Link>
           </MenuItem>
         ) : null}
-        <MenuItem onClick={handleLogOut}>
-          <div className="menu-icon">
-            <img src="assets\icons\Logout icon.svg" />
+        <MenuItem onClick={handleLogOut} sx={menuItemStyle}>
+          <div
+            className="menu-icon"
+            style={{
+              width: "clamp(1rem, 3.2vw, 2.25rem)",
+              height: "clamp(1rem, 3.2vw, 2.25rem)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flex: " 0 0 auto",
+            }}
+          >
+            <img
+              src="assets\icons\Logout icon.svg"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                display: "block",
+                imageRendering: "-webkit-optimize-contrast",
+              }}
+            />
           </div>
-          <div className="menu-text" style={{ color: "#c10058" }}>
+          <div
+            className="menu-text"
+            style={{ color: "#c10058", margin: 0, lineHeight: 1 }}
+          >
             Log out
           </div>
         </MenuItem>
