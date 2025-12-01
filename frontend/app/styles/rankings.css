@@ -73,6 +73,13 @@ p {
     align-items: center;
 }
 
+.petItem img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 #customBadge {
     color: #739797;
     font-family: "Itim";
