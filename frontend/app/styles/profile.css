@@ -146,6 +146,13 @@ li {
   padding: 15px;
 }
 
+.petItem img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .petName {
   padding-right: 30px;
   color: var(--font-color);

@@ -87,6 +87,34 @@ export default function Profile() {
 
   const [currentPet, setCurrentPet] = useState(petInfo1);
 
+  // fetches the last uploaded image for a specific pet
+  const fetchLastPetImage = async (petId: string): Promise<string> => {
+    try {
+      const response = await fetch("http://localhost:8000/posts", {
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const postsData = await response.json();
+
+        // Filter posts by petId and sort by createdAt in descending order
+        const petPosts = postsData
+          .filter((post: any) => post.petId === petId)
+          .sort((a: any, b: any) => {
+            const dateA = new Date(a.createdAt).getTime();
+            const dateB = new Date(b.createdAt).getTime();
+            return dateB - dateA; // Most recent first
+          });
+
+        // Return the imageUrl of the most recent post, or empty string if no posts
+        return petPosts.length > 0 ? petPosts[0].imageUrl : "";
+      }
+    } catch (error) {
+      console.error("Error fetching pet images:", error);
+    }
+    return "";
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -123,6 +151,7 @@ export default function Profile() {
 
           // Map fetched pets to petInfo1 and petInfo2
           if (petsData.length > 0) {
+            const lastImage1 = await fetchLastPetImage(petsData[0].id);
             setPetInfo1({
               id: petsData[0].id || "",
               name: petsData[0].name || "",
@@ -130,11 +159,12 @@ export default function Profile() {
               bday: petsData[0].birthday || "",
               treat: petsData[0].favouriteTreat || "",
               toy: petsData[0].favouriteToy || "",
-              lastImageUrl: "",
+              lastImageUrl: lastImage1,
             });
           }
 
           if (petsData.length > 1) {
+            const lastImage2 = await fetchLastPetImage(petsData[1].id);
             setPetInfo2({
               id: petsData[1].id || "",
               name: petsData[1].name || "",
@@ -142,7 +172,7 @@ export default function Profile() {
               bday: petsData[1].birthday || "",
               treat: petsData[1].favouriteTreat || "",
               toy: petsData[1].favouriteToy || "",
-              lastImageUrl: "",
+              lastImageUrl: lastImage2,
             });
           }
         } else {
@@ -575,7 +605,10 @@ export default function Profile() {
                   ) : (
                     <CreateSubProfileModal />
                   )}
-                  <img src={defaultPetPFPMain} alt="" />
+                  <img
+                    src={petInfo1.lastImageUrl || defaultPetPFPMain}
+                    alt={petInfo1.name ? `${petInfo1.name}'s photo` : ""}
+                  />
                 </div>
               </div>
               <div className="evenItem">
@@ -587,7 +620,10 @@ export default function Profile() {
                   ) : (
                     <CreateSubProfileModal />
                   )}
-                  <img src={defaultPetPFPMain} alt="" />
+                  <img
+                    src={petInfo2.lastImageUrl || defaultPetPFPMain}
+                    alt={petInfo2.name ? `${petInfo2.name}'s photo` : ""}
+                  />
                 </div>
               </div>
             </Container>
