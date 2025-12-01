@@ -8,31 +8,38 @@ import TextField from "@mui/material/TextField";
 export default function CreateSubProfileModal() {
   // handles whether the modal is open or not
   const [open, setOpen] = React.useState(false);
-  // keeps track of error and error message
-  const [errorMsg, setErrorMsg] = React.useState("");
-  const [hasError, setHasError] = React.useState(false);
+
   // handles what happens when user opens/closes the modal
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setPetName(""); // reset after window closed
+    // reset all fields after window closed
+    setPetName("");
+    setBreed("");
+    setBday("");
+    setTreat("");
+    setToy("");
   };
+
   // handles what happens when user clicks submit in the modal
   const handleSubmit = () => {
-    if (petName !== "") {
-      // pass created object back to parent page
-      const newPetInfo = {
-        name: "Pet 2",
-        breed: "",
-        bday: "",
-        treat: "",
-        toy: "",
-      };
-    }
+    // pass created object back to parent page
+    const newPetInfo = {
+      name: petName,
+      breed: breed,
+      bday: bday,
+      treat: treat,
+      toy: toy,
+    };
     // TODO: save pet info to DB
     // This function would send off the user's request to update the pets information
     setOpen(false);
-    setPetName(""); // reset after submitted
+    // reset all fields after submitted
+    setPetName("");
+    setBreed("");
+    setBday("");
+    setTreat("");
+    setToy("");
   };
 
   // bunch of styling in constants used for sx attributes
@@ -103,26 +110,102 @@ export default function CreateSubProfileModal() {
     margin: "10px",
   };
 
+  // saves each input field content to a variable
   const [petName, setPetName] = React.useState("");
+  const [breed, setBreed] = React.useState("");
+  const [bday, setBday] = React.useState("");
+  const [treat, setTreat] = React.useState("");
+  const [toy, setToy] = React.useState("");
 
-  // set error messages for the input field
+  // keeps track of error and error messages
+  const [petNameErrorMsg, setPetNameErrorMsg] = React.useState("");
+  const [hasPetNameError, setHasPetNameError] = React.useState(false);
+  const [breedErrorMsg, setBreedErrorMsg] = React.useState("");
+  const [hasBreedError, setHasBreedError] = React.useState(false);
+  const [bdayErrorMsg, setBdayErrorMsg] = React.useState("");
+  const [hasBdayError, setHasBdayError] = React.useState(false);
+  const [treatErrorMsg, setTreatErrorMsg] = React.useState("");
+  const [hasTreatError, setHasTreatError] = React.useState(false);
+  const [toyErrorMsg, setToyErrorMsg] = React.useState("");
+  const [hasToyError, setHasToyError] = React.useState(false);
+
+  // keep track of any errors on the entire page
+  const [hasFormErrors, setHasFormErrors] = React.useState(false);
+
+  // set error messages for each field
   React.useEffect(() => {
     if (petName === "") {
-      setErrorMsg("Pet name field cannot be empty.");
-      setHasError(true);
-      setInputFieldBorderColor("1px solid rgba(255, 0, 0, 1)");
+      setPetNameErrorMsg("Pet name field cannot be empty.");
+      setHasPetNameError(true);
     } else {
-      setErrorMsg("");
-      setHasError(false);
-      console.log(petName);
-      setInputFieldBorderColor(pinkBorder);
+      setPetNameErrorMsg("");
+      setHasPetNameError(false);
     }
-  }, [petName]);
 
-  // saves local updates from input
+    if (breed === "") {
+      setBreedErrorMsg("Pet breed field cannot be empty.");
+      setHasBreedError(true);
+    } else {
+      setBreedErrorMsg("");
+      setHasBreedError(false);
+    }
+
+    if (bday === "") {
+      setBdayErrorMsg("Pet birthday field cannot be empty.");
+      setHasBdayError(true);
+    } else {
+      setBdayErrorMsg("");
+      setHasBdayError(false);
+    }
+
+    if (treat === "") {
+      setTreatErrorMsg("Pet favourite treat field cannot be empty.");
+      setHasTreatError(true);
+    } else {
+      setTreatErrorMsg("");
+      setHasTreatError(false);
+    }
+
+    if (toy === "") {
+      setToyErrorMsg("Pet favourite toy field cannot be empty.");
+      setHasToyError(true);
+    } else {
+      setToyErrorMsg("");
+      setHasToyError(false);
+    }
+  }, [petName, breed, bday, treat, toy]);
+
+  // disable submit button if any error exists
+  React.useEffect(() => {
+    if (hasPetNameError || hasBreedError || hasBdayError || hasTreatError || hasToyError) {
+      setHasFormErrors(true);
+    } else {
+      setHasFormErrors(false);
+    }
+  }, [hasPetNameError, hasBreedError, hasBdayError, hasTreatError, hasToyError]);
+
+  // functions to update inputs being saved
   function onNameChange(event: React.ChangeEvent<HTMLInputElement>) {
     setPetName(event.currentTarget.value);
   }
+
+  function onBreedChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setBreed(event.currentTarget.value);
+  }
+
+  function onBdayChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setBday(event.currentTarget.value);
+  }
+
+  function onTreatChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setTreat(event.currentTarget.value);
+  }
+
+  function onToyChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setToy(event.currentTarget.value);
+  }
+
+  const maxCharacters = 50;
 
   return (
     <div style={{ display: "flex" }}>
