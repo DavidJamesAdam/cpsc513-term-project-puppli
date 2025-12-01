@@ -175,6 +175,9 @@ export default function CreateSubProfileModal() {
     if (bday === "") {
       setBdayErrorMsg("Pet birthday field cannot be empty.");
       setHasBdayError(true);
+    } else if (!/^\d{4}-\d{2}-\d{2}$/.test(bday)) {
+      setBdayErrorMsg("Must be in YYYY-MM-DD format (e.g., 2020-03-15).");
+      setHasBdayError(true);
     } else {
       setBdayErrorMsg("");
       setHasBdayError(false);
@@ -294,14 +297,18 @@ export default function CreateSubProfileModal() {
             <TextField
               sx={inputFieldStyle}
               variant="standard"
-              placeholder={"Birthday"}
+              type="date"
+              placeholder="YYYY-MM-DD"
+              value={bday}
               onChange={onBdayChange}
               slotProps={{
                 input: {
                   disableUnderline: true,
                   style: { color: "#675844" },
                 },
-                htmlInput: { maxLength: maxCharacters },
+                htmlInput: {
+                  pattern: "\\d{4}-\\d{2}-\\d{2}",
+                },
               }}
             />
             <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
