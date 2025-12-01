@@ -172,7 +172,7 @@ export default function Ranking() {
           }
         }
       } catch (e) {
-        console.log("Failed to fetch data for global rankings.");
+        console.log("Failed to fetch data for rankings.");
       }
     })();
   }, []);
