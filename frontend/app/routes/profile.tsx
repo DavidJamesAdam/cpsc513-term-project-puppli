@@ -460,7 +460,9 @@ export default function Profile() {
         <div id="profileBanner">
           <img
             src={
-              onMainProfile ? defaultProfilePicture : defaultPetProfilePicture
+              onMainProfile
+                ? defaultProfilePicture
+                : (onPetOneSubPage ? petInfo1.lastImageUrl : petInfo2.lastImageUrl) || defaultPetProfilePicture
             }
             alt=""
           />

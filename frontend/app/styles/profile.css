@@ -25,6 +25,13 @@ span {
   padding: 30px;
 }
 
+#profileBanner > img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .profileName {
   font-size: 45px;
   line-height: 0.6;
