@@ -1,13 +1,13 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import SettingOption from "../settings/settingOption";
+import SettingOption from "../../settings/settingOption";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
-import showIcon from "../login/show.svg";
-import hideIcon from "../login/hide.svg";
+import showIcon from "../../login/show.svg";
+import hideIcon from "../../login/hide.svg";
 import TextField from "@mui/material/TextField";
 
 export default function ChangeEmailModal() {

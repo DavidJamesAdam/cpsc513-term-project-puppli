@@ -4,11 +4,12 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { PetSelectionMenu } from "../dropdown menus/dropdown-menus";
+import { PetSelectionMenu } from "../../dropdown menus/pet-selection-menu";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../../../firebase";
+import { storage } from "../../../../firebase";
 import toast from "react-hot-toast";
+import { toastStyle } from "~/styles/component-styles";
 
 type UploadModalProps = {
   open?: boolean;
@@ -118,13 +119,7 @@ export default function UploadModal({
           error: (err: Error) => `Upload failed: ${err.message}`,
         },
         {
-          style: {
-            borderRadius: "100px",
-            width: "100%",
-            fontSize: "2em",
-            backgroundColor: "#e0cdb2",
-            border: "1px solid rgba(255, 132, 164, 1)",
-          },
+          style: toastStyle,
           duration: 3000,
         }
       );

@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import disabledCommentIcon from "../voting-card/icons/disabled_comment.svg";
+import disabledCommentIcon from "../../voting-card/icons/disabled_comment.svg";
 
 interface CommentModalProps {
   authorized: boolean;

@@ -13,11 +13,12 @@ import showIcon from "../components/login/show.svg";
 import hideIcon from "../components/login/hide.svg";
 import { useEffect, useState } from "react";
 import TemporaryNotification from "~/components/temporaryNotification";
-import { LocationMenu } from "~/components/dropdown menus/dropdown-menus";
+import { LocationMenu } from "~/components/dropdown menus/location-dropdown";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import handleLogIn from "~/utils/loginFunction";
 import { auth } from "../../firebase";
+import { toastStyle } from "~/styles/component-styles";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "login" }, { name: "description", content: "Sign-up page" }];
@@ -152,7 +153,14 @@ export default function SignUp() {
     } else {
       setHasFormErrors(false);
     }
-  }, [hasEmailError, hasUsernameError, hasPasswordError, hasDisplayNameError, hasProvinceError, hasCityError]);
+  }, [
+    hasEmailError,
+    hasUsernameError,
+    hasPasswordError,
+    hasDisplayNameError,
+    hasProvinceError,
+    hasCityError,
+  ]);
 
   // functions to update inputs being saved
   function onEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -214,17 +222,10 @@ export default function SignUp() {
           error: (err: Error) => `User signup failed: ${err.message}`,
         },
         {
-          style: {
-            borderRadius: "100px",
-            width: "100%",
-            fontSize: "2em",
-            backgroundColor: "#e0cdb2",
-            border: "1px solid rgba(255, 132, 164, 1)",
-          },
+          style: toastStyle,
           duration: 3000,
         }
       );
-
     } catch (error) {
       console.error("Error:", error);
     }
@@ -251,7 +252,10 @@ export default function SignUp() {
         }}
       >
         <div className="loginBox">
-          <Card className="card" sx={{ maxWidth: 785 }}>
+          <Card
+            className="card"
+            sx={{ maxWidth: 785, border: "1px solid rgba(255, 132, 164, 1)" }}
+          >
             <h1>Sign-up</h1>
             <CardContent className="inputs">
               <p className="signupInput">Enter an email address</p>
@@ -260,6 +264,7 @@ export default function SignUp() {
                 variant="standard"
                 type="email"
                 onChange={onEmailChange}
+                sx={{ border: "1px solid rgba(120, 114, 111, 1)" }}
                 slotProps={{
                   input: {
                     disableUnderline: true,
@@ -282,6 +287,7 @@ export default function SignUp() {
                 className="input"
                 variant="standard"
                 onChange={onUsernameChange}
+                sx={{ border: "1px solid rgba(120, 114, 111, 1)" }}
                 slotProps={{
                   input: {
                     disableUnderline: true,
@@ -305,6 +311,7 @@ export default function SignUp() {
                 className="input"
                 variant="standard"
                 onChange={onDisplayNameChange}
+                sx={{ border: "1px solid rgba(120, 114, 111, 1)" }}
                 slotProps={{
                   input: {
                     disableUnderline: true,
@@ -329,6 +336,7 @@ export default function SignUp() {
                 variant="standard"
                 onChange={onPasswordChange}
                 type={show ? "text" : "password"}
+                sx={{ border: "1px solid rgba(120, 114, 111, 1)" }}
                 slotProps={{
                   input: {
                     disableUnderline: true,
@@ -355,7 +363,7 @@ export default function SignUp() {
               </p>
               <br></br>
               <LocationMenu onLocationChange={handleLocationChange} />
-                            <p
+              <p
                 className="signupInput"
                 style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}
               >
@@ -369,6 +377,7 @@ export default function SignUp() {
                 className="enterButton"
                 disabled={hasFormErrors}
                 onClick={handleSignUp}
+                sx={{ border: "1px solid rgba(147, 191, 191, 1)" }}
               >
                 Sign-up!
               </Button>

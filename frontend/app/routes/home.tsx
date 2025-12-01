@@ -30,7 +30,9 @@ export default function Home() {
   const matches = useMediaQuery("(min-width: 600px)");
   const [animateKey, setAnimateKey] = useState(0);
   const [posts, setPosts] = useState<Post[]>([]);
-  const [selectedPosts, setSelectedPosts] = useState<[Post | null, Post | null]>([null, null]);
+  const [selectedPosts, setSelectedPosts] = useState<
+    [Post | null, Post | null]
+  >([null, null]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -93,9 +95,7 @@ export default function Home() {
   };
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-    >
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh", width: "100vw" }}>
       {authorized ? <Header /> : <LoginHeader />}
       {matches ? (
         <>
@@ -117,7 +117,14 @@ export default function Home() {
           )}
           <main
             className="voting-page"
-            style={{ display: "flex", flexDirection: "row", flex: 1 }}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              width: "100%",
+              height: "100%",
+              justifyContent: "space-around",
+              alignItems: "center",
+            }}
           >
             {selectedPosts[0] && selectedPosts[1] ? (
               <>
@@ -136,8 +143,11 @@ export default function Home() {
                 />
               </>
             ) : (
-              <h1 style={{ fontSize: "3vh", alignSelf: "center", margin: "auto" }}>
-                Not enough posts available. Please upload some posts to start voting!
+              <h1
+                style={{ fontSize: "3vh", alignSelf: "center", margin: "auto" }}
+              >
+                Not enough posts available. Please upload some posts to start
+                voting!
               </h1>
             )}
           </main>
@@ -146,12 +156,12 @@ export default function Home() {
         <main
           className="voting-page"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "auto",
-            flex: 1,
-            justifyContent: "space-between",
-            height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              height: "100%",
+              justifyContent: "space-around",
+              alignItems: "center",
           }}
         >
           {selectedPosts[0] && selectedPosts[1] ? (
@@ -171,8 +181,11 @@ export default function Home() {
               />
             </>
           ) : (
-            <h1 style={{ fontSize: "3vh", alignSelf: "center", margin: "auto" }}>
-              Not enough posts available. Please upload some posts to start voting!
+            <h1
+              style={{ fontSize: "3vh", alignSelf: "center", margin: "auto" }}
+            >
+              Not enough posts available. Please upload some posts to start
+              voting!
             </h1>
           )}
         </main>

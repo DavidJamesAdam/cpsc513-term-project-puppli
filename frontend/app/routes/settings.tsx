@@ -5,11 +5,11 @@ import "../styles/settings.css";
 import settingsIcon from "../components/settings/icons/settings.svg";
 import aboutIcon from "../components/settings/icons/about.svg";
 import userIcon from "../components/settings/icons/user.svg";
-import ChangePasswordModal from "~/components/change-password-modal/change-password-modal";
-import FAQModal from "~/components/faq-modal/faq-modal";
+import ChangePasswordModal from "~/components/modals/change-password-modal/change-password-modal";
+import FAQModal from "~/components/modals/faq-modal/faq-modal";
 import { authCheck } from "../utils/authCheck";
 import { useEffect, useState } from "react";
-import ChangeEmailModal from "~/components/change-email-modal/change-email-modal";
+import ChangeEmailModal from "~/components/modals/change-email-modal/change-email-modal";
 
 export function meta({}: Route.MetaArgs) {
   return [

@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import * as React from "react";
-import CommentModal from "../comment-modal/comment-modal";
+import CommentModal from "../modals/comment-modal/comment-modal";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState, useEffect, useRef } from "react";
 import "./styles.css";
@@ -37,6 +37,37 @@ export default function VotingCard({
   const [voteCount, setVoteCount] = useState(post?.voteCount || 0);
   const matches = useMediaQuery("(min-width: 600px)");
   const firstRunRef = useRef(true);
+  const [imgFitMode, setImgFitMode] = useState<
+    "fit-width" | "fit-height" | "contain"
+  >("contain");
+
+  // helper to set mode on image load
+  function handleImgLoad(e: React.SyntheticEvent<HTMLImageElement>) {
+    const img = e.currentTarget;
+    const naturalW = img.naturalWidth || 1;
+    const naturalH = img.naturalHeight || 1;
+    const imageAspect = naturalW / naturalH;
+
+    // compute container aspect: you may use a fixed ratio you set in CSS,
+    // or compute from clientWidth/clientHeight of the container:
+    const container = img.parentElement as HTMLElement | null;
+    let containerAspect = 1;
+    if (container) {
+      const rect = container.getBoundingClientRect();
+      containerAspect = rect.width / Math.max(rect.height, 1);
+    }
+
+    // choose fit mode
+    if (imageAspect > containerAspect) {
+      // image is wider than container -> fit by width so width fills and height shrinks
+      setImgFitMode("fit-width");
+    } else if (imageAspect < containerAspect) {
+      // image is taller -> fit by height
+      setImgFitMode("fit-height");
+    } else {
+      setImgFitMode("contain");
+    }
+  }
 
   // keep vote count in sync with incoming post prop
   useEffect(() => {
@@ -93,10 +124,13 @@ export default function VotingCard({
     if (!post) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/posts/vote/${post.id}`, {
-        method: "POST",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `http://localhost:8000/posts/vote/${post.id}`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         setVoteCount((prev) => prev + 1);
@@ -116,7 +150,7 @@ export default function VotingCard({
           style={{
             border: "1px solid rgba(255, 132, 164, 1)",
             width: "30%",
-            height: "50%",
+            height: "80%",
             borderRadius: "40px",
             backgroundColor: "rgba(224, 205, 178, 1)",
             display: "flex",
@@ -125,53 +159,19 @@ export default function VotingCard({
             justifyContent: "space-around",
           }}
         >
-          <div
-            style={{
-              border: "1px solid",
-              borderRadius: "40px",
-              width: "75%",
-              height: "75%",
-              margin: "20px",
-              backgroundColor: "rgba(217, 217, 217, 1)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              overflow: "hidden",
-              position: "relative",
-            }}
-          >
+          <div className="image-container">
             {post?.imageUrl ? (
               <img
                 src={post.imageUrl}
                 alt={post.caption}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "40px",
-                }}
+                onLoad={handleImgLoad}
+                className={imgFitMode}
               />
             ) : (
               <img
                 src={"assets/icons/ant-design--picture-outlined.svg"}
-                style={{ width: "90%", height: "auto" }}
+                className="fallback-image"
               />
-            )}
-            {post && (
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "10px",
-                  left: "10px",
-                  backgroundColor: "rgba(0, 0, 0, 0.6)",
-                  color: "white",
-                  padding: "5px 10px",
-                  borderRadius: "10px",
-                  fontSize: "12px",
-                }}
-              >
-                Votes: {voteCount}
-              </div>
             )}
           </div>
           <div
@@ -199,7 +199,6 @@ export default function VotingCard({
                   <img src={disabledLikeIcon} />
                 </Button>
               )}
-
               {plusOnes.map((id) => (
                 <span key={id} className="plus-one">
                   +1
@@ -232,55 +231,19 @@ export default function VotingCard({
             justifyContent: "space-around",
           }}
         >
-          <div
-            style={{
-              border: "1px solid",
-              borderRadius: "40px",
-              width: "75%",
-              height: "75%",
-              marginTop: "20px",
-              marginLeft: "20px",
-              marginBottom: "20px",
-              backgroundColor: "rgba(217, 217, 217, 1)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              overflow: "hidden",
-              position: "relative",
-            }}
-          >
+          <div className="image-container">
             {post?.imageUrl ? (
               <img
                 src={post.imageUrl}
                 alt={post.caption}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "40px",
-                }}
+                onLoad={handleImgLoad}
+                className={imgFitMode}
               />
             ) : (
               <img
                 src={"assets/icons/ant-design--picture-outlined.svg"}
-                style={{ width: "90%", height: "auto" }}
+                className="fallback-image"
               />
-            )}
-            {post && (
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "10px",
-                  left: "10px",
-                  backgroundColor: "rgba(0, 0, 0, 0.6)",
-                  color: "white",
-                  padding: "5px 10px",
-                  borderRadius: "10px",
-                  fontSize: "12px",
-                }}
-              >
-                Votes: {voteCount}
-              </div>
             )}
           </div>
           <div

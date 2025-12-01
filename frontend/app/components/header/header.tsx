@@ -1,7 +1,7 @@
 import {
   MainNavMenu,
-  NotificationMenu,
-} from "../dropdown menus/dropdown-menus";
+} from "../dropdown menus/nav-menu";
+import NotificationMenu from "../dropdown menus/notification-menu";
 
 export default function Header() {
   return (

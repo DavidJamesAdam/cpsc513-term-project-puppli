@@ -1,0 +1,54 @@
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { useState } from "react";
+import "./styles.css";
+import { menuStyle, menuItemStyle } from "./mui-styles";
+
+export default function NotificationMenu() {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <div>
+      <Button
+        id="basic-button"
+        aria-controls={open ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        onClick={handleClick}
+      >
+        <div style={{ position: "relative", display: "inline-block" }}>
+          <img src="assets\icons\Notification Bell.svg" />
+          <img
+            src="assets\icons\mdi_arrow-down-drop.svg"
+            style={{ position: "absolute", left: -12, bottom: -12 }}
+          />
+        </div>
+      </Button>
+      <Menu
+        className="menu"
+        id="notification-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        slotProps={{
+          paper: {
+            sx: menuStyle
+          },
+          list: {
+            "aria-labelledby": "basic-button",
+          },
+        }}
+      >
+        <MenuItem sx={menuItemStyle}>Notification</MenuItem>
+      </Menu>
+    </div>
+  );
+}

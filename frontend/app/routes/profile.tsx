@@ -15,7 +15,7 @@ import CreateSubProfileModal from "~/components/profile/createSubProfileModal";
 import TextField from "@mui/material/TextField";
 import editIcon from "../components/settings/icons/username.svg";
 import SaveAndCancelButtons from "~/components/saveAndCancelButtons";
-import UploadModal from "~/components/upload-modal/upload-modal";
+import UploadModal from "~/components/modals/upload-modal/upload-modal";
 import ProfileBanner from "~/components/profile/profileBanner";
 import DeleteSubProfileModal from "~/components/profile/deleteSubProfileModal";
 import { authCheck } from "../utils/authCheck";
