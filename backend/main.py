@@ -13,6 +13,7 @@ from handlers.posts.createPost import router as create_post_router
 from handlers.users.getUser import router as get_user_router
 from handlers.users.postUser import router as post_user_router
 from handlers.pets.getPets import router as get_pets_router
+from handlers.pets.createSubprofile import router as create_pet_router
 from handlers.users.deleteUser import router as delete_user_router
 from utils.authCheck import router as auth_check_router
 
