@@ -22,24 +22,48 @@ export default function CreateSubProfileModal() {
   };
 
   // handles what happens when user clicks submit in the modal
-  const handleSubmit = () => {
-    // pass created object back to parent page
-    const newPetInfo = {
-      name: petName,
-      breed: breed,
-      bday: bday,
-      treat: treat,
-      toy: toy,
-    };
-    // TODO: save pet info to DB
-    // This function would send off the user's request to update the pets information
-    setOpen(false);
-    // reset all fields after submitted
-    setPetName("");
-    setBreed("");
-    setBday("");
-    setTreat("");
-    setToy("");
+  const handleSubmit = async () => {
+    try {
+      // Create pet data object
+      const newPetInfo = {
+        name: petName,
+        breed: breed,
+        birthday: bday,
+        favouriteTreat: treat,
+        favouriteToy: toy,
+      };
+
+      // Send POST request to create pet
+      const response = await fetch("http://localhost:8000/pet/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(newPetInfo),
+      });
+
+      if (response.ok) {
+        console.log("Pet profile created successfully");
+        // Close modal and reset fields
+        setOpen(false);
+        setPetName("");
+        setBreed("");
+        setBday("");
+        setTreat("");
+        setToy("");
+
+        // Reload the page to show the new pet
+        window.location.reload();
+      } else {
+        const errorData = await response.json();
+        console.error("Error creating pet profile:", response.status, errorData);
+        alert("Failed to create pet profile. Please try again.");
+      }
+    } catch (error) {
+      console.error("Failed to create pet profile:", error);
+      alert("Failed to create pet profile. Please try again.");
+    }
   };
 
   // bunch of styling in constants used for sx attributes

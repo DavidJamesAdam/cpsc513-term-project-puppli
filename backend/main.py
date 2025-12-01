@@ -50,6 +50,7 @@ app.include_router(create_post_router)
 app.include_router(get_user_router)
 app.include_router(post_user_router)
 app.include_router(get_pets_router)
+app.include_router(create_pet_router)
 app.include_router(delete_user_router)
 app.include_router(auth_check_router)
 
