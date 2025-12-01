@@ -4,8 +4,10 @@ import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 import "./styles.css";
 import { menuStyle, menuItemStyle } from "./mui-styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function NotificationMenu() {
+  const matches = useMediaQuery("(min-width: 600px)");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
