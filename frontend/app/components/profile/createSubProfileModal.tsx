@@ -78,8 +78,6 @@ export default function CreateSubProfileModal() {
   };
 
   const pinkBorder = "1px solid rgba(255, 132, 164, 1)";
-  const [inputFieldBorderColor, setInputFieldBorderColor] =
-    React.useState(pinkBorder);
 
   const inputFieldStyle = {
     backgroundColor: "var(--bg-color)",
@@ -87,7 +85,7 @@ export default function CreateSubProfileModal() {
     padding: "10px",
     maxHeight: "59px",
     borderBottom: "none",
-    border: inputFieldBorderColor,
+    border: pinkBorder,
   };
 
   const closeButtonStyle = {
@@ -329,7 +327,7 @@ export default function CreateSubProfileModal() {
               id="submit"
               sx={submitButtonStyle}
               onClick={handleSubmit}
-              disabled={hasError}
+              disabled={hasFormErrors}
             >
               Submit
             </Button>
