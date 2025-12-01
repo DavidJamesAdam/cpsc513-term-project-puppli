@@ -23,16 +23,49 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+interface RankedPet {
+  name: string;
+  imageUrl: string;
+}
+
 export default function Ranking() {
   const [authorized, setAuthorized] = useState<boolean | null>(null);
   // keeps track of which tab we are on
   const [value, setValue] = useState(0);
 
   // list to store all global names
-  const [globalList, setGlobalList] = useState<string[]>([]);
-  const [provincialList, setProvincialList] = useState<string[]>([]);
-  const [cityList, setCityList] = useState<string[]>([]);
-  let data: string[] = [];
+  const [globalList, setGlobalList] = useState<RankedPet[]>([]);
+  const [provincialList, setProvincialList] = useState<RankedPet[]>([]);
+  const [cityList, setCityList] = useState<RankedPet[]>([]);
+  let data: RankedPet[] = [];
+
+  // fetches the last uploaded image for a specific pet
+  const fetchLastPetImage = async (petId: string): Promise<string> => {
+    try {
+      const response = await fetch("http://localhost:8000/posts", {
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const postsData = await response.json();
+
+        // Filter posts by petId and sort by createdAt in descending order
+        const petPosts = postsData
+          .filter((post: any) => post.petId === petId)
+          .sort((a: any, b: any) => {
+            const dateA = new Date(a.createdAt).getTime();
+            const dateB = new Date(b.createdAt).getTime();
+            return dateB - dateA; // Most recent first
+          });
+
+        // Return the imageUrl of the most recent post, or empty string if no posts
+        return petPosts.length > 0 ? petPosts[0].imageUrl : "";
+      }
+    } catch (error) {
+      console.error("Error fetching pet images:", error);
+    }
+    return "";
+  };
 
   useEffect(() => {
     (async () => {
@@ -77,17 +110,18 @@ export default function Ranking() {
               ...new Set(globalData.map((post: any) => post.petId)),
             ];
 
-            // for every id, get the pet
-            const petNames = await Promise.all(
+            // for every id, get the pet and its last image
+            const petData = await Promise.all(
               onlyPetIds.map(async (id: any) => {
                 const petResponse = await fetch(
                   `http://localhost:8000/pet/${id}`
                 );
 
-                // if we successfully retrieved the data, extract the name and add to the list
+                // if we successfully retrieved the data, extract the name and get the image
                 if (petResponse.ok) {
-                  const petData = await petResponse.json();
-                  return petData.name;
+                  const pet = await petResponse.json();
+                  const imageUrl = await fetchLastPetImage(id);
+                  return { name: pet.name, imageUrl };
                 } else {
                   // otherwise the response failed, just return nothing
                   return null;
@@ -96,7 +130,7 @@ export default function Ranking() {
             );
 
             // filter out nulls, set the list
-            setGlobalList(petNames.filter((name) => name !== null));
+            setGlobalList(petData.filter((pet) => pet !== null) as RankedPet[]);
           }
 
           // Fetch the json for the province rankings based on user's location
@@ -113,17 +147,18 @@ export default function Ranking() {
               ...new Set(provincialData.map((post: any) => post.petId)),
             ];
 
-            // for every id, get the pet
-            const petNames = await Promise.all(
+            // for every id, get the pet and its last image
+            const petData = await Promise.all(
               onlyPetIds.map(async (id: any) => {
                 const petResponse = await fetch(
                   `http://localhost:8000/pet/${id}`
                 );
 
-                // if we successfully retrieved the data, extract the name and add to the list
+                // if we successfully retrieved the data, extract the name and get the image
                 if (petResponse.ok) {
-                  const petData = await petResponse.json();
-                  return petData.name;
+                  const pet = await petResponse.json();
+                  const imageUrl = await fetchLastPetImage(id);
+                  return { name: pet.name, imageUrl };
                 } else {
                   // otherwise the response failed, just return nothing
                   return null;
@@ -132,7 +167,7 @@ export default function Ranking() {
             );
 
             // filter out nulls, set the list
-            setProvincialList(petNames.filter((name) => name !== null));
+            setProvincialList(petData.filter((pet) => pet !== null) as RankedPet[]);
           }
 
           // Fetch the json for the city rankings based on user's location
@@ -149,17 +184,18 @@ export default function Ranking() {
               ...new Set(cityData.map((post: any) => post.petId)),
             ];
 
-            // for every id, get the pet
-            const petNames = await Promise.all(
+            // for every id, get the pet and its last image
+            const petData = await Promise.all(
               onlyPetIds.map(async (id: any) => {
                 const petResponse = await fetch(
                   `http://localhost:8000/pet/${id}`
                 );
 
-                // if we successfully retrieved the data, extract the name and add to the list
+                // if we successfully retrieved the data, extract the name and get the image
                 if (petResponse.ok) {
-                  const petData = await petResponse.json();
-                  return petData.name;
+                  const pet = await petResponse.json();
+                  const imageUrl = await fetchLastPetImage(id);
+                  return { name: pet.name, imageUrl };
                 } else {
                   // otherwise the response failed, just return nothing
                   return null;
@@ -168,7 +204,7 @@ export default function Ranking() {
             );
 
             // filter out nulls, set the list
-            setCityList(petNames.filter((name) => name !== null));
+            setCityList(petData.filter((pet) => pet !== null) as RankedPet[]);
           }
         }
       } catch (e) {
@@ -256,8 +292,8 @@ export default function Ranking() {
                 </TableCell>
                 <TableCell>
                   <div className="petItem">
-                    <h1 className="name">{row}</h1>
-                    <img src={petPFP} alt="example.svg" />
+                    <h1 className="name">{row.name}</h1>
+                    <img src={row.imageUrl || petPFP} alt={row.name} />
                   </div>
                 </TableCell>
               </TableRow>
