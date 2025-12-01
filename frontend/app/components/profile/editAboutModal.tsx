@@ -37,12 +37,14 @@ interface EditAboutModalProps {
       toy: string;
     };
   };
+  onUpdateSuccess?: () => void;
 }
 
 export default function EditAboutModal({
   onPetOneSubPage,
   petInfo,
   userInfo,
+  onUpdateSuccess,
 }: EditAboutModalProps) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -82,11 +84,14 @@ export default function EditAboutModal({
           }
         );
 
-        // if successful, reload the page to show updated data
+        // if successful, call the callback to refresh data
         if (updatePetResponse.ok) {
           console.log("Pet information updated successfully");
           setOpen(false);
-          window.location.reload();
+          // Call the callback to refresh pet data in parent component
+          if (onUpdateSuccess) {
+            onUpdateSuccess();
+          }
         } else {
           const errorData = await updatePetResponse.json();
           console.error("Error updating pet information:", updatePetResponse.status, errorData);

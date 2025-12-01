@@ -356,6 +356,54 @@ export default function Profile() {
     window.location.href = "/settings";
   }
 
+  // refreshes pet data from the backend
+  const refreshPetData = async () => {
+    try {
+      const petsResponse = await fetch("http://localhost:8000/pets", {
+        credentials: "include",
+      });
+
+      if (petsResponse.ok) {
+        const petsData = await petsResponse.json();
+
+        // Update pet info states
+        if (petsData.length > 0) {
+          const updatedPet1 = {
+            name: petsData[0].name || "",
+            breed: petsData[0].breed || "",
+            bday: petsData[0].birthday || "",
+            treat: petsData[0].favouriteTreat || "",
+            toy: petsData[0].favouriteToy || "",
+          };
+          setPetInfo1(updatedPet1);
+
+          // Update current pet if viewing pet 1
+          if (onPetOneSubPage) {
+            setCurrentPet(updatedPet1);
+          }
+        }
+
+        if (petsData.length > 1) {
+          const updatedPet2 = {
+            name: petsData[1].name || "",
+            breed: petsData[1].breed || "",
+            bday: petsData[1].birthday || "",
+            treat: petsData[1].favouriteTreat || "",
+            toy: petsData[1].favouriteToy || "",
+          };
+          setPetInfo2(updatedPet2);
+
+          // Update current pet if viewing pet 2
+          if (!onPetOneSubPage) {
+            setCurrentPet(updatedPet2);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error refreshing pet data:", error);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -564,6 +612,7 @@ export default function Profile() {
                 onPetOneSubPage={onPetOneSubPage}
                 petInfo={currentPet}
                 userInfo={userInfo}
+                onUpdateSuccess={refreshPetData}
               />
               <div className="oddItem">Breed: {currentPet.breed}</div>
               <div className="evenItem">Birthday: {currentPet.bday}</div>
