@@ -32,19 +32,23 @@ export default function Profile() {
 
   // Pet info from database
   const [petInfo1, setPetInfo1] = useState({
+    id: "",
     name: "",
     breed: "",
     bday: "",
     treat: "",
     toy: "",
+    lastImageUrl: "",
   });
 
   const [petInfo2, setPetInfo2] = useState({
+    id: "",
     name: "",
     breed: "",
     bday: "",
     treat: "",
     toy: "",
+    lastImageUrl: "",
   });
 
   const [userInfo, setUserInfo] = useState({
@@ -120,21 +124,25 @@ export default function Profile() {
           // Map fetched pets to petInfo1 and petInfo2
           if (petsData.length > 0) {
             setPetInfo1({
+              id: petsData[0].id || "",
               name: petsData[0].name || "",
               breed: petsData[0].breed || "",
               bday: petsData[0].birthday || "",
               treat: petsData[0].favouriteTreat || "",
               toy: petsData[0].favouriteToy || "",
+              lastImageUrl: "",
             });
           }
 
           if (petsData.length > 1) {
             setPetInfo2({
+              id: petsData[1].id || "",
               name: petsData[1].name || "",
               breed: petsData[1].breed || "",
               bday: petsData[1].birthday || "",
               treat: petsData[1].favouriteTreat || "",
               toy: petsData[1].favouriteToy || "",
+              lastImageUrl: "",
             });
           }
         } else {
@@ -369,11 +377,13 @@ export default function Profile() {
         // Update pet info states
         if (petsData.length > 0) {
           const updatedPet1 = {
+            id: petsData[0].id || "",
             name: petsData[0].name || "",
             breed: petsData[0].breed || "",
             bday: petsData[0].birthday || "",
             treat: petsData[0].favouriteTreat || "",
             toy: petsData[0].favouriteToy || "",
+            lastImageUrl: petInfo1.lastImageUrl,
           };
           setPetInfo1(updatedPet1);
 
@@ -385,11 +395,13 @@ export default function Profile() {
 
         if (petsData.length > 1) {
           const updatedPet2 = {
+            id: petsData[1].id || "",
             name: petsData[1].name || "",
             breed: petsData[1].breed || "",
             bday: petsData[1].birthday || "",
             treat: petsData[1].favouriteTreat || "",
             toy: petsData[1].favouriteToy || "",
+            lastImageUrl: petInfo2.lastImageUrl,
           };
           setPetInfo2(updatedPet2);
 
