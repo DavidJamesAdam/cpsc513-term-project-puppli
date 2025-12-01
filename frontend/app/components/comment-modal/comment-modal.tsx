@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import "./styles.css";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
@@ -8,9 +8,11 @@ import disabledCommentIcon from "../voting-card/icons/disabled_comment.svg";
 
 interface CommentModalProps {
   authorized: boolean;
+  imageUrl?: string;
+  caption?: string;
 }
 
-export default function CommentModal({ authorized }: CommentModalProps) {
+export default function CommentModal({ authorized, imageUrl, caption }: CommentModalProps) {
   const [open, setOpen] = React.useState(false);
   const matches = useMediaQuery("(min-width: 600px)");
   const handleOpen = () => setOpen(true);
@@ -128,7 +130,8 @@ export default function CommentModal({ authorized }: CommentModalProps) {
                 }}
               >
                 <img
-                  src={"assets/icons/ant-design--picture-outlined.svg"}
+                  src={imageUrl || "assets/icons/ant-design--picture-outlined.svg"}
+                  alt={caption || "Post image"}
                   style={{
                     width: "100%",
                     height: "100%",
@@ -218,7 +221,8 @@ export default function CommentModal({ authorized }: CommentModalProps) {
                 }}
               >
                 <img
-                  src={"assets/icons/ant-design--picture-outlined.svg"}
+                  src={imageUrl || "assets/icons/ant-design--picture-outlined.svg"}
+                  alt={caption || "Post image"}
                   style={{
                     width: "100%",
                     height: "100%",

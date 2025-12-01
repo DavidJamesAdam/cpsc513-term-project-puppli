@@ -185,7 +185,11 @@ export default function VotingCard({
               justifyContent: "space-around",
             }}
           >
-            <CommentModal authorized={authorized} />
+            <CommentModal
+              authorized={authorized}
+              imageUrl={post?.imageUrl}
+              caption={post?.caption}
+            />
             <div style={{ position: "relative", display: "inline-block" }}>
               {authorized ? (
                 <Button
@@ -294,7 +298,11 @@ export default function VotingCard({
               justifyContent: "space-evenly",
             }}
           >
-            <CommentModal authorized={authorized} />
+            <CommentModal
+              authorized={authorized}
+              imageUrl={post?.imageUrl}
+              caption={post?.caption}
+            />
             {authorized ? (
               <Button id="favorite-button" onClick={handleFavoriteButtonClick}>
                 <img src="assets\icons\heart icon.svg" />
