@@ -243,11 +243,85 @@ export default function CreateSubProfileModal() {
                   disableUnderline: true,
                   style: { color: "#675844" },
                 },
+                htmlInput: { maxLength: maxCharacters },
               }}
             />
             <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
-              {errorMsg}
+              {petNameErrorMsg}
             </p>
+            <br></br>
+            <p style={{ fontSize: "24px" }}>Breed:</p>
+            <TextField
+              sx={inputFieldStyle}
+              variant="standard"
+              placeholder={"Breed"}
+              onChange={onBreedChange}
+              slotProps={{
+                input: {
+                  disableUnderline: true,
+                  style: { color: "#675844" },
+                },
+                htmlInput: { maxLength: maxCharacters },
+              }}
+            />
+            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+              {breedErrorMsg}
+            </p>
+            <br></br>
+            <p style={{ fontSize: "24px" }}>Birthday:</p>
+            <TextField
+              sx={inputFieldStyle}
+              variant="standard"
+              placeholder={"Birthday"}
+              onChange={onBdayChange}
+              slotProps={{
+                input: {
+                  disableUnderline: true,
+                  style: { color: "#675844" },
+                },
+                htmlInput: { maxLength: maxCharacters },
+              }}
+            />
+            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+              {bdayErrorMsg}
+            </p>
+            <br></br>
+            <p style={{ fontSize: "24px" }}>Favourite Treat:</p>
+            <TextField
+              sx={inputFieldStyle}
+              variant="standard"
+              placeholder={"Favourite Treat"}
+              onChange={onTreatChange}
+              slotProps={{
+                input: {
+                  disableUnderline: true,
+                  style: { color: "#675844" },
+                },
+                htmlInput: { maxLength: maxCharacters },
+              }}
+            />
+            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+              {treatErrorMsg}
+            </p>
+            <br></br>
+            <p style={{ fontSize: "24px" }}>Favourite Toy:</p>
+            <TextField
+              sx={inputFieldStyle}
+              variant="standard"
+              placeholder={"Favourite Toy"}
+              onChange={onToyChange}
+              slotProps={{
+                input: {
+                  disableUnderline: true,
+                  style: { color: "#675844" },
+                },
+                htmlInput: { maxLength: maxCharacters },
+              }}
+            />
+            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+              {toyErrorMsg}
+            </p>
+            <br></br>
           </CardContent>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
