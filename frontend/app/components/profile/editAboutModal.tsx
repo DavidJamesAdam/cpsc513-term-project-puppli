@@ -49,46 +49,58 @@ export default function EditAboutModal({
   const handleClose = () => setOpen(false);
   // This function would send off the user's request to update the pets information
   const handleSubmit = async () => {
-    // Fetch pets for the logged-in user
-    const petsResponse = await fetch("http://localhost:8000/pets", {
-      credentials: "include",
-    });
+    try {
+      // Fetch pets for the logged-in user
+      const petsResponse = await fetch("http://localhost:8000/pets", {
+        credentials: "include",
+      });
 
-    // if successful, we can do the update
-    if (petsResponse.ok) {
-      const petsData = await petsResponse.json();
+      // if successful, we can do the update
+      if (petsResponse.ok) {
+        const petsData = await petsResponse.json();
 
-      // by defualt use pet1 id
-      let petID = petsData[0].id;
+        // by default use pet1 id
+        let petID = petsData[0].id;
 
-      // but if on sub profile 2, get second pet's id
-      if (!onPetOneSubPage) {
-        petID = petsData[1].id;
-      }
-
-      // save all the fields in the modal to the DB based on the pet id
-      const updateNameResponse = await fetch(
-        `http://localhost:8000/pet/update/${petID}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            breed: breed,
-            birthday: bday,
-            favouriteToy: toy,
-            favouriteTreat: treat,
-          }),
+        // but if on sub profile 2, get second pet's id
+        if (!onPetOneSubPage) {
+          petID = petsData[1].id;
         }
-      );
 
-      // if failed, print to console
-      if (!updateNameResponse.ok) {
-        console.error("Error updating pet name.");
+        // save all the fields in the modal to the DB based on the pet id
+        const updatePetResponse = await fetch(
+          `http://localhost:8000/pet/update/${petID}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              breed: breed,
+              birthday: bday,
+              favouriteToy: toy,
+              favouriteTreat: treat,
+            }),
+          }
+        );
+
+        // if successful, reload the page to show updated data
+        if (updatePetResponse.ok) {
+          console.log("Pet information updated successfully");
+          setOpen(false);
+          window.location.reload();
+        } else {
+          const errorData = await updatePetResponse.json();
+          console.error("Error updating pet information:", updatePetResponse.status, errorData);
+          alert("Failed to update pet information. Please try again.");
+        }
+      } else {
+        const errorData = await petsResponse.json();
+        console.error("Error fetching pets:", petsResponse.status, errorData);
+        alert("Failed to fetch pet information. Please try again.");
       }
+    } catch (error) {
+      console.error("Failed to update pet information:", error);
+      alert("Failed to update pet information. Please try again.");
     }
-
-    // close modal when done
-    setOpen(false);
   };
   const maxCharacters = 50;
 
@@ -287,14 +299,18 @@ export default function EditAboutModal({
             <TextField
               sx={inputFieldStyle}
               variant="standard"
+              type="date"
               defaultValue={petInfo.bday}
+              value={bday}
               onChange={onBdayChange}
               slotProps={{
                 input: {
                   disableUnderline: true,
                   style: { color: "#675844" },
                 },
-                htmlInput: { maxLength: maxCharacters },
+                htmlInput: {
+                  pattern: "\\d{4}-\\d{2}-\\d{2}",
+                },
               }}
             />
             <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
