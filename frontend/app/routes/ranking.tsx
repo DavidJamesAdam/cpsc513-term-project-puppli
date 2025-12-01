@@ -99,34 +99,80 @@ export default function Ranking() {
             setGlobalList(petNames.filter((name) => name !== null));
           }
 
-          // // Fetch the json for the province rankings based on user's location
-          // const provinceResponse = await fetch(
-          //   `http://localhost:8000/posts/rank/province/${userLocation}`
-          // );
+          // Fetch the json for the province rankings based on user's location
+          const provinceResponse = await fetch(
+            `http://localhost:8000/posts/rank/province/${userLocation}`
+          );
 
-          // if (provinceResponse.ok) {
-          //   const provincialData = await provinceResponse.json();
+          // extract info if response is ok
+          if (provinceResponse.ok) {
+            const provincialData = await provinceResponse.json();
 
-          //   const onlyPetId = provincialData.map((item: any) => item.petId);
+            // only keep the unique pet ids in the json of all posts (a pet may have more than one post!)
+            const onlyPetIds = [
+              ...new Set(provincialData.map((post: any) => post.petId)),
+            ];
 
-          //   setProvincialList(onlyPetId);
-          // }
+            // for every id, get the pet
+            const petNames = await Promise.all(
+              onlyPetIds.map(async (id: any) => {
+                const petResponse = await fetch(
+                  `http://localhost:8000/pet/${id}`
+                );
 
-          // // Fetch the json for the city rankings based on user's location
-          // const cityResponse = await fetch(
-          //   `http://localhost:8000/posts/rank/city/${userLocation}`
-          // );
+                // if we successfully retrieved the data, extract the name and add to the list
+                if (petResponse.ok) {
+                  const petData = await petResponse.json();
+                  return petData.name;
+                } else {
+                  // otherwise the response failed, just return nothing
+                  return null;
+                }
+              })
+            );
 
-          // if (cityResponse.ok) {
-          //   const cityData = await cityResponse.json();
+            // filter out nulls, set the list
+            setProvincialList(petNames.filter((name) => name !== null));
+          }
 
-          //   const onlyPetId = cityData.map((item: any) => item.petId);
+          // Fetch the json for the city rankings based on user's location
+          const cityResponse = await fetch(
+            `http://localhost:8000/posts/rank/city/${userLocation}`
+          );
 
-          //   setCityList(onlyPetId);
-          // }
+          // extract info if response is ok
+          if (cityResponse.ok) {
+            const cityData = await cityResponse.json();
+
+            // only keep the unique pet ids in the json of all posts (a pet may have more than one post!)
+            const onlyPetIds = [
+              ...new Set(cityData.map((post: any) => post.petId)),
+            ];
+
+            // for every id, get the pet
+            const petNames = await Promise.all(
+              onlyPetIds.map(async (id: any) => {
+                const petResponse = await fetch(
+                  `http://localhost:8000/pet/${id}`
+                );
+
+                // if we successfully retrieved the data, extract the name and add to the list
+                if (petResponse.ok) {
+                  const petData = await petResponse.json();
+                  return petData.name;
+                } else {
+                  // otherwise the response failed, just return nothing
+                  return null;
+                }
+              })
+            );
+
+            // filter out nulls, set the list
+            setCityList(petNames.filter((name) => name !== null));
+          }
         }
       } catch (e) {
-        console.log("Failed to fetch data for global rankings.");
+        console.log("Failed to fetch data for rankings.");
       }
     })();
   }, []);
