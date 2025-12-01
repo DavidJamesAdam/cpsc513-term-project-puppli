@@ -188,6 +188,9 @@ export default function EditAboutModal({
     if (bday === "") {
       setBdayErrorMsg("Pet birthday field cannot be empty.");
       setHasBdayError(true);
+    } else if (!/^\d{4}-\d{2}-\d{2}$/.test(bday)) {
+      setBdayErrorMsg("Must be in YYYY-MM-DD format (e.g., 2020-03-15).");
+      setHasBdayError(true);
     } else {
       setBdayErrorMsg("");
       setHasBdayError(false);
