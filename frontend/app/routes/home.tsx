@@ -94,8 +94,27 @@ export default function Home() {
     return null;
   }
 
-  const handleAnyVote = () => {
-    selectRandomPosts(posts);
+  const handleAnyVote = async () => {
+    // Refresh posts from database to get updated vote counts
+    try {
+      const response = await fetch("http://localhost:8000/posts", {
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const postsData = await response.json();
+        setPosts(postsData);
+        selectRandomPosts(postsData);
+      } else {
+        // Fallback to current posts if fetch fails
+        selectRandomPosts(posts);
+      }
+    } catch (error) {
+      console.error("Failed to refresh posts:", error);
+      // Fallback to current posts if fetch fails
+      selectRandomPosts(posts);
+    }
+
     // increment to retrigger animation in children
     setAnimateKey((k) => k + 1);
   };

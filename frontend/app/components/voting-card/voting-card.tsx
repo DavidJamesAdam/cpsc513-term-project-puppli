@@ -2,6 +2,7 @@ import Button from "@mui/material/Button";
 import * as React from "react";
 import CommentModal from "../modals/comment-modal/comment-modal";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Typography from "@mui/material/Typography";
 import { useState, useEffect, useRef } from "react";
 import "./styles.css";
 import disabledVoteIcon from "./icons/disabled_vote.svg";
@@ -243,8 +244,11 @@ export default function VotingCard({
               ))}
             </div>
             {authorized ? (
-              <Button id="vote-button" onClick={handleVoteButtonClick}>
+              <Button id="vote-button" onClick={handleVoteButtonClick} sx={{ gap: '0.5rem' }}>
                 <img src="assets\icons\vote icon.svg" />
+                {voteCount > 0 && (
+                  <Typography variant="caption">{voteCount}</Typography>
+                )}
               </Button>
             ) : (
               <Button id="vote-button">
@@ -313,8 +317,11 @@ export default function VotingCard({
               </Button>
             )}
             {authorized ? (
-              <Button id="vote-button" onClick={handleVoteButtonClick}>
+              <Button id="vote-button" onClick={handleVoteButtonClick} sx={{ gap: '0.5rem' }}>
                 <img src="assets\icons\vote icon.svg" />
+                {voteCount > 0 && (
+                  <Typography variant="caption">{voteCount}</Typography>
+                )}
               </Button>
             ) : (
               <Button id="vote-button">
