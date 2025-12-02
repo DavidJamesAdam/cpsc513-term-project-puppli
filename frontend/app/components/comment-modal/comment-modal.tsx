@@ -106,7 +106,7 @@ export default function CommentModal({
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
     width: "60%",
-    height: "80%",
+    height: "90%",
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
@@ -114,7 +114,7 @@ export default function CommentModal({
     alignItems: "center",
     backgroundColor: "rgba(224, 205, 178, 1)",
     position: "absolute",
-    transform: "translate(33%, 10%)",
+    transform: "translate(33%, 5%)",
     overflowY: "auto",
     padding: "20px",
   };
@@ -214,24 +214,21 @@ export default function CommentModal({
                   width: "90%",
                   height: "auto",
                   maxHeight: "55%",
-                  borderRadius: "40px",
-                  border: "1px solid rgba(255, 132, 164, 1)",
-                  backgroundColor: "rgba(217, 217, 217, 1)",
                   marginBottom: "20px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  overflow: "hidden",
                 }}
               >
                 <img
                   src={imageUrl || "assets/icons/ant-design--picture-outlined.svg"}
                   alt={caption || "Post image"}
                   style={{
-                    width: "100%",
-                    height: "100%",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
                     objectFit: "contain",
-                    borderRadius: "inherit",
+                    borderRadius: "40px",
+                    border: "1px solid rgba(255, 132, 164, 1)",
                   }}
                 />
               </div>
@@ -387,24 +384,21 @@ export default function CommentModal({
                   width: "90%",
                   height: "auto",
                   maxHeight: "45%",
-                  borderRadius: "40px",
-                  border: "1px solid rgba(255, 132, 164, 1)",
-                  backgroundColor: "rgba(217, 217, 217, 1)",
                   marginBottom: "15px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  overflow: "hidden",
                 }}
               >
                 <img
                   src={imageUrl || "assets/icons/ant-design--picture-outlined.svg"}
                   alt={caption || "Post image"}
                   style={{
-                    width: "100%",
-                    height: "100%",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
                     objectFit: "contain",
-                    borderRadius: "inherit",
+                    borderRadius: "40px",
+                    border: "1px solid rgba(255, 132, 164, 1)",
                   }}
                 />
               </div>
