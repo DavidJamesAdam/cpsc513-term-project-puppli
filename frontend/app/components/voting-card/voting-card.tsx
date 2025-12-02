@@ -127,7 +127,21 @@ export default function VotingCard({
       );
 
       if (response.ok) {
-        setFavouriteCount((prev) => prev + 1);
+        // Fetch the updated post data from the database
+        const postsResponse = await fetch("http://localhost:8000/posts", {
+          credentials: "include",
+        });
+
+        if (postsResponse.ok) {
+          const postsData = await postsResponse.json();
+          const updatedPost = postsData.find((p: Post) => p.id === post.id);
+          if (updatedPost) {
+            // Update with the latest count from the database
+            setFavouriteCount(updatedPost.favouriteCount);
+          }
+        } else {
+          console.error("Error fetching posts:", postsResponse.status);
+        }
       } else {
         console.error("Error favouriting post:", response.status);
       }

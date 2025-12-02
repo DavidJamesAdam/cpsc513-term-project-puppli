@@ -4,6 +4,7 @@ from handlers.root import read_root
 from handlers.users.getUser import read_users
 from handlers.users.postUser import create_user, User
 from handlers.posts.postVote import post_vote
+from handlers.posts.postFavourite import post_favourite
 from handlers.posts.rankGlobal import rank_global as rank_g
 from handlers.posts.rankCity import rank_city as rank_c
 from handlers.users.updateUser import update_user as update_u
@@ -13,7 +14,7 @@ from handlers.pets.updatePet import update_pet as update_p
 from handlers.pets.getPetByID import get_pet as get_p
 from handlers.pets.deleteSubprofile import delete_pet as delete_p
 from handlers.auth.updateEmail import update_email, EmailUpdate
-from handlers.auth.updatePassword import update_password, PassUpdate 
+from handlers.auth.updatePassword import update_password, PassUpdate
 from fastapi import APIRouter, Request
 
 router = APIRouter()
@@ -57,6 +58,10 @@ async def post_update_pass(request: Request):
 @router.post("/posts/vote/{postId}")
 async def posts_vote(postId: str):
     return await post_vote(postId)
+
+@router.post("/posts/favourite/{postId}")
+async def posts_favourite(postId: str):
+    return await post_favourite(postId)
 
 @router.post("/profile")
 async def post_profile(pet: PetCreate):
