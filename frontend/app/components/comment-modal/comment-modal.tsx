@@ -105,17 +105,18 @@ export default function CommentModal({
   const modalStyle = {
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
-    width: "50%",
-    height: "70%",
+    width: "60%",
+    height: "80%",
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "rgba(224, 205, 178, 1)",
     position: "absolute",
-    transform: "translate(50%, 20%)",
+    transform: "translate(33%, 10%)",
     overflowY: "auto",
+    padding: "20px",
   };
 
   const modalStyleMobile = {
@@ -210,13 +211,17 @@ export default function CommentModal({
               </div>
               <div
                 style={{
-                  width: "auto",
+                  width: "90%",
                   height: "auto",
-                  maxWidth: "80%",
-                  maxHeight: "40%",
+                  maxHeight: "55%",
                   borderRadius: "40px",
                   border: "1px solid rgba(255, 132, 164, 1)",
                   backgroundColor: "rgba(217, 217, 217, 1)",
+                  marginBottom: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden",
                 }}
               >
                 <img
@@ -225,67 +230,21 @@ export default function CommentModal({
                   style={{
                     width: "100%",
                     height: "100%",
-                    objectFit: "cover",
+                    objectFit: "contain",
                     borderRadius: "inherit",
                   }}
                 />
               </div>
 
-              {/* Comment Input Form */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-evenly",
-                  margin: "10px",
-                  width: "80%",
-                }}
-              >
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Add your comment..."
-                    value={commentText}
-                    onChange={(e) => setCommentText(e.target.value)}
-                    disabled={isSubmitting}
-                    maxLength={MAX_CHARS}
-                    style={{
-                      backgroundColor: "white",
-                      borderRadius: "100px",
-                      border: "1px solid rgba(255, 132, 164, 1)",
-                      width: "100%",
-                      padding: "8px 12px",
-                      boxSizing: "border-box",
-                    }}
-                  />
-                  <Typography
-                    variant="caption"
-                    sx={{ color: "#675844", marginLeft: "12px", fontSize: "12px" }}
-                  >
-                    {remainingChars} characters remaining
-                  </Typography>
-                </div>
-                {error && (
-                  <Typography variant="body2" sx={{ color: "red", fontSize: "14px" }}>
-                    {error}
-                  </Typography>
-                )}
-                <Button
-                  sx={buttonStyle}
-                  onClick={submitComment}
-                  disabled={isSubmitting || !commentText.trim()}
-                >
-                  {isSubmitting ? "Posting..." : "Submit comment"}
-                </Button>
-              </div>
-
               {/* Comments List */}
               <div
                 style={{
-                  width: "80%",
-                  maxHeight: "200px",
+                  width: "90%",
+                  minHeight: "80px",
+                  maxHeight: "350px",
                   overflowY: "auto",
-                  marginBottom: "20px",
+                  marginBottom: "15px",
+                  padding: "10px",
                 }}
               >
                 {sortedComments.length === 0 ? (
@@ -321,6 +280,57 @@ export default function CommentModal({
                     </div>
                   ))
                 )}
+              </div>
+
+              {/* Comment Input Form */}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-evenly",
+                  margin: "10px",
+                  width: "90%",
+                }}
+              >
+                <div>
+                  <textarea
+                    placeholder="Add your comment..."
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    disabled={isSubmitting}
+                    maxLength={MAX_CHARS}
+                    rows={3}
+                    style={{
+                      backgroundColor: "white",
+                      borderRadius: "20px",
+                      border: "1px solid rgba(255, 132, 164, 1)",
+                      width: "100%",
+                      padding: "12px",
+                      boxSizing: "border-box",
+                      fontFamily: "inherit",
+                      fontSize: "14px",
+                      resize: "none",
+                    }}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{ color: "#675844", marginLeft: "12px", fontSize: "12px" }}
+                  >
+                    {remainingChars} characters remaining
+                  </Typography>
+                </div>
+                {error && (
+                  <Typography variant="body2" sx={{ color: "red", fontSize: "14px" }}>
+                    {error}
+                  </Typography>
+                )}
+                <Button
+                  sx={buttonStyle}
+                  onClick={submitComment}
+                  disabled={isSubmitting || !commentText.trim()}
+                >
+                  {isSubmitting ? "Posting..." : "Submit comment"}
+                </Button>
               </div>
             </Box>
           </Modal>
@@ -374,13 +384,17 @@ export default function CommentModal({
               </div>
               <div
                 style={{
-                  width: "auto",
+                  width: "90%",
                   height: "auto",
-                  maxWidth: "80%",
-                  maxHeight: "30%",
+                  maxHeight: "45%",
                   borderRadius: "40px",
                   border: "1px solid rgba(255, 132, 164, 1)",
                   backgroundColor: "rgba(217, 217, 217, 1)",
+                  marginBottom: "15px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden",
                 }}
               >
                 <img
@@ -389,67 +403,21 @@ export default function CommentModal({
                   style={{
                     width: "100%",
                     height: "100%",
-                    objectFit: "cover",
+                    objectFit: "contain",
                     borderRadius: "inherit",
                   }}
                 />
-              </div>
-
-              {/* Comment Input Form */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-evenly",
-                  margin: "10px",
-                  width: "90%",
-                }}
-              >
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Add your comment..."
-                    value={commentText}
-                    onChange={(e) => setCommentText(e.target.value)}
-                    disabled={isSubmitting}
-                    maxLength={MAX_CHARS}
-                    style={{
-                      backgroundColor: "white",
-                      borderRadius: "100px",
-                      border: "1px solid rgba(255, 132, 164, 1)",
-                      width: "100%",
-                      padding: "8px 12px",
-                      boxSizing: "border-box",
-                    }}
-                  />
-                  <Typography
-                    variant="caption"
-                    sx={{ color: "#675844", marginLeft: "12px", fontSize: "10px" }}
-                  >
-                    {remainingChars} characters remaining
-                  </Typography>
-                </div>
-                {error && (
-                  <Typography variant="body2" sx={{ color: "red", fontSize: "12px" }}>
-                    {error}
-                  </Typography>
-                )}
-                <Button
-                  sx={buttonStyle}
-                  onClick={submitComment}
-                  disabled={isSubmitting || !commentText.trim()}
-                >
-                  {isSubmitting ? "Posting..." : "Submit comment"}
-                </Button>
               </div>
 
               {/* Comments List */}
               <div
                 style={{
                   width: "90%",
-                  maxHeight: "150px",
+                  minHeight: "60px",
+                  maxHeight: "250px",
                   overflowY: "auto",
                   marginBottom: "10px",
+                  padding: "8px",
                 }}
               >
                 {sortedComments.length === 0 ? (
@@ -485,6 +453,57 @@ export default function CommentModal({
                     </div>
                   ))
                 )}
+              </div>
+
+              {/* Comment Input Form */}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-evenly",
+                  margin: "10px",
+                  width: "90%",
+                }}
+              >
+                <div>
+                  <textarea
+                    placeholder="Add your comment..."
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    disabled={isSubmitting}
+                    maxLength={MAX_CHARS}
+                    rows={3}
+                    style={{
+                      backgroundColor: "white",
+                      borderRadius: "20px",
+                      border: "1px solid rgba(255, 132, 164, 1)",
+                      width: "100%",
+                      padding: "10px",
+                      boxSizing: "border-box",
+                      fontFamily: "inherit",
+                      fontSize: "12px",
+                      resize: "none",
+                    }}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{ color: "#675844", marginLeft: "12px", fontSize: "10px" }}
+                  >
+                    {remainingChars} characters remaining
+                  </Typography>
+                </div>
+                {error && (
+                  <Typography variant="body2" sx={{ color: "red", fontSize: "12px" }}>
+                    {error}
+                  </Typography>
+                )}
+                <Button
+                  sx={buttonStyle}
+                  onClick={submitComment}
+                  disabled={isSubmitting || !commentText.trim()}
+                >
+                  {isSubmitting ? "Posting..." : "Submit comment"}
+                </Button>
               </div>
             </Box>
           </Modal>
