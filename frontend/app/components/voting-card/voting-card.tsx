@@ -221,6 +221,7 @@ export default function VotingCard({
               postId={currentPost?.id}
               comments={currentPost?.comments || []}
               onCommentAdded={refreshPostData}
+              onOpen={refreshPostData}
             />
             <div style={{ position: "relative", display: "inline-block" }}>
               {authorized ? (
@@ -337,6 +338,7 @@ export default function VotingCard({
               postId={currentPost?.id}
               comments={currentPost?.comments || []}
               onCommentAdded={refreshPostData}
+              onOpen={refreshPostData}
             />
             {authorized ? (
               <Button id="favorite-button" onClick={handleFavoriteButtonClick}>

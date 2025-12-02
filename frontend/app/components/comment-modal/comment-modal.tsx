@@ -19,6 +19,7 @@ interface CommentModalProps {
   postId?: string;
   comments?: Comment[];
   onCommentAdded?: () => void;
+  onOpen?: () => void;
 }
 
 export default function CommentModal({
@@ -28,6 +29,7 @@ export default function CommentModal({
   postId,
   comments = [],
   onCommentAdded,
+  onOpen,
 }: CommentModalProps) {
   const [open, setOpen] = useState(false);
   const [commentText, setCommentText] = useState("");
@@ -43,7 +45,12 @@ export default function CommentModal({
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    if (onOpen) {
+      onOpen();
+    }
+    setOpen(true);
+  };
 
   const handleClose = () => {
     setCommentText("");
