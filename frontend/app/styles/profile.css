@@ -13,11 +13,23 @@ p {
   color: var(--font-color);
 }
 
+span {
+  font-size: 32px;
+  color: var(--font-color);
+}
+
 #profileBanner {
   background-color: #e0cdb2;
   display: flex;
   width: 100%;
   padding: 30px;
+}
+
+#profileBanner > img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .profileName {
@@ -139,6 +151,13 @@ li {
   justify-content: end;
   align-items: center;
   padding: 15px;
+}
+
+.petItem img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .petName {

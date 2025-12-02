@@ -153,42 +153,57 @@ export default function Home() {
           </main>
         </>
       ) : (
-        <main
-          className="voting-page"
-          style={{
-              display: "flex",
-              flexDirection: "column",
-              width: "100%",
-              height: "100%",
-              justifyContent: "space-around",
-              alignItems: "center",
-          }}
-        >
-          {selectedPosts[0] && selectedPosts[1] ? (
-            <>
-              <VotingCard
-                animateKey={animateKey}
-                onVote={handleAnyVote}
-                authorized={authorized}
-                post={selectedPosts[0]}
-              />
-              <h1 style={{ fontSize: "5vh" }}>VS</h1>
-              <VotingCard
-                animateKey={animateKey}
-                onVote={handleAnyVote}
-                authorized={authorized}
-                post={selectedPosts[1]}
-              />
-            </>
-          ) : (
+        <>
+        {!authorized && (
             <h1
-              style={{ fontSize: "3vh", alignSelf: "center", margin: "auto" }}
+              style={{
+                fontSize: "5vh",
+                alignSelf: "center",
+                padding: "30px",
+              }}
+              className="blinking-text"
             >
-              Not enough posts available. Please upload some posts to start
-              voting!
+              To like, comment, or vote, please{" "}
+              <Link className="link" href="signup">
+                Sign-up here
+              </Link>
+              !
             </h1>
           )}
-        </main>
+          <main
+            className="voting-page"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              width: "auto",
+              flex: 1,
+              justifyContent: "space-between",
+              height: "100%",
+            }}
+          >
+            {selectedPosts[0] && selectedPosts[1] ? (
+              <>
+                <VotingCard
+                  animateKey={animateKey}
+                  onVote={handleAnyVote}
+                  authorized={authorized}
+                  post={selectedPosts[0]}
+                />
+                <h1 style={{ fontSize: "5vh" }}>VS</h1>
+                <VotingCard
+                  animateKey={animateKey}
+                  onVote={handleAnyVote}
+                  authorized={authorized}
+                  post={selectedPosts[1]}
+                />
+              </>
+            ) : (
+              <h1 style={{ fontSize: "3vh", alignSelf: "center", margin: "auto" }}>
+                Not enough posts available. Please upload some posts to start voting!
+              </h1>
+            )}
+          </main>
+        </>
       )}
     </div>
   );

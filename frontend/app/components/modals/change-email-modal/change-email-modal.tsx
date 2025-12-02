@@ -9,11 +9,12 @@ import IconButton from "@mui/material/IconButton";
 import showIcon from "../../login/show.svg";
 import hideIcon from "../../login/hide.svg";
 import TextField from "@mui/material/TextField";
+import { auth } from "firebase";
+import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
+import toast from "react-hot-toast";
+import handleLogIn from "~/utils/loginFunction";
 
 export default function ChangeEmailModal() {
-  // TODO: get from DB to prepopulate
-  const userPassword = "formDB";
-
   const matches = useMediaQuery("(min-width: 600px)");
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -27,14 +28,87 @@ export default function ChangeEmailModal() {
     setShow(false);
     setOpen(false);
   };
-  const handleSubmit = () => {
-    // check password here and set error message if needed
-    if (password !== userPassword) {
+
+  // This function would send off the user's request to change email
+  const handleSubmit = async () => {
+    // keep track of update failures
+    let successful = false;
+
+    try {
+      // need to use auth for reauthentication
+      const user = auth!.currentUser;
+      if (!user) throw new Error("No Firebase user authenticated.");
+
+      // reauthenticate with password
+      const credential = EmailAuthProvider.credential(user.email!, password);
+      await reauthenticateWithCredential(user, credential);
+
+      // get new ID token with the password entered
+      const idToken = await user.getIdToken(true);
+
+      // proceed with the email update
+      const updateEmailResponse = await fetch(
+        "http://localhost:8000/user/update-email",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            id_token: idToken,
+            new_email: email,
+          }),
+        }
+      );
+
+      // catch errors
+      if (!updateEmailResponse.ok) {
+        console.log("Error updating email.");
+      } else {
+        successful = true;
+        // automatically log user in again to get new session cookie with the new email if update was successful
+        // this prevents getting user logged out after the chnage
+        handleLogIn(auth, email, password);
+      }
+
+      // show the temp notificaiton if successful
+      toast.promise(
+        Promise.resolve(updateEmailResponse),
+        {
+          loading: "Updating email...",
+          success: "Email update successful!",
+          error: (err: Error) => `Email update failed: ${err.message}`,
+        },
+        {
+          style: {
+            borderRadius: "100px",
+            width: "100%",
+            fontSize: "2em",
+            backgroundColor: "#e0cdb2",
+            border: "1px solid rgba(255, 132, 164, 1)",
+          },
+          duration: 3000,
+        }
+      );
+    } catch (e) {
+      console.error(e);
+    }
+
+    // if the whole operation was successful, close the modal
+    if (successful) {
+      // close modal when done
+      setOpen(false);
+      // reset everything in the modal
+      setHasEmailError(true);
+      setEmailErrorMsg("");
+      setHasPasswordError(false);
+      setPasswordErrorMsg("");
+      // reset show password toggle
+      setShow(false);
+      setOpen(false);
+    } else {
+      // authentication must have gone wrong
       setHasPasswordError(true);
       setPasswordErrorMsg("Incorrect password.");
-    } else {
-      // This function would send off the user's request to change email
-      setOpen(false);
     }
   };
 
@@ -127,6 +201,9 @@ export default function ChangeEmailModal() {
     }
 
     if (password === "") {
+      setPasswordErrorMsg("");
+      setHasPasswordError(false);
+    } else if (password) {
       setPasswordErrorMsg("");
       setHasPasswordError(false);
     }
