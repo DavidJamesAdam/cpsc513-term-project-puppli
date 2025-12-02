@@ -106,7 +106,7 @@ export default function CommentModal({
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
     width: "60%",
-    height: "90%",
+    maxHeight: "90%",
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
@@ -114,7 +114,9 @@ export default function CommentModal({
     alignItems: "center",
     backgroundColor: "rgba(224, 205, 178, 1)",
     position: "absolute",
-    transform: "translate(33%, 5%)",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     overflowY: "auto",
     padding: "20px",
   };
@@ -123,14 +125,16 @@ export default function CommentModal({
     borderRadius: "40px",
     border: "1px solid rgba(255, 132, 164, 1)",
     width: "100%",
-    height: "60%",
+    maxHeight: "90%",
     boxShadow: "5px 10px 10px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     backgroundColor: "rgba(224, 205, 178, 1)",
     position: "absolute",
-    transform: "translate(0%, 30%)",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     overflowY: "auto",
   };
 
@@ -237,9 +241,6 @@ export default function CommentModal({
               <div
                 style={{
                   width: "90%",
-                  minHeight: "80px",
-                  maxHeight: "350px",
-                  overflowY: "auto",
                   marginBottom: "15px",
                   padding: "10px",
                 }}
@@ -407,9 +408,6 @@ export default function CommentModal({
               <div
                 style={{
                   width: "90%",
-                  minHeight: "60px",
-                  maxHeight: "250px",
-                  overflowY: "auto",
                   marginBottom: "10px",
                   padding: "8px",
                 }}
