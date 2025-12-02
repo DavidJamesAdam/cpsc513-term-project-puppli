@@ -114,7 +114,7 @@ export default function VotingCard({
   const handleFavoriteButtonClick = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
-    // Add picture to favorites
+    // Toggle favorite for the post
     if (!post) return;
 
     try {
@@ -127,6 +127,9 @@ export default function VotingCard({
       );
 
       if (response.ok) {
+        const result = await response.json();
+        const favourited = result.favourited;
+
         // Fetch the updated post data from the database
         const postsResponse = await fetch("http://localhost:8000/posts", {
           credentials: "include",
@@ -142,21 +145,23 @@ export default function VotingCard({
         } else {
           console.error("Error fetching posts:", postsResponse.status);
         }
+
+        // Only show +1 animation when adding a favorite (not removing)
+        if (favourited) {
+          const id = Date.now();
+          setPlusOnes((prev) => [...prev, id]);
+
+          // remove it after the animation duration (match CSS 800ms)
+          window.setTimeout(() => {
+            setPlusOnes((prev) => prev.filter((x) => x !== id));
+          }, 2000); // small buffer > animation duration
+        }
       } else {
         console.error("Error favouriting post:", response.status);
       }
     } catch (error) {
       console.error("Failed to favourite post:", error);
     }
-
-    // create a short-lived +1
-    const id = Date.now();
-    setPlusOnes((prev) => [...prev, id]);
-
-    // remove it after the animation duration (match CSS 800ms)
-    window.setTimeout(() => {
-      setPlusOnes((prev) => prev.filter((x) => x !== id));
-    }, 2000); // small buffer > animation duration
   };
 
   useEffect(() => {

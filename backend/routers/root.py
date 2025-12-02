@@ -60,8 +60,8 @@ async def posts_vote(postId: str):
     return await post_vote(postId)
 
 @router.post("/posts/favourite/{postId}")
-async def posts_favourite(postId: str):
-    return await post_favourite(postId)
+async def posts_favourite(postId: str, request: Request):
+    return await post_favourite(postId, request)
 
 @router.post("/profile")
 async def post_profile(pet: PetCreate):
