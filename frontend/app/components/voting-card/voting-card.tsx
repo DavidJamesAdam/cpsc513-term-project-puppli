@@ -42,6 +42,7 @@ export default function VotingCard({
   const [isPopped, setIsPopped] = useState(false);
   const [plusOnes, setPlusOnes] = useState<number[]>([]);
   const [voteCount, setVoteCount] = useState(post?.voteCount || 0);
+  const [favouriteCount, setFavouriteCount] = useState(post?.favouriteCount || 0);
   const [currentPost, setCurrentPost] = useState(post);
   const matches = useMediaQuery("(min-width: 600px)");
   const firstRunRef = useRef(true);
@@ -80,6 +81,7 @@ export default function VotingCard({
   // keep vote count and post data in sync with incoming post prop
   useEffect(() => {
     setVoteCount(post?.voteCount || 0);
+    setFavouriteCount(post?.favouriteCount || 0);
     setCurrentPost(post);
   }, [post]);
 
@@ -109,10 +111,29 @@ export default function VotingCard({
     // Open comment model to leave comment on picture
   };
 
-  const handleFavoriteButtonClick = (
+  const handleFavoriteButtonClick = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     // Add picture to favorites
+    if (!post) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/posts/favourite/${post.id}`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        setFavouriteCount((prev) => prev + 1);
+      } else {
+        console.error("Error favouriting post:", response.status);
+      }
+    } catch (error) {
+      console.error("Failed to favourite post:", error);
+    }
 
     // create a short-lived +1
     const id = Date.now();
@@ -229,8 +250,12 @@ export default function VotingCard({
                 <Button
                   id="favorite-button"
                   onClick={handleFavoriteButtonClick}
+                  sx={{ gap: '0.5rem' }}
                 >
                   <img src="assets\icons\heart icon.svg" />
+                  {favouriteCount > 0 && (
+                    <Typography variant="caption">{favouriteCount}</Typography>
+                  )}
                 </Button>
               ) : (
                 <Button id="favorite-button">
@@ -308,8 +333,11 @@ export default function VotingCard({
               onOpen={refreshPostData}
             />
             {authorized ? (
-              <Button id="favorite-button" onClick={handleFavoriteButtonClick}>
+              <Button id="favorite-button" onClick={handleFavoriteButtonClick} sx={{ gap: '0.5rem' }}>
                 <img src="assets\icons\heart icon.svg" />
+                {favouriteCount > 0 && (
+                  <Typography variant="caption">{favouriteCount}</Typography>
+                )}
               </Button>
             ) : (
               <Button id="favorite-button">
