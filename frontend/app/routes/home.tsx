@@ -14,6 +14,11 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+interface Comment {
+  text: string;
+  createdAt: string;
+}
+
 interface Post {
   id: string;
   UserId: string;
@@ -23,6 +28,7 @@ interface Post {
   createdAt: string;
   voteCount: number;
   favouriteCount: number;
+  comments: Comment[];
 }
 
 export default function Home() {

@@ -7,6 +7,11 @@ import "./styles.css";
 import disabledVoteIcon from "./icons/disabled_vote.svg";
 import disabledLikeIcon from "./icons/disabled_like.svg";
 
+interface Comment {
+  text: string;
+  createdAt: string;
+}
+
 interface Post {
   id: string;
   UserId: string;
@@ -16,6 +21,7 @@ interface Post {
   createdAt: string;
   voteCount: number;
   favouriteCount: number;
+  comments: Comment[];
 }
 
 type VotingCardProps = {
@@ -35,6 +41,7 @@ export default function VotingCard({
   const [isPopped, setIsPopped] = useState(false);
   const [plusOnes, setPlusOnes] = useState<number[]>([]);
   const [voteCount, setVoteCount] = useState(post?.voteCount || 0);
+  const [currentPost, setCurrentPost] = useState(post);
   const matches = useMediaQuery("(min-width: 600px)");
   const firstRunRef = useRef(true);
   const [imgFitMode, setImgFitMode] = useState<
@@ -69,10 +76,32 @@ export default function VotingCard({
     }
   }
 
-  // keep vote count in sync with incoming post prop
+  // keep vote count and post data in sync with incoming post prop
   useEffect(() => {
     setVoteCount(post?.voteCount || 0);
+    setCurrentPost(post);
   }, [post]);
+
+  // Function to refresh post data after comment is added
+  const refreshPostData = async () => {
+    if (!post?.id) return;
+
+    try {
+      const response = await fetch("http://localhost:8000/posts", {
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const postsData = await response.json();
+        const updatedPost = postsData.find((p: Post) => p.id === post.id);
+        if (updatedPost) {
+          setCurrentPost(updatedPost);
+        }
+      }
+    } catch (error) {
+      console.error("Error refreshing post:", error);
+    }
+  };
   const handleCommentButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -187,8 +216,12 @@ export default function VotingCard({
           >
             <CommentModal
               authorized={authorized}
-              imageUrl={post?.imageUrl}
-              caption={post?.caption}
+              imageUrl={currentPost?.imageUrl}
+              caption={currentPost?.caption}
+              postId={currentPost?.id}
+              comments={currentPost?.comments || []}
+              onCommentAdded={refreshPostData}
+              onOpen={refreshPostData}
             />
             <div style={{ position: "relative", display: "inline-block" }}>
               {authorized ? (
@@ -263,8 +296,12 @@ export default function VotingCard({
           >
             <CommentModal
               authorized={authorized}
-              imageUrl={post?.imageUrl}
-              caption={post?.caption}
+              imageUrl={currentPost?.imageUrl}
+              caption={currentPost?.caption}
+              postId={currentPost?.id}
+              comments={currentPost?.comments || []}
+              onCommentAdded={refreshPostData}
+              onOpen={refreshPostData}
             />
             {authorized ? (
               <Button id="favorite-button" onClick={handleFavoriteButtonClick}>
