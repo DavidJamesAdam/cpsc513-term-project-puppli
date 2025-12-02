@@ -7,7 +7,7 @@ router = APIRouter()
 async def read_posts():
     """
     Retrieve all documents from the 'posts' collection
-    Returns a list of all posts with their IDs
+    Returns a list of all posts with their IDs and comments
     """
     try:
         # Get all documents from 'posts' collection
@@ -18,6 +18,9 @@ async def read_posts():
         for doc in docs:
             doc_data = doc.to_dict()
             doc_data['id'] = doc.id  # Include document ID
+            # Ensure comments field exists (initialize as empty array if missing)
+            if 'comments' not in doc_data:
+                doc_data['comments'] = []
             results.append(doc_data)
 
         return results

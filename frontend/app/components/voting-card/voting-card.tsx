@@ -7,6 +7,11 @@ import "./styles.css";
 import disabledVoteIcon from "./icons/disabled_vote.svg";
 import disabledLikeIcon from "./icons/disabled_like.svg";
 
+interface Comment {
+  text: string;
+  createdAt: string;
+}
+
 interface Post {
   id: string;
   UserId: string;
@@ -16,6 +21,7 @@ interface Post {
   createdAt: string;
   voteCount: number;
   favouriteCount: number;
+  comments: Comment[];
 }
 
 type VotingCardProps = {
