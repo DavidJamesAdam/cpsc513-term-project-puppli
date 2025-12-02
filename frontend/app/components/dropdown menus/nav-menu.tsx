@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -124,29 +123,29 @@ export function MainNavMenu() {
           },
         }}
       >
-        <MenuItem onClick={handleClose} sx={matches ? menuItemStyle : mobileMenuItemStyle}>
+        <MenuItem onClick={() => { handleClose(); navigate("/"); }} sx={matches ? menuItemStyle : mobileMenuItemStyle}>
           <div className="menu-icon">
             <img src="assets\icons\vote icon.svg" />
           </div>
-          <Link className="menu-text" to="/">
+          <div className="menu-text">
             Vote
-          </Link>
+          </div>
         </MenuItem>
-        <MenuItem onClick={handleClose} sx={matches ? menuItemStyle : mobileMenuItemStyle}>
+        <MenuItem onClick={() => { handleClose(); navigate("/profile"); }} sx={matches ? menuItemStyle : mobileMenuItemStyle}>
           <div className="menu-icon">
             <img src="assets\icons\Profile icon.svg" />
           </div>
-          <Link className="menu-text" to="/profile">
+          <div className="menu-text">
             Profile
-          </Link>
+          </div>
         </MenuItem>
-        <MenuItem onClick={handleClose} sx={matches ? menuItemStyle : mobileMenuItemStyle}>
+        <MenuItem onClick={() => { handleClose(); navigate("/ranking"); }} sx={matches ? menuItemStyle : mobileMenuItemStyle}>
           <div className="menu-icon">
             <img src="assets\icons\Rankings icon.svg" />
           </div>
-          <Link className="menu-text" to="/ranking">
+          <div className="menu-text">
             Rankings
-          </Link>
+          </div>
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -161,13 +160,13 @@ export function MainNavMenu() {
           <div className="menu-text">Upload</div>
         </MenuItem>
         {isAdmin ? (
-          <MenuItem onClick={handleClose} sx={matches ? menuItemStyle : mobileMenuItemStyle}>
+          <MenuItem onClick={() => { handleClose(); navigate("/all-users"); }} sx={matches ? menuItemStyle : mobileMenuItemStyle}>
             <div className="menu-icon">
               <img src="assets\icons\fontisto--list-2.svg" />
             </div>
-            <Link className="menu-text" to="/all-users">
+            <div className="menu-text">
               All users
-            </Link>
+            </div>
           </MenuItem>
         ) : null}
         <MenuItem onClick={handleLogOut} sx={matches ? menuItemStyle : mobileMenuItemStyle}>
