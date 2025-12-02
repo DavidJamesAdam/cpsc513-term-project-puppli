@@ -3,7 +3,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 import "./styles.css";
-import { menuStyle, menuItemStyle } from "./mui-styles";
+import { menuStyle, menuItemStyle, mobileMenuStyle, mobileMenuItemStyle } from "./mui-styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function NotificationMenu() {
@@ -41,15 +41,13 @@ export default function NotificationMenu() {
         open={open}
         onClose={handleClose}
         slotProps={{
-          paper: {
-            sx: menuStyle
-          },
+          paper: matches ? { sx: menuStyle  } : { sx: mobileMenuStyle  },
           list: {
             "aria-labelledby": "basic-button",
           },
         }}
       >
-        <MenuItem sx={menuItemStyle}>Notification</MenuItem>
+        <MenuItem sx={matches ? menuItemStyle : mobileMenuItemStyle}>Notification</MenuItem>
       </Menu>
     </div>
   );

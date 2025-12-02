@@ -4,7 +4,8 @@ import MenuItem from "@mui/material/MenuItem";
 import { useEffect, useState } from "react";
 import { GetCity, GetState } from "react-country-state-city";
 import './styles.css'
-import { menuStyle, menuItemStyle, buttonStyle } from "./mui-styles";
+import { menuStyle, menuItemStyle, buttonStyle, mobileMenuStyle } from "./mui-styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export function LocationMenu({
   onLocationChange,
@@ -14,6 +15,7 @@ export function LocationMenu({
     cityName?: string | null;
   }) => void;
 }) {
+  const matches = useMediaQuery("(min-width: 600px)");
   const [state, setState] = useState<string | number | null>(null);
   const [city, setCity] = useState<string | number | null>(null);
   const [stateList, setStateList] = useState<any[]>([]);
@@ -87,9 +89,7 @@ export function LocationMenu({
           open={openState}
           onClose={handleStateClose}
           slotProps={{
-            paper: {
-              sx: menuStyle,
-            },
+paper: matches ? { sx: menuStyle  } : { sx: mobileMenuStyle  },
             list: {
               "aria-labelledby": "basic-button",
             },

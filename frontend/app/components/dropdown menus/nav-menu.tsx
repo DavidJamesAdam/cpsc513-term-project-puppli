@@ -8,10 +8,17 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import "./styles.css";
-import { menuStyle, menuItemStyle } from "./mui-styles";
+import {
+  menuStyle,
+  menuItemStyle,
+  mobileMenuStyle,
+  mobileMenuItemStyle,
+} from "./mui-styles";
 import { toastStyle } from "~/styles/component-styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export function MainNavMenu() {
+  const matches = useMediaQuery("(min-width: 600px)");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [uploadOpen, setUploadOpen] = useState(false);
   const open = Boolean(anchorEl);
@@ -108,9 +115,7 @@ export function MainNavMenu() {
         open={open}
         onClose={handleClose}
         slotProps={{
-          paper: {
-            sx: menuStyle,
-          },
+          paper: matches ? { sx: menuStyle } : { sx: mobileMenuStyle },
           list: {
             "aria-labelledby": "basic-button",
             sx: {
@@ -119,7 +124,7 @@ export function MainNavMenu() {
           },
         }}
       >
-        <MenuItem onClick={handleClose} sx={menuItemStyle}>
+        <MenuItem onClick={handleClose} sx={matches ? menuItemStyle : mobileMenuItemStyle}>
           <div className="menu-icon">
             <img src="assets\icons\vote icon.svg" />
           </div>
@@ -127,7 +132,7 @@ export function MainNavMenu() {
             Vote
           </Link>
         </MenuItem>
-        <MenuItem onClick={handleClose} sx={menuItemStyle}>
+        <MenuItem onClick={handleClose} sx={matches ? menuItemStyle : mobileMenuItemStyle}>
           <div className="menu-icon">
             <img src="assets\icons\Profile icon.svg" />
           </div>
@@ -135,7 +140,7 @@ export function MainNavMenu() {
             Profile
           </Link>
         </MenuItem>
-        <MenuItem onClick={handleClose} sx={menuItemStyle}>
+        <MenuItem onClick={handleClose} sx={matches ? menuItemStyle : mobileMenuItemStyle}>
           <div className="menu-icon">
             <img src="assets\icons\Rankings icon.svg" />
           </div>
@@ -148,7 +153,7 @@ export function MainNavMenu() {
             handleClose();
             setUploadOpen(true);
           }}
-          sx={menuItemStyle}
+          sx={matches ? menuItemStyle : mobileMenuItemStyle}
         >
           <div className="menu-icon">
             <img src="assets\icons\Upload icon.svg" />
@@ -156,7 +161,7 @@ export function MainNavMenu() {
           <div className="menu-text">Upload</div>
         </MenuItem>
         {isAdmin ? (
-          <MenuItem onClick={handleClose} sx={menuItemStyle}>
+          <MenuItem onClick={handleClose} sx={matches ? menuItemStyle : mobileMenuItemStyle}>
             <div className="menu-icon">
               <img src="assets\icons\fontisto--list-2.svg" />
             </div>
@@ -165,7 +170,7 @@ export function MainNavMenu() {
             </Link>
           </MenuItem>
         ) : null}
-        <MenuItem onClick={handleLogOut} sx={menuItemStyle}>
+        <MenuItem onClick={handleLogOut} sx={matches ? menuItemStyle : mobileMenuItemStyle}>
           <div className="menu-icon">
             <img src="assets\icons\Logout icon.svg" />
           </div>

@@ -5,6 +5,14 @@ export const menuStyle = {
   justifyContent: "space-around",
 };
 
+export const mobileMenuStyle = {
+  backgroundColor: "#ffc2cf",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-around",
+  width: "90%"
+};
+
 export const menuItemStyle = {
   display: "flex",
   alignItems: "center",
@@ -14,6 +22,17 @@ export const menuItemStyle = {
   // padding: "10px",
   fontFamily: "Itim",
   fontSize: "clamp(1rem, 2.5vw, 3rem)",
+};
+
+export const mobileMenuItemStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "0.75rem",
+  width: "100%",
+  borderRadius: "20px",
+  // padding: "10px",
+  fontFamily: "Itim",
+  fontSize: "3em",
 };
 
 export const buttonStyle = {

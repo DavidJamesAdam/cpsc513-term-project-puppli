@@ -3,18 +3,24 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useEffect, useState } from "react";
 import "./styles.css";
-import { menuStyle, menuItemStyle, buttonStyle } from "./mui-styles";
+import {
+  menuStyle,
+  menuItemStyle,
+  buttonStyle,
+  mobileMenuStyle,
+  mobileMenuItemStyle,
+} from "./mui-styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export function PetSelectionMenu({
   onPetChange,
 }: {
   onPetChange?: (petId: string, petName: string) => void;
 } = {}) {
+  const matches = useMediaQuery("(min-width: 600px)");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedPet, setSelectedPet] = useState<string>("Select Pet");
-  const [pets, setPets] = useState<Array<{ id: string; name: string }>>(
-    []
-  );
+  const [pets, setPets] = useState<Array<{ id: string; name: string }>>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const open = Boolean(anchorEl);
 
@@ -84,9 +90,7 @@ export function PetSelectionMenu({
         open={open}
         onClose={handleClose}
         slotProps={{
-          paper: {
-            sx: menuStyle,
-          },
+          paper: matches ? { sx: menuStyle } : { sx: mobileMenuStyle },
           list: {
             "aria-labelledby": "basic-button",
           },
@@ -96,7 +100,7 @@ export function PetSelectionMenu({
           pets.map((pet) => (
             <MenuItem
               key={pet.id}
-              sx = {menuItemStyle}
+              sx={menuItemStyle}
               onClick={() => handlePetSelect(pet.id, pet.name)}
             >
               {pet.name}
@@ -111,4 +115,3 @@ export function PetSelectionMenu({
     </div>
   );
 }
-
