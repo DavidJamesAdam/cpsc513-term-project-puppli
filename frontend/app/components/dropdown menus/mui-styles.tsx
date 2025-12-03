@@ -10,7 +10,8 @@ export const mobileMenuStyle = {
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-around",
-  width: "90%"
+  width: "90%",
+  color: 'inherit'
 };
 
 export const menuItemStyle = {

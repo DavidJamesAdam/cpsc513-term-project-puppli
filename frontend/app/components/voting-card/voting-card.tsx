@@ -42,13 +42,16 @@ export default function VotingCard({
   const [isPopped, setIsPopped] = useState(false);
   const [plusOnes, setPlusOnes] = useState<number[]>([]);
   const [voteCount, setVoteCount] = useState(post?.voteCount || 0);
-  const [favouriteCount, setFavouriteCount] = useState(post?.favouriteCount || 0);
+  const [favouriteCount, setFavouriteCount] = useState(
+    post?.favouriteCount || 0
+  );
   const [currentPost, setCurrentPost] = useState(post);
   const matches = useMediaQuery("(min-width: 600px)");
   const firstRunRef = useRef(true);
   const [imgFitMode, setImgFitMode] = useState<
     "fit-width" | "fit-height" | "contain"
   >("contain");
+  const [likedPost, setLikedPost] = useState(false);
 
   // helper to set mode on image load
   function handleImgLoad(e: React.SyntheticEvent<HTMLImageElement>) {
@@ -146,7 +149,8 @@ export default function VotingCard({
           console.error("Error fetching posts:", postsResponse.status);
         }
 
-        // Only show +1 animation when adding a favorite (not removing)
+        // Update liked state and show +1 when favourited
+        setLikedPost(Boolean(favourited));
         if (favourited) {
           const id = Date.now();
           setPlusOnes((prev) => [...prev, id]);
@@ -249,10 +253,10 @@ export default function VotingCard({
             style={{
               display: "flex",
               flexDirection: "row",
-              width: "50%",
+              width: "80%",
               height: "20%",
               alignItems: "center",
-              justifyContent: "space-around",
+              justifyContent: "space-between",
             }}
           >
             <CommentModal
@@ -269,10 +273,23 @@ export default function VotingCard({
                 <Button
                   id="favorite-button"
                   onClick={handleFavoriteButtonClick}
-                  sx={{ gap: '0.5rem' }}
+                  sx={{
+                    gap: "0.5rem",
+                    color: "inherit",
+                    fontFamily: "inherit",
+                  }}
                 >
-                  <img src="assets\icons\heart icon.svg" />
-                  <Typography variant="caption">{favouriteCount}</Typography>
+                  <img
+                    src={
+                      likedPost
+                        ? "assets/icons/Liked post.svg"
+                        : "assets/icons/heart icon.svg"
+                    }
+                    alt={likedPost ? "Liked" : "Like"}
+                  />
+                  {favouriteCount > 0 && (
+                    <Typography variant="caption">{favouriteCount}</Typography>
+                  )}
                 </Button>
               ) : (
                 <Button id="favorite-button">
@@ -286,7 +303,11 @@ export default function VotingCard({
               ))}
             </div>
             {authorized ? (
-              <Button id="vote-button" onClick={handleVoteButtonClick} sx={{ gap: '0.5rem' }}>
+              <Button
+                id="vote-button"
+                onClick={handleVoteButtonClick}
+                sx={{ gap: "0.5rem", color: "inherit", fontFamily: "inherit" }}
+              >
                 <img src="assets\icons\vote icon.svg" />
                 <Typography variant="caption">{voteCount}</Typography>
               </Button>
@@ -335,7 +356,7 @@ export default function VotingCard({
               width: "20%",
               height: "400px",
               alignItems: "center",
-              justifyContent: "space-evenly",
+              justifyContent: "space-between",
             }}
           >
             <CommentModal
@@ -348,8 +369,25 @@ export default function VotingCard({
               onOpen={refreshPostData}
             />
             {authorized ? (
-              <Button id="favorite-button" onClick={handleFavoriteButtonClick} sx={{ gap: '0.5rem' }}>
-                <img src="assets\icons\heart icon.svg" />
+              <Button
+                id="favorite-button"
+                onClick={handleFavoriteButtonClick}
+                sx={{
+                  gap: "0.5rem",
+                  color: "inherit",
+                  fontFamily: "inherit",
+                  direction: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <img
+                  src={
+                    likedPost
+                      ? "assets\\icons\\Liked post.svg"
+                      : "assets\\icons\\heart icon.svg"
+                  }
+                  alt={likedPost ? "Liked" : "Like"}
+                />
                 {favouriteCount > 0 && (
                   <Typography variant="caption">{favouriteCount}</Typography>
                 )}
@@ -360,7 +398,17 @@ export default function VotingCard({
               </Button>
             )}
             {authorized ? (
-              <Button id="vote-button" onClick={handleVoteButtonClick} sx={{ gap: '0.5rem' }}>
+              <Button
+                id="vote-button"
+                onClick={handleVoteButtonClick}
+                sx={{
+                  gap: "0.5rem",
+                  color: "inherit",
+                  fontFamily: "inherit",
+                  direction: "flex",
+                  flexDirection: "column",
+                }}
+              >
                 <img src="assets\icons\vote icon.svg" />
                 {voteCount > 0 && (
                   <Typography variant="caption">{voteCount}</Typography>
