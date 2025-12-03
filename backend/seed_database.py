@@ -3,8 +3,8 @@ Database Seeding Script for Pet Social Media Application
 
 This script populates Firebase Authentication and Firestore with test data:
 - 5 users with Firebase Auth accounts and Firestore profiles
-- Up to 2 pets per user in the pets collection
-- Posts with varying engagement in the posts collection
+- Up to 2 pets per user in the pets collection (6 pets total)
+- Posts with varying engagement in the posts collection (10 posts total)
 
 Run with: python seed_database.py
 """
