@@ -161,17 +161,6 @@ export default function CommentModal({
     height: "100%",
   };
 
-  const buttonStyle = {
-    borderRadius: "100px",
-    border: "1px solid rgba(147, 191, 191, 1)",
-    backgroundColor: "rgba(179, 232, 232, 1)",
-    color: "inherit",
-    font: "inherit",
-    display: "flex",
-    minWidth: "30%",
-    margin: "10px",
-  };
-
   return (
     <>
       {matches ? (
@@ -210,7 +199,10 @@ export default function CommentModal({
                   paddingRight: "20px",
                 }}
               >
-                <Typography variant="h6" sx={{ color: "#675844", fontFamily: "Itim" }}>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "#675844", fontFamily: "Itim" }}
+                >
                   Comments ({comments.length})
                 </Typography>
                 <Button sx={closeButtonStyle} onClick={handleClose}>
@@ -232,7 +224,9 @@ export default function CommentModal({
                 }}
               >
                 <img
-                  src={imageUrl || "assets/icons/ant-design--picture-outlined.svg"}
+                  src={
+                    imageUrl || "assets/icons/ant-design--picture-outlined.svg"
+                  }
                   alt={caption || "Post image"}
                   style={{
                     maxWidth: "100%",
@@ -255,7 +249,11 @@ export default function CommentModal({
                 {sortedComments.length === 0 ? (
                   <Typography
                     variant="body2"
-                    sx={{ color: "#675844", textAlign: "center", fontFamily: "Itim" }}
+                    sx={{
+                      color: "#675844",
+                      textAlign: "center",
+                      fontFamily: "Itim",
+                    }}
                   >
                     No comments yet. Be the first to comment!
                   </Typography>
@@ -266,7 +264,8 @@ export default function CommentModal({
                       style={{
                         padding: "10px",
                         marginBottom: "8px",
-                        backgroundColor: index % 2 === 0 ? "#FFECF0" : "#FFC2CF",
+                        backgroundColor:
+                          index % 2 === 0 ? "#FFECF0" : "#FFC2CF",
                         borderRadius: "10px",
                       }}
                     >
@@ -294,7 +293,7 @@ export default function CommentModal({
                   flexDirection: "column",
                   justifyContent: "space-evenly",
                   margin: "10px",
-                  width: "90%",
+                  width: "50%",
                 }}
               >
                 <div>
@@ -319,23 +318,47 @@ export default function CommentModal({
                   />
                   <Typography
                     variant="caption"
-                    sx={{ color: "#675844", marginLeft: "12px", fontSize: "12px" }}
+                    sx={{
+                      color: "#675844",
+                      marginLeft: "12px",
+                      fontSize: "12px",
+                    }}
                   >
-                    {remainingChars} characters remaining
+                    <p
+                      style={{
+                        textAlign: "center",
+                        fontSize: "1.5em",
+                        fontFamily: "Itim",
+                        color: "inherit",
+                      }}
+                    >
+                      {remainingChars} characters remaining
+                    </p>
                   </Typography>
                 </div>
                 {error && (
-                  <Typography variant="body2" sx={{ color: "red", fontSize: "14px" }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "red", fontSize: "14px" }}
+                  >
                     {error}
                   </Typography>
                 )}
-                <Button
-                  sx={buttonStyle}
-                  onClick={submitComment}
-                  disabled={isSubmitting || !commentText.trim()}
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
                 >
-                  {isSubmitting ? "Posting..." : "Submit comment"}
-                </Button>
+                  <Button
+                    className="buttonStyle"
+                    onClick={submitComment}
+                    disabled={isSubmitting || !commentText.trim()}
+                  >
+                    {isSubmitting ? "Posting..." : "Submit comment"}
+                  </Button>
+                </div>
               </div>
             </Box>
           </Modal>
@@ -343,7 +366,7 @@ export default function CommentModal({
       ) : (
         <div>
           {authorized ? (
-            <Button onClick={handleOpen} sx={openButtonStyle}>
+            <Button onClick={handleOpen} sx={openButtonStyle} style={{display: 'flex', flexDirection: "column"}}>
               <div>
                 <img src="assets\icons\Message icon.svg" />
               </div>
@@ -377,7 +400,14 @@ export default function CommentModal({
                   paddingRight: "10px",
                 }}
               >
-                <Typography variant="h6" sx={{ color: "#675844", fontFamily: "Itim", fontSize: "18px" }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: "#675844",
+                    fontFamily: "Itim",
+                    fontSize: "18px",
+                  }}
+                >
                   Comments ({comments.length})
                 </Typography>
                 <Button sx={closeButtonStyle} onClick={handleClose}>
@@ -399,7 +429,9 @@ export default function CommentModal({
                 }}
               >
                 <img
-                  src={imageUrl || "assets/icons/ant-design--picture-outlined.svg"}
+                  src={
+                    imageUrl || "assets/icons/ant-design--picture-outlined.svg"
+                  }
                   alt={caption || "Post image"}
                   style={{
                     maxWidth: "100%",
@@ -422,7 +454,12 @@ export default function CommentModal({
                 {sortedComments.length === 0 ? (
                   <Typography
                     variant="body2"
-                    sx={{ color: "#675844", textAlign: "center", fontFamily: "Itim", fontSize: "14px" }}
+                    sx={{
+                      color: "#675844",
+                      textAlign: "center",
+                      fontFamily: "Itim",
+                      fontSize: "14px",
+                    }}
                   >
                     No comments yet!
                   </Typography>
@@ -433,13 +470,18 @@ export default function CommentModal({
                       style={{
                         padding: "8px",
                         marginBottom: "6px",
-                        backgroundColor: index % 2 === 0 ? "#FFECF0" : "#FFC2CF",
+                        backgroundColor:
+                          index % 2 === 0 ? "#FFECF0" : "#FFC2CF",
                         borderRadius: "10px",
                       }}
                     >
                       <Typography
                         variant="body2"
-                        sx={{ color: "#675844", fontFamily: "Itim", fontSize: "14px" }}
+                        sx={{
+                          color: "#675844",
+                          fontFamily: "Itim",
+                          fontSize: "14px",
+                        }}
                       >
                         {comment.text}
                       </Typography>
@@ -486,23 +528,47 @@ export default function CommentModal({
                   />
                   <Typography
                     variant="caption"
-                    sx={{ color: "#675844", marginLeft: "12px", fontSize: "10px" }}
+                    sx={{
+                      color: "#675844",
+                      marginLeft: "12px",
+                      fontSize: "10px",
+                    }}
                   >
-                    {remainingChars} characters remaining
+                    <p
+                      style={{
+                        textAlign: "center",
+                        fontSize: "1.5em",
+                        fontFamily: "Itim",
+                        color: "inherit",
+                      }}
+                    >
+                      {remainingChars} characters remaining
+                    </p>
                   </Typography>
                 </div>
                 {error && (
-                  <Typography variant="body2" sx={{ color: "red", fontSize: "12px" }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "red", fontSize: "12px" }}
+                  >
                     {error}
                   </Typography>
                 )}
-                <Button
-                  sx={buttonStyle}
-                  onClick={submitComment}
-                  disabled={isSubmitting || !commentText.trim()}
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
                 >
-                  {isSubmitting ? "Posting..." : "Submit comment"}
-                </Button>
+                  <Button
+                    className="buttonStyle"
+                    onClick={submitComment}
+                    disabled={isSubmitting || !commentText.trim()}
+                  >
+                    {isSubmitting ? "Posting..." : "Submit comment"}
+                  </Button>
+                </div>
               </div>
             </Box>
           </Modal>
