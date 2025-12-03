@@ -74,6 +74,7 @@ span {
 
   #profileBanner {
     flex-direction: column;
+    align-items: center;
   }
 }
 
