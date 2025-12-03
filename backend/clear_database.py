@@ -48,6 +48,42 @@ def clear_collection(collection_name):
 
     return total_deleted
 
+def clear_firebase_auth_users():
+    """Delete all users from Firebase Authentication"""
+    try:
+        # List all users
+        page = auth.list_users()
+        total_deleted = 0
+
+        while page:
+            for user in page.users:
+                try:
+                    auth.delete_user(user.uid)
+                    total_deleted += 1
+                except Exception as e:
+                    print(f"  Warning: Failed to delete user {user.email} ({user.uid}): {e}")
+
+            # Get next page of users
+            page = page.get_next_page()
+
+        return total_deleted
+    except Exception as e:
+        print(f"  Error clearing Firebase Auth users: {e}")
+        return 0
+
+def get_firebase_auth_count():
+    """Get count of Firebase Authentication users"""
+    try:
+        count = 0
+        page = auth.list_users()
+        while page:
+            count += len(page.users)
+            page = page.get_next_page()
+        return count
+    except Exception as e:
+        print(f"  Error getting Firebase Auth count: {e}")
+        return 0
+
 def get_collection_counts():
     """Get document counts for all collections"""
     counts = {}
