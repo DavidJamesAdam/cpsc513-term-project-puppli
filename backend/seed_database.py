@@ -112,16 +112,11 @@ def create_firebase_user(email, password, display_name):
             password=password,
             display_name=display_name
         )
-        print(f"  ✓ Created Firebase Auth user: {email} (UID: {user.uid})")
         return user.uid
     except auth.EmailAlreadyExistsError:
         # If user already exists, get their UID
         user = auth.get_user_by_email(email)
-        print(f"  ⚠ User already exists: {email} (UID: {user.uid})")
         return user.uid
-    except Exception as e:
-        print(f"  ✗ Error creating Firebase Auth user {email}: {e}")
-        raise
 
 def generate_firestore_user(uid, user_data, user_index):
     """Generate a Firestore user document with strategic location assignment"""
@@ -226,19 +221,12 @@ def generate_post(user_id, pet_id, pet_name, post_index):
 
 def seed_database():
     """Main function to seed the database"""
-    print("\n" + "="*70)
-    print("SEEDING DATABASE WITH FIREBASE AUTH + FIRESTORE")
-    print("="*70 + "\n")
-
     all_users = []
     all_pets = []
     all_posts = []
 
     # Create users in Firebase Auth and Firestore
-    print("Creating users...\n")
     for i, user_data in enumerate(TEST_USERS, start=1):
-        print(f"User {i}/5: {user_data['displayName']}")
-
         # Create user in Firebase Authentication
         uid = create_firebase_user(
             user_data["email"],
@@ -257,10 +245,7 @@ def seed_database():
             "uid": uid
         })
 
-        print(f"  ✓ Created Firestore user document\n")
-
     # Create pets for each user (1-2 pets per user)
-    print("Creating pets...\n")
     pet_counter = 0
     post_counter = 0  # Separate counter for posts to cycle through images
     MAX_POSTS = len(FIREBASE_STORAGE_IMAGES)  # Limit posts to available images (10)
@@ -268,8 +253,6 @@ def seed_database():
     for user in all_users:
         num_pets = random.randint(1, 2)  # 1-2 pets per user
         user_pets = []
-
-        print(f"Creating {num_pets} pet(s) for {user['data']['displayName']}:")
 
         for _ in range(num_pets):
             pet_data = generate_pet(user["uid"], pet_counter)
@@ -283,19 +266,11 @@ def seed_database():
                 "ref": pet_ref
             })
 
-            print(f"  ✓ Pet: {pet_data['name']} ({pet_data['breed']})")
-
         all_pets.extend(user_pets)
 
         # Create at least one post per pet, but don't exceed MAX_POSTS total
         if post_counter >= MAX_POSTS:
-            print(f"  Maximum posts ({MAX_POSTS}) reached, skipping post creation\n")
             continue
-
-        posts_remaining = MAX_POSTS - post_counter
-        # Ensure each pet gets at least 1 post, then add random extras
-        num_posts = min(len(user_pets), posts_remaining)
-        print(f"  Creating {num_posts} post(s) (1 per pet)...")
 
         # Create one post for each pet first
         for pet in user_pets:
@@ -317,39 +292,17 @@ def seed_database():
 
             post_counter += 1
 
-        print(f"  ✓ Created {num_posts} post(s)\n")
-
     # Write all data to Firestore
-    print("Writing to Firestore...\n")
-
-    print(f"Writing {len(all_users)} users...")
     for user in all_users:
         user["ref"].set(user["data"])
-    print(f"✓ Users written\n")
 
-    print(f"Writing {len(all_pets)} pets...")
     for pet in all_pets:
         pet["ref"].set(pet["data"])
-    print(f"✓ Pets written\n")
 
-    print(f"Writing {len(all_posts)} posts...")
     for post in all_posts:
         post["ref"].set(post["data"])
-    print(f"✓ Posts written\n")
 
-    print("="*70)
-    print(f"DATABASE SEEDING COMPLETED SUCCESSFULLY!")
-    print("="*70)
-    print(f"\nSummary:")
-    print(f"  • {len(all_users)} users (Firebase Auth + Firestore)")
-    print(f"  • {len(all_pets)} pets")
-    print(f"  • {len(all_posts)} posts")
-    print(f"\nTest Account Credentials:")
-    print("-" * 70)
-    for user_data in TEST_USERS:
-        print(f"  Email: {user_data['email']}")
-        print(f"  Password: {user_data['password']}")
-        print()
+    print(f"✓ Added {len(all_users)} users, {len(all_pets)} pets, {len(all_posts)} posts")
 
 if __name__ == "__main__":
     try:
