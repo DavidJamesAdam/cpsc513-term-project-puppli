@@ -92,14 +92,32 @@ def get_collection_counts():
         counts[collection_name] = len(docs)
     return counts
 
-def confirm_deletion(collections_to_clear):
+def confirm_deletion(collections_to_clear, clear_auth=True):
     """Ask user to confirm deletion"""
-    print("WARNING: You are about to delete data from Firestore")
+    print("\n" + "="*70)
+    print("WARNING: You are about to delete data!")
+    print("="*70)
 
     counts = get_collection_counts()
     total = sum(counts[col] for col in collections_to_clear)
-    print(f"Collections to clear: {', '.join(collections_to_clear)} ({total} documents)")
 
+    print(f"\nFirestore Collections to clear:")
+    for col in collections_to_clear:
+        print(f"  - {col}: {counts[col]} documents")
+
+    auth_count = 0
+    if clear_auth:
+        auth_count = get_firebase_auth_count()
+        print(f"\nFirebase Authentication:")
+        print(f"  - Users to delete: {auth_count}")
+
+    print(f"\nTotal impact: {total} Firestore documents", end="")
+    if clear_auth:
+        print(f" + {auth_count} Firebase Auth users")
+    else:
+        print()
+
+    print("\n" + "="*70)
     response = input("Type 'yes' to continue: ").strip().lower()
     return response == 'yes'
 
@@ -111,6 +129,10 @@ def main():
     force = '--force' in args
     if force:
         args.remove('--force')
+
+    no_auth = '--no-auth' in args
+    if no_auth:
+        args.remove('--no-auth')
 
     # Determine which collections to clear
     if not args:
@@ -127,22 +149,41 @@ def main():
                 print(f"Available collections: {', '.join(COLLECTIONS)}")
                 sys.exit(1)
 
+    # Determine if we should clear Firebase Auth
+    # Clear auth if: clearing users collection AND not --no-auth flag
+    clear_auth = 'users' in collections_to_clear and not no_auth
+
     # Confirm deletion (unless --force flag is used)
     if not force:
-        if not confirm_deletion(collections_to_clear):
-            print("Operation cancelled")
+        if not confirm_deletion(collections_to_clear, clear_auth):
+            print("\nOperation cancelled")
             sys.exit(0)
 
-    # Clear collections
-    print("Clearing collections...")
+    # Clear Firestore collections
+    print("\nClearing Firestore collections...")
     total_deleted = 0
 
     for collection_name in collections_to_clear:
+        print(f"  Clearing {collection_name}...", end=" ")
         deleted = clear_collection(collection_name)
         total_deleted += deleted
+        print(f"✓ ({deleted} documents)")
 
-    print(f"Deleted {total_deleted} documents from {len(collections_to_clear)} collection(s)")
-    print("Database clearing completed")
+    # Clear Firebase Authentication users
+    auth_deleted = 0
+    if clear_auth:
+        print("\nClearing Firebase Authentication users...")
+        auth_deleted = clear_firebase_auth_users()
+        print(f"  ✓ Deleted {auth_deleted} Firebase Auth users")
+
+    # Summary
+    print("\n" + "="*70)
+    print("DATABASE CLEARING COMPLETED")
+    print("="*70)
+    print(f"  Firestore: {total_deleted} documents from {len(collections_to_clear)} collection(s)")
+    if clear_auth:
+        print(f"  Firebase Auth: {auth_deleted} users")
+    print()
 
 if __name__ == "__main__":
     try:
