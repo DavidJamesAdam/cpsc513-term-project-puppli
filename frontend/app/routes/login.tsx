@@ -12,9 +12,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import showIcon from "../components/login/show.svg";
 import hideIcon from "../components/login/hide.svg";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
-import toast from 'react-hot-toast';
 import { useNavigate } from "react-router";
 import handleLogIn from "~/utils/loginFunction";
 

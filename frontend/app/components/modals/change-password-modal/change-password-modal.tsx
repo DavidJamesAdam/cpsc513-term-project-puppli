@@ -1,19 +1,20 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import SettingOption from "../settings/settingOption";
+import SettingOption from "../../settings/settingOption";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
-import showIcon from "../login/show.svg";
-import hideIcon from "../login/hide.svg";
+import { auth } from "firebase";
+import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
+import toast from "react-hot-toast";
+import handleLogIn from "~/utils/loginFunction";
+import showIcon from "../../login/show.svg";
+import hideIcon from "../../login/hide.svg";
 
 export default function ChangePasswordModal() {
-  // TODO: get from DB to prepopulate
-  const userPassword = "formDB";
-
   const matches = useMediaQuery("(min-width: 600px)");
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -32,14 +33,92 @@ export default function ChangePasswordModal() {
     setShowReEnterPass(false);
     setOpen(false);
   };
-  const handleSubmit = () => {
-    // check password here and set error message if needed
-    if (password !== userPassword) {
+
+  // This function would send off the user's request to change password
+  const handleSubmit = async () => {
+    // keep track of update failures
+    let successful = false;
+
+    try {
+      // need to use auth for reauthentication
+      const user = auth!.currentUser;
+      if (!user) throw new Error("No Firebase user authenticated.");
+
+      // reauthenticate with password
+      const credential = EmailAuthProvider.credential(user.email!, password);
+      await reauthenticateWithCredential(user, credential);
+
+      // get new ID token with the password entered
+      const idToken = await user.getIdToken(true);
+
+      // proceed with the password update
+      const updatePassResponse = await fetch(
+        "http://localhost:8000/user/update-password",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            id_token: idToken,
+            new_password: newPassword,
+          }),
+        }
+      );
+
+      // catch errors
+      if (!updatePassResponse.ok) {
+        console.log("Error updating password.");
+      } else {
+        successful = true;
+        // automatically log user in again to get new session cookie with the new password if update was successful
+        // this prevents getting user logged out after the chnage
+        handleLogIn(auth, user.email, newPassword);
+        // reset everything in modal
+        setHasFormErrors(false);
+        setHasNewPasswordError(true);
+        setNewPasswordErrorMsg("");
+        setHasNewPassReEnterError(true);
+        setNewPassReEnterErrorMsg("");
+        setHasPasswordError(false);
+        setPasswordErrorMsg("");
+        // reset show password toggle
+        setShow(false);
+        setShowNewPass(false);
+        setShowReEnterPass(false);
+        setOpen(false);
+      }
+
+      // show the temp notificaiton if successful
+      toast.promise(
+        Promise.resolve(updatePassResponse),
+        {
+          loading: "Updating password...",
+          success: "Password update successful!",
+          error: (err: Error) => `Password update failed: ${err.message}`,
+        },
+        {
+          style: {
+            borderRadius: "100px",
+            width: "100%",
+            fontSize: "2em",
+            backgroundColor: "#e0cdb2",
+            border: "1px solid rgba(255, 132, 164, 1)",
+          },
+          duration: 3000,
+        }
+      );
+    } catch (e) {
+      console.error(e);
+    }
+
+    // if the whole operation was successful, close the modal
+    if (successful) {
+      // close modal when done
+      setOpen(false);
+    } else {
+      // authentication must have gone wrong
       setHasPasswordError(true);
       setPasswordErrorMsg("Incorrect password.");
-    } else {
-      // This function would send off the user's request to change password
-      setOpen(false);
     }
   };
 
@@ -153,6 +232,9 @@ export default function ChangePasswordModal() {
 
     // if current password field is empty, reset errors
     if (password === "") {
+      setPasswordErrorMsg("");
+      setHasPasswordError(false);
+    } else if (password) {
       setPasswordErrorMsg("");
       setHasPasswordError(false);
     }

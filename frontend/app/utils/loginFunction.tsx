@@ -1,5 +1,6 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import toast from "react-hot-toast";
+import { toastStyle } from "~/styles/component-styles";
 
 export default async function handleLogIn(
   auth: any,
@@ -13,13 +14,7 @@ export default async function handleLogIn(
     userCredential = await signInWithEmailAndPassword(auth!, email, password);
   } catch (e) {
     toast.error("Invalid username or password.", {
-      style: {
-        borderRadius: "100px",
-        width: "100%",
-        fontSize: "2em",
-        backgroundColor: "#e0cdb2",
-        border: "1px solid rgba(255, 132, 164, 1)",
-      },
+      style: toastStyle,
     });
   }
   // 2) Get fresh ID token
@@ -37,13 +32,7 @@ export default async function handleLogIn(
     });
 
     toast.success("Login successful!", {
-      style: {
-        borderRadius: "100px",
-        width: "100%",
-        fontSize: "2em",
-        backgroundColor: "#e0cdb2",
-        border: "1px solid rgba(255, 132, 164, 1)",
-      },
+      style: toastStyle,
       duration: 3000,
     });
   } catch (e) {

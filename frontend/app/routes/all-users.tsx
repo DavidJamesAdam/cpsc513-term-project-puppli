@@ -9,13 +9,14 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
-import ConfirmDeletionModal from "~/components/confirm-modal/confirm-modal";
+import ConfirmDeletionModal from "~/components/modals/confirm-modal/confirm-modal";
 import toast from "react-hot-toast";
 import { authCheck } from "~/utils/authCheck";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
+import { toastStyle } from "~/styles/component-styles";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -109,13 +110,7 @@ export default function AllUsers() {
           error: (err: Error) => `User deletion failed: ${err.message}`,
         },
         {
-          style: {
-            borderRadius: "100px",
-            width: "100%",
-            fontSize: "2em",
-            backgroundColor: "#e0cdb2",
-            border: "1px solid rgba(255, 132, 164, 1)",
-          },
+          style: toastStyle,
           duration: 3000,
         }
       );

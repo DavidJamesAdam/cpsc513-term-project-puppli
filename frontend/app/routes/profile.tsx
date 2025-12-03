@@ -15,7 +15,7 @@ import CreateSubProfileModal from "~/components/profile/createSubProfileModal";
 import TextField from "@mui/material/TextField";
 import editIcon from "../components/settings/icons/username.svg";
 import SaveAndCancelButtons from "~/components/saveAndCancelButtons";
-import UploadModal from "~/components/upload-modal/upload-modal";
+import UploadModal from "~/components/modals/upload-modal/upload-modal";
 import ProfileBanner from "~/components/profile/profileBanner";
 import DeleteSubProfileModal from "~/components/profile/deleteSubProfileModal";
 import { authCheck } from "../utils/authCheck";
@@ -32,19 +32,23 @@ export default function Profile() {
 
   // Pet info from database
   const [petInfo1, setPetInfo1] = useState({
+    id: "",
     name: "",
     breed: "",
     bday: "",
     treat: "",
     toy: "",
+    lastImageUrl: "",
   });
 
   const [petInfo2, setPetInfo2] = useState({
+    id: "",
     name: "",
     breed: "",
     bday: "",
     treat: "",
     toy: "",
+    lastImageUrl: "",
   });
 
   const [userInfo, setUserInfo] = useState({
@@ -83,6 +87,34 @@ export default function Profile() {
 
   const [currentPet, setCurrentPet] = useState(petInfo1);
 
+  // fetches the last uploaded image for a specific pet
+  const fetchLastPetImage = async (petId: string): Promise<string> => {
+    try {
+      const response = await fetch("http://localhost:8000/posts", {
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const postsData = await response.json();
+
+        // Filter posts by petId and sort by createdAt in descending order
+        const petPosts = postsData
+          .filter((post: any) => post.petId === petId)
+          .sort((a: any, b: any) => {
+            const dateA = new Date(a.createdAt).getTime();
+            const dateB = new Date(b.createdAt).getTime();
+            return dateB - dateA; // Most recent first
+          });
+
+        // Return the imageUrl of the most recent post, or empty string if no posts
+        return petPosts.length > 0 ? petPosts[0].imageUrl : "";
+      }
+    } catch (error) {
+      console.error("Error fetching pet images:", error);
+    }
+    return "";
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -119,22 +151,28 @@ export default function Profile() {
 
           // Map fetched pets to petInfo1 and petInfo2
           if (petsData.length > 0) {
+            const lastImage1 = await fetchLastPetImage(petsData[0].id);
             setPetInfo1({
+              id: petsData[0].id || "",
               name: petsData[0].name || "",
               breed: petsData[0].breed || "",
               bday: petsData[0].birthday || "",
               treat: petsData[0].favouriteTreat || "",
               toy: petsData[0].favouriteToy || "",
+              lastImageUrl: lastImage1,
             });
           }
 
           if (petsData.length > 1) {
+            const lastImage2 = await fetchLastPetImage(petsData[1].id);
             setPetInfo2({
+              id: petsData[1].id || "",
               name: petsData[1].name || "",
               breed: petsData[1].breed || "",
               bday: petsData[1].birthday || "",
               treat: petsData[1].favouriteTreat || "",
               toy: petsData[1].favouriteToy || "",
+              lastImageUrl: lastImage2,
             });
           }
         } else {
@@ -163,12 +201,36 @@ export default function Profile() {
   const maxCharacters = 50;
 
   // saves edited bio to DB
-  const handleSaveBio = (saved: boolean) => {
+  const handleSaveBio = async (saved: boolean) => {
     if (saved) {
       setEditedBio(editedBio);
       // update local object (since data from DB is not available yet)
       setUserInfo((prev) => ({ ...prev, bio: editedBio }));
-      // TODO: save the bio in the text field to the user DB object.
+
+      // Fetch user profile data for the logged-in user
+      const userResponse = await fetch("http://localhost:8000/user/me", {
+        credentials: "include",
+      });
+
+      // if successful, we can do the update
+      if (userResponse.ok) {
+        const userData = await userResponse.json();
+
+        // save the bio in the text field to the DB based on the current user id
+        const updateBioResponse = await fetch(
+          `http://localhost:8000/user/update/${userData.id}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ bio: editedBio }),
+          }
+        );
+
+        // if failed, print to console
+        if (!updateBioResponse.ok) {
+          console.error("Error updating bio.");
+        }
+      }
     }
     // either button clicked should disable editing mode on user bio
     setEditingBio(false);
@@ -176,12 +238,36 @@ export default function Profile() {
   };
 
   // saves edited name to DB
-  const handleSaveName = (saved: boolean) => {
+  const handleSaveName = async (saved: boolean) => {
     if (saved) {
       setEditedName(editedName);
       // update local object (since data from DB is not available yet)
       setUserInfo((prev) => ({ ...prev, name: editedName }));
-      // TODO: save to DB
+
+      // Fetch user profile data for the logged-in user
+      const userResponse = await fetch("http://localhost:8000/user/me", {
+        credentials: "include",
+      });
+
+      // if successful, we can do the update
+      if (userResponse.ok) {
+        const userData = await userResponse.json();
+
+        // save the display name in the text field to the DB based on the current user id
+        const updateNameResponse = await fetch(
+          `http://localhost:8000/user/update/${userData.id}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ displayName: editedName }),
+          }
+        );
+
+        // if failed, print to console
+        if (!updateNameResponse.ok) {
+          console.error("Error updating display name.");
+        }
+      }
     }
     // either button clicked should disable editing mode on user name
     setEditingName(false);
@@ -189,7 +275,7 @@ export default function Profile() {
   };
 
   // saves edited pet name to DB
-  const handleSavePetName = (saved: boolean) => {
+  const handleSavePetName = async (saved: boolean) => {
     if (saved) {
       setEditedPetName(editedPetName);
       // update local object (since data from DB is not available yet)
@@ -200,7 +286,39 @@ export default function Profile() {
         setPetInfo2((prev) => ({ ...prev, name: editedPetName }));
         setUserInfo((prev) => ({ ...prev, pet2: petInfo2 }));
       }
-      // TODO: save to DB
+
+      // Fetch pets for the logged-in user
+      const petsResponse = await fetch("http://localhost:8000/pets", {
+        credentials: "include",
+      });
+
+      // if successful, we can do the update
+      if (petsResponse.ok) {
+        const petsData = await petsResponse.json();
+
+        // by defualt use pet1 id
+        let petID = petsData[0].id;
+
+        // but if on sub profile 2, get second pet's id
+        if (!onPetOneSubPage) {
+          petID = petsData[1].id;
+        }
+
+        // save the pet's name in the text field to the DB based on the pet id
+        const updateNameResponse = await fetch(
+          `http://localhost:8000/pet/update/${petID}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: editedPetName }),
+          }
+        );
+
+        // if failed, print to console
+        if (!updateNameResponse.ok) {
+          console.error("Error updating pet name.");
+        }
+      }
     }
     // either button clicked should disable editing mode on user name
     setEditingPetName(false);
@@ -276,6 +394,58 @@ export default function Profile() {
     window.location.href = "/settings";
   }
 
+  // refreshes pet data from the backend
+  const refreshPetData = async () => {
+    try {
+      const petsResponse = await fetch("http://localhost:8000/pets", {
+        credentials: "include",
+      });
+
+      if (petsResponse.ok) {
+        const petsData = await petsResponse.json();
+
+        // Update pet info states
+        if (petsData.length > 0) {
+          const updatedPet1 = {
+            id: petsData[0].id || "",
+            name: petsData[0].name || "",
+            breed: petsData[0].breed || "",
+            bday: petsData[0].birthday || "",
+            treat: petsData[0].favouriteTreat || "",
+            toy: petsData[0].favouriteToy || "",
+            lastImageUrl: petInfo1.lastImageUrl,
+          };
+          setPetInfo1(updatedPet1);
+
+          // Update current pet if viewing pet 1
+          if (onPetOneSubPage) {
+            setCurrentPet(updatedPet1);
+          }
+        }
+
+        if (petsData.length > 1) {
+          const updatedPet2 = {
+            id: petsData[1].id || "",
+            name: petsData[1].name || "",
+            breed: petsData[1].breed || "",
+            bday: petsData[1].birthday || "",
+            treat: petsData[1].favouriteTreat || "",
+            toy: petsData[1].favouriteToy || "",
+            lastImageUrl: petInfo2.lastImageUrl,
+          };
+          setPetInfo2(updatedPet2);
+
+          // Update current pet if viewing pet 2
+          if (!onPetOneSubPage) {
+            setCurrentPet(updatedPet2);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error refreshing pet data:", error);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -290,7 +460,9 @@ export default function Profile() {
         <div id="profileBanner">
           <img
             src={
-              onMainProfile ? defaultProfilePicture : defaultPetProfilePicture
+              onMainProfile
+                ? defaultProfilePicture
+                : (onPetOneSubPage ? petInfo1.lastImageUrl : petInfo2.lastImageUrl) || defaultPetProfilePicture
             }
             alt=""
           />
@@ -390,7 +562,7 @@ export default function Profile() {
                 third={userInfo.bronze}
               />
               <br></br>
-              <p>
+              <div>
                 <span>More about {userInfo.username}</span>
                 {!editingBio ? (
                   <Button onClick={setEditBioMode}>
@@ -399,7 +571,7 @@ export default function Profile() {
                 ) : (
                   <SaveAndCancelButtons onAction={handleSaveBio} />
                 )}
-              </p>
+              </div>
               {userInfo.bio && !editingBio ? (
                 <p style={{ fontSize: "24px" }}>{userInfo.bio}</p>
               ) : (
@@ -433,9 +605,12 @@ export default function Profile() {
                       {petInfo1.name}
                     </Button>
                   ) : (
-                    <></>
+                    <CreateSubProfileModal />
                   )}
-                  <img src={defaultPetPFPMain} alt="" />
+                  <img
+                    src={petInfo1.lastImageUrl || defaultPetPFPMain}
+                    alt={petInfo1.name ? `${petInfo1.name}'s photo` : ""}
+                  />
                 </div>
               </div>
               <div className="evenItem">
@@ -447,7 +622,10 @@ export default function Profile() {
                   ) : (
                     <CreateSubProfileModal />
                   )}
-                  <img src={defaultPetPFPMain} alt="" />
+                  <img
+                    src={petInfo2.lastImageUrl || defaultPetPFPMain}
+                    alt={petInfo2.name ? `${petInfo2.name}'s photo` : ""}
+                  />
                 </div>
               </div>
             </Container>
@@ -480,7 +658,12 @@ export default function Profile() {
         ) : (
           <>
             <div id="petInfoContainer">
-              <EditAboutModal petInfo={currentPet} userInfo={userInfo} />
+              <EditAboutModal
+                onPetOneSubPage={onPetOneSubPage}
+                petInfo={currentPet}
+                userInfo={userInfo}
+                onUpdateSuccess={refreshPetData}
+              />
               <div className="oddItem">Breed: {currentPet.breed}</div>
               <div className="evenItem">Birthday: {currentPet.bday}</div>
               <div className="oddItem">Favourite Treat: {currentPet.treat}</div>

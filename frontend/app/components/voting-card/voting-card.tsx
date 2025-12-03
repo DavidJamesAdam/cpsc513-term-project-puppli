@@ -1,11 +1,17 @@
 import Button from "@mui/material/Button";
 import * as React from "react";
-import CommentModal from "../comment-modal/comment-modal";
+import CommentModal from "../modals/comment-modal/comment-modal";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Typography from "@mui/material/Typography";
 import { useState, useEffect, useRef } from "react";
 import "./styles.css";
 import disabledVoteIcon from "./icons/disabled_vote.svg";
 import disabledLikeIcon from "./icons/disabled_like.svg";
+
+interface Comment {
+  text: string;
+  createdAt: string;
+}
 
 interface Post {
   id: string;
@@ -16,6 +22,7 @@ interface Post {
   createdAt: string;
   voteCount: number;
   favouriteCount: number;
+  comments: Comment[];
 }
 
 type VotingCardProps = {
@@ -35,32 +42,126 @@ export default function VotingCard({
   const [isPopped, setIsPopped] = useState(false);
   const [plusOnes, setPlusOnes] = useState<number[]>([]);
   const [voteCount, setVoteCount] = useState(post?.voteCount || 0);
+  const [favouriteCount, setFavouriteCount] = useState(post?.favouriteCount || 0);
+  const [currentPost, setCurrentPost] = useState(post);
   const matches = useMediaQuery("(min-width: 600px)");
   const firstRunRef = useRef(true);
+  const [imgFitMode, setImgFitMode] = useState<
+    "fit-width" | "fit-height" | "contain"
+  >("contain");
 
-  // keep vote count in sync with incoming post prop
+  // helper to set mode on image load
+  function handleImgLoad(e: React.SyntheticEvent<HTMLImageElement>) {
+    const img = e.currentTarget;
+    const naturalW = img.naturalWidth || 1;
+    const naturalH = img.naturalHeight || 1;
+    const imageAspect = naturalW / naturalH;
+
+    // compute container aspect: you may use a fixed ratio you set in CSS,
+    // or compute from clientWidth/clientHeight of the container:
+    const container = img.parentElement as HTMLElement | null;
+    let containerAspect = 1;
+    if (container) {
+      const rect = container.getBoundingClientRect();
+      containerAspect = rect.width / Math.max(rect.height, 1);
+    }
+
+    // choose fit mode
+    if (imageAspect > containerAspect) {
+      // image is wider than container -> fit by width so width fills and height shrinks
+      setImgFitMode("fit-width");
+    } else if (imageAspect < containerAspect) {
+      // image is taller -> fit by height
+      setImgFitMode("fit-height");
+    } else {
+      setImgFitMode("contain");
+    }
+  }
+
+  // keep vote count and post data in sync with incoming post prop
   useEffect(() => {
     setVoteCount(post?.voteCount || 0);
+    setFavouriteCount(post?.favouriteCount || 0);
+    setCurrentPost(post);
   }, [post]);
+
+  // Function to refresh post data after comment is added
+  const refreshPostData = async () => {
+    if (!post?.id) return;
+
+    try {
+      const response = await fetch("http://localhost:8000/posts", {
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const postsData = await response.json();
+        const updatedPost = postsData.find((p: Post) => p.id === post.id);
+        if (updatedPost) {
+          setCurrentPost(updatedPost);
+        }
+      }
+    } catch (error) {
+      console.error("Error refreshing post:", error);
+    }
+  };
   const handleCommentButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     // Open comment model to leave comment on picture
   };
 
-  const handleFavoriteButtonClick = (
+  const handleFavoriteButtonClick = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
-    // Add picture to favorites
+    // Toggle favorite for the post
+    if (!post) return;
 
-    // create a short-lived +1
-    const id = Date.now();
-    setPlusOnes((prev) => [...prev, id]);
+    try {
+      const response = await fetch(
+        `http://localhost:8000/posts/favourite/${post.id}`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
 
-    // remove it after the animation duration (match CSS 800ms)
-    window.setTimeout(() => {
-      setPlusOnes((prev) => prev.filter((x) => x !== id));
-    }, 2000); // small buffer > animation duration
+      if (response.ok) {
+        const result = await response.json();
+        const favourited = result.favourited;
+
+        // Fetch the updated post data from the database
+        const postsResponse = await fetch("http://localhost:8000/posts", {
+          credentials: "include",
+        });
+
+        if (postsResponse.ok) {
+          const postsData = await postsResponse.json();
+          const updatedPost = postsData.find((p: Post) => p.id === post.id);
+          if (updatedPost) {
+            // Update with the latest count from the database
+            setFavouriteCount(updatedPost.favouriteCount);
+          }
+        } else {
+          console.error("Error fetching posts:", postsResponse.status);
+        }
+
+        // Only show +1 animation when adding a favorite (not removing)
+        if (favourited) {
+          const id = Date.now();
+          setPlusOnes((prev) => [...prev, id]);
+
+          // remove it after the animation duration (match CSS 800ms)
+          window.setTimeout(() => {
+            setPlusOnes((prev) => prev.filter((x) => x !== id));
+          }, 2000); // small buffer > animation duration
+        }
+      } else {
+        console.error("Error favouriting post:", response.status);
+      }
+    } catch (error) {
+      console.error("Failed to favourite post:", error);
+    }
   };
 
   useEffect(() => {
@@ -93,10 +194,13 @@ export default function VotingCard({
     if (!post) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/posts/vote/${post.id}`, {
-        method: "POST",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `http://localhost:8000/posts/vote/${post.id}`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         setVoteCount((prev) => prev + 1);
@@ -116,7 +220,7 @@ export default function VotingCard({
           style={{
             border: "1px solid rgba(255, 132, 164, 1)",
             width: "30%",
-            height: "50%",
+            height: "80%",
             borderRadius: "40px",
             backgroundColor: "rgba(224, 205, 178, 1)",
             display: "flex",
@@ -125,53 +229,19 @@ export default function VotingCard({
             justifyContent: "space-around",
           }}
         >
-          <div
-            style={{
-              border: "1px solid",
-              borderRadius: "40px",
-              width: "75%",
-              height: "75%",
-              margin: "20px",
-              backgroundColor: "rgba(217, 217, 217, 1)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              overflow: "hidden",
-              position: "relative",
-            }}
-          >
+          <div className="image-container">
             {post?.imageUrl ? (
               <img
                 src={post.imageUrl}
                 alt={post.caption}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "40px",
-                }}
+                onLoad={handleImgLoad}
+                className={imgFitMode}
               />
             ) : (
               <img
                 src={"assets/icons/ant-design--picture-outlined.svg"}
-                style={{ width: "90%", height: "auto" }}
+                className="fallback-image"
               />
-            )}
-            {post && (
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "10px",
-                  left: "10px",
-                  backgroundColor: "rgba(0, 0, 0, 0.6)",
-                  color: "white",
-                  padding: "5px 10px",
-                  borderRadius: "10px",
-                  fontSize: "12px",
-                }}
-              >
-                Votes: {voteCount}
-              </div>
             )}
           </div>
           <div
@@ -185,21 +255,32 @@ export default function VotingCard({
               justifyContent: "space-around",
             }}
           >
-            <CommentModal authorized={authorized} />
+            <CommentModal
+              authorized={authorized}
+              imageUrl={currentPost?.imageUrl}
+              caption={currentPost?.caption}
+              postId={currentPost?.id}
+              comments={currentPost?.comments || []}
+              onCommentAdded={refreshPostData}
+              onOpen={refreshPostData}
+            />
             <div style={{ position: "relative", display: "inline-block" }}>
               {authorized ? (
                 <Button
                   id="favorite-button"
                   onClick={handleFavoriteButtonClick}
+                  sx={{ gap: '0.5rem' }}
                 >
                   <img src="assets\icons\heart icon.svg" />
+                  {favouriteCount > 0 && (
+                    <Typography variant="caption">{favouriteCount}</Typography>
+                  )}
                 </Button>
               ) : (
                 <Button id="favorite-button">
                   <img src={disabledLikeIcon} />
                 </Button>
               )}
-
               {plusOnes.map((id) => (
                 <span key={id} className="plus-one">
                   +1
@@ -207,8 +288,11 @@ export default function VotingCard({
               ))}
             </div>
             {authorized ? (
-              <Button id="vote-button" onClick={handleVoteButtonClick}>
+              <Button id="vote-button" onClick={handleVoteButtonClick} sx={{ gap: '0.5rem' }}>
                 <img src="assets\icons\vote icon.svg" />
+                {voteCount > 0 && (
+                  <Typography variant="caption">{voteCount}</Typography>
+                )}
               </Button>
             ) : (
               <Button id="vote-button">
@@ -232,55 +316,19 @@ export default function VotingCard({
             justifyContent: "space-around",
           }}
         >
-          <div
-            style={{
-              border: "1px solid",
-              borderRadius: "40px",
-              width: "75%",
-              height: "75%",
-              marginTop: "20px",
-              marginLeft: "20px",
-              marginBottom: "20px",
-              backgroundColor: "rgba(217, 217, 217, 1)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              overflow: "hidden",
-              position: "relative",
-            }}
-          >
+          <div className="image-container">
             {post?.imageUrl ? (
               <img
                 src={post.imageUrl}
                 alt={post.caption}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "40px",
-                }}
+                onLoad={handleImgLoad}
+                className={imgFitMode}
               />
             ) : (
               <img
                 src={"assets/icons/ant-design--picture-outlined.svg"}
-                style={{ width: "90%", height: "auto" }}
+                className="fallback-image"
               />
-            )}
-            {post && (
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "10px",
-                  left: "10px",
-                  backgroundColor: "rgba(0, 0, 0, 0.6)",
-                  color: "white",
-                  padding: "5px 10px",
-                  borderRadius: "10px",
-                  fontSize: "12px",
-                }}
-              >
-                Votes: {voteCount}
-              </div>
             )}
           </div>
           <div
@@ -294,10 +342,21 @@ export default function VotingCard({
               justifyContent: "space-evenly",
             }}
           >
-            <CommentModal authorized={authorized} />
+            <CommentModal
+              authorized={authorized}
+              imageUrl={currentPost?.imageUrl}
+              caption={currentPost?.caption}
+              postId={currentPost?.id}
+              comments={currentPost?.comments || []}
+              onCommentAdded={refreshPostData}
+              onOpen={refreshPostData}
+            />
             {authorized ? (
-              <Button id="favorite-button" onClick={handleFavoriteButtonClick}>
+              <Button id="favorite-button" onClick={handleFavoriteButtonClick} sx={{ gap: '0.5rem' }}>
                 <img src="assets\icons\heart icon.svg" />
+                {favouriteCount > 0 && (
+                  <Typography variant="caption">{favouriteCount}</Typography>
+                )}
               </Button>
             ) : (
               <Button id="favorite-button">
@@ -305,8 +364,11 @@ export default function VotingCard({
               </Button>
             )}
             {authorized ? (
-              <Button id="vote-button" onClick={handleVoteButtonClick}>
+              <Button id="vote-button" onClick={handleVoteButtonClick} sx={{ gap: '0.5rem' }}>
                 <img src="assets\icons\vote icon.svg" />
+                {voteCount > 0 && (
+                  <Typography variant="caption">{voteCount}</Typography>
+                )}
               </Button>
             ) : (
               <Button id="vote-button">

@@ -8,31 +8,62 @@ import TextField from "@mui/material/TextField";
 export default function CreateSubProfileModal() {
   // handles whether the modal is open or not
   const [open, setOpen] = React.useState(false);
-  // keeps track of error and error message
-  const [errorMsg, setErrorMsg] = React.useState("");
-  const [hasError, setHasError] = React.useState(false);
+
   // handles what happens when user opens/closes the modal
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setPetName(""); // reset after window closed
+    // reset all fields after window closed
+    setPetName("");
+    setBreed("");
+    setBday("");
+    setTreat("");
+    setToy("");
   };
+
   // handles what happens when user clicks submit in the modal
-  const handleSubmit = () => {
-    if (petName !== "") {
-      // pass created object back to parent page
+  const handleSubmit = async () => {
+    try {
+      // Create pet data object
       const newPetInfo = {
-        name: "Pet 2",
-        breed: "",
-        bday: "",
-        treat: "",
-        toy: "",
+        name: petName,
+        breed: breed,
+        birthday: bday,
+        favouriteTreat: treat,
+        favouriteToy: toy,
       };
+
+      // Send POST request to create pet
+      const response = await fetch("http://localhost:8000/pet/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(newPetInfo),
+      });
+
+      if (response.ok) {
+        console.log("Pet profile created successfully");
+        // Close modal and reset fields
+        setOpen(false);
+        setPetName("");
+        setBreed("");
+        setBday("");
+        setTreat("");
+        setToy("");
+
+        // Reload the page to show the new pet
+        window.location.reload();
+      } else {
+        const errorData = await response.json();
+        console.error("Error creating pet profile:", response.status, errorData);
+        alert("Failed to create pet profile. Please try again.");
+      }
+    } catch (error) {
+      console.error("Failed to create pet profile:", error);
+      alert("Failed to create pet profile. Please try again.");
     }
-    // TODO: save pet info to DB
-    // This function would send off the user's request to update the pets information
-    setOpen(false);
-    setPetName(""); // reset after submitted
   };
 
   // bunch of styling in constants used for sx attributes
@@ -71,8 +102,6 @@ export default function CreateSubProfileModal() {
   };
 
   const pinkBorder = "1px solid rgba(255, 132, 164, 1)";
-  const [inputFieldBorderColor, setInputFieldBorderColor] =
-    React.useState(pinkBorder);
 
   const inputFieldStyle = {
     backgroundColor: "var(--bg-color)",
@@ -80,7 +109,7 @@ export default function CreateSubProfileModal() {
     padding: "10px",
     maxHeight: "59px",
     borderBottom: "none",
-    border: inputFieldBorderColor,
+    border: pinkBorder,
   };
 
   const closeButtonStyle = {
@@ -103,26 +132,105 @@ export default function CreateSubProfileModal() {
     margin: "10px",
   };
 
+  // saves each input field content to a variable
   const [petName, setPetName] = React.useState("");
+  const [breed, setBreed] = React.useState("");
+  const [bday, setBday] = React.useState("");
+  const [treat, setTreat] = React.useState("");
+  const [toy, setToy] = React.useState("");
 
-  // set error messages for the input field
+  // keeps track of error and error messages
+  const [petNameErrorMsg, setPetNameErrorMsg] = React.useState("");
+  const [hasPetNameError, setHasPetNameError] = React.useState(false);
+  const [breedErrorMsg, setBreedErrorMsg] = React.useState("");
+  const [hasBreedError, setHasBreedError] = React.useState(false);
+  const [bdayErrorMsg, setBdayErrorMsg] = React.useState("");
+  const [hasBdayError, setHasBdayError] = React.useState(false);
+  const [treatErrorMsg, setTreatErrorMsg] = React.useState("");
+  const [hasTreatError, setHasTreatError] = React.useState(false);
+  const [toyErrorMsg, setToyErrorMsg] = React.useState("");
+  const [hasToyError, setHasToyError] = React.useState(false);
+
+  // keep track of any errors on the entire page
+  const [hasFormErrors, setHasFormErrors] = React.useState(false);
+
+  // set error messages for each field
   React.useEffect(() => {
     if (petName === "") {
-      setErrorMsg("Pet name field cannot be empty.");
-      setHasError(true);
-      setInputFieldBorderColor("1px solid rgba(255, 0, 0, 1)");
+      setPetNameErrorMsg("Pet name field cannot be empty.");
+      setHasPetNameError(true);
     } else {
-      setErrorMsg("");
-      setHasError(false);
-      console.log(petName);
-      setInputFieldBorderColor(pinkBorder);
+      setPetNameErrorMsg("");
+      setHasPetNameError(false);
     }
-  }, [petName]);
 
-  // saves local updates from input
+    if (breed === "") {
+      setBreedErrorMsg("Pet breed field cannot be empty.");
+      setHasBreedError(true);
+    } else {
+      setBreedErrorMsg("");
+      setHasBreedError(false);
+    }
+
+    if (bday === "") {
+      setBdayErrorMsg("Pet birthday field cannot be empty.");
+      setHasBdayError(true);
+    } else if (!/^\d{4}-\d{2}-\d{2}$/.test(bday)) {
+      setBdayErrorMsg("Must be in YYYY-MM-DD format (e.g., 2020-03-15).");
+      setHasBdayError(true);
+    } else {
+      setBdayErrorMsg("");
+      setHasBdayError(false);
+    }
+
+    if (treat === "") {
+      setTreatErrorMsg("Pet favourite treat field cannot be empty.");
+      setHasTreatError(true);
+    } else {
+      setTreatErrorMsg("");
+      setHasTreatError(false);
+    }
+
+    if (toy === "") {
+      setToyErrorMsg("Pet favourite toy field cannot be empty.");
+      setHasToyError(true);
+    } else {
+      setToyErrorMsg("");
+      setHasToyError(false);
+    }
+  }, [petName, breed, bday, treat, toy]);
+
+  // disable submit button if any error exists
+  React.useEffect(() => {
+    if (hasPetNameError || hasBreedError || hasBdayError || hasTreatError || hasToyError) {
+      setHasFormErrors(true);
+    } else {
+      setHasFormErrors(false);
+    }
+  }, [hasPetNameError, hasBreedError, hasBdayError, hasTreatError, hasToyError]);
+
+  // functions to update inputs being saved
   function onNameChange(event: React.ChangeEvent<HTMLInputElement>) {
     setPetName(event.currentTarget.value);
   }
+
+  function onBreedChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setBreed(event.currentTarget.value);
+  }
+
+  function onBdayChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setBday(event.currentTarget.value);
+  }
+
+  function onTreatChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setTreat(event.currentTarget.value);
+  }
+
+  function onToyChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setToy(event.currentTarget.value);
+  }
+
+  const maxCharacters = 50;
 
   return (
     <div style={{ display: "flex" }}>
@@ -160,11 +268,89 @@ export default function CreateSubProfileModal() {
                   disableUnderline: true,
                   style: { color: "#675844" },
                 },
+                htmlInput: { maxLength: maxCharacters },
               }}
             />
             <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
-              {errorMsg}
+              {petNameErrorMsg}
             </p>
+            <br></br>
+            <p style={{ fontSize: "24px" }}>Breed:</p>
+            <TextField
+              sx={inputFieldStyle}
+              variant="standard"
+              placeholder={"Breed"}
+              onChange={onBreedChange}
+              slotProps={{
+                input: {
+                  disableUnderline: true,
+                  style: { color: "#675844" },
+                },
+                htmlInput: { maxLength: maxCharacters },
+              }}
+            />
+            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+              {breedErrorMsg}
+            </p>
+            <br></br>
+            <p style={{ fontSize: "24px" }}>Birthday:</p>
+            <TextField
+              sx={inputFieldStyle}
+              variant="standard"
+              type="date"
+              placeholder="YYYY-MM-DD"
+              value={bday}
+              onChange={onBdayChange}
+              slotProps={{
+                input: {
+                  disableUnderline: true,
+                  style: { color: "#675844" },
+                },
+                htmlInput: {
+                  pattern: "\\d{4}-\\d{2}-\\d{2}",
+                },
+              }}
+            />
+            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+              {bdayErrorMsg}
+            </p>
+            <br></br>
+            <p style={{ fontSize: "24px" }}>Favourite Treat:</p>
+            <TextField
+              sx={inputFieldStyle}
+              variant="standard"
+              placeholder={"Favourite Treat"}
+              onChange={onTreatChange}
+              slotProps={{
+                input: {
+                  disableUnderline: true,
+                  style: { color: "#675844" },
+                },
+                htmlInput: { maxLength: maxCharacters },
+              }}
+            />
+            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+              {treatErrorMsg}
+            </p>
+            <br></br>
+            <p style={{ fontSize: "24px" }}>Favourite Toy:</p>
+            <TextField
+              sx={inputFieldStyle}
+              variant="standard"
+              placeholder={"Favourite Toy"}
+              onChange={onToyChange}
+              slotProps={{
+                input: {
+                  disableUnderline: true,
+                  style: { color: "#675844" },
+                },
+                htmlInput: { maxLength: maxCharacters },
+              }}
+            />
+            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+              {toyErrorMsg}
+            </p>
+            <br></br>
           </CardContent>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
@@ -172,7 +358,7 @@ export default function CreateSubProfileModal() {
               id="submit"
               sx={submitButtonStyle}
               onClick={handleSubmit}
-              disabled={hasError}
+              disabled={hasFormErrors}
             >
               Submit
             </Button>

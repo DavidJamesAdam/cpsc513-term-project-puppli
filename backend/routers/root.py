@@ -4,6 +4,7 @@ from handlers.root import read_root
 from handlers.users.getUser import read_users
 from handlers.users.postUser import create_user, User
 from handlers.posts.postVote import post_vote
+from handlers.posts.postFavourite import post_favourite
 from handlers.posts.rankGlobal import rank_global as rank_g
 from handlers.posts.rankCity import rank_city as rank_c
 from handlers.users.updateUser import update_user as update_u
@@ -58,6 +59,10 @@ async def post_update_pass(request: Request):
 @router.post("/posts/vote/{postId}")
 async def posts_vote(postId: str):
     return await post_vote(postId)
+
+@router.post("/posts/favourite/{postId}")
+async def posts_favourite(postId: str, request: Request):
+    return await post_favourite(postId, request)
 
 @router.post("/profile")
 async def post_profile(pet: PetCreate):

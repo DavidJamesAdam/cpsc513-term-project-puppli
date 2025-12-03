@@ -7,6 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import TextField from "@mui/material/TextField";
 
 interface EditAboutModalProps {
+  onPetOneSubPage: boolean;
   petInfo: {
     name: string;
     breed: string;
@@ -36,26 +37,75 @@ interface EditAboutModalProps {
       toy: string;
     };
   };
+  onUpdateSuccess?: () => void;
 }
 
 export default function EditAboutModal({
+  onPetOneSubPage,
   petInfo,
   userInfo,
+  onUpdateSuccess,
 }: EditAboutModalProps) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleSubmit = () => {
-    // update the DB with this updated object
-    const newPetInfo = {
-      name: petInfo.name,
-      breed: breed,
-      bday: bday,
-      treat: treat,
-      toy: toy,
-    };
-    // TODO: This function would send off the user's request to update the pets information
-    setOpen(false);
+  // This function would send off the user's request to update the pets information
+  const handleSubmit = async () => {
+    try {
+      // Fetch pets for the logged-in user
+      const petsResponse = await fetch("http://localhost:8000/pets", {
+        credentials: "include",
+      });
+
+      // if successful, we can do the update
+      if (petsResponse.ok) {
+        const petsData = await petsResponse.json();
+
+        // by default use pet1 id
+        let petID = petsData[0].id;
+
+        // but if on sub profile 2, get second pet's id
+        if (!onPetOneSubPage) {
+          petID = petsData[1].id;
+        }
+
+        // save all the fields in the modal to the DB based on the pet id
+        const updatePetResponse = await fetch(
+          `http://localhost:8000/pet/update/${petID}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              breed: breed,
+              birthday: bday,
+              favouriteToy: toy,
+              favouriteTreat: treat,
+            }),
+          }
+        );
+
+        // if successful, call the callback to refresh data
+        if (updatePetResponse.ok) {
+          console.log("Pet information updated successfully");
+          setOpen(false);
+          // Call the callback to refresh pet data in parent component
+          if (onUpdateSuccess) {
+            onUpdateSuccess();
+          }
+        } else {
+          const errorData = await updatePetResponse.json();
+          console.error("Error updating pet information:", updatePetResponse.status, errorData);
+          alert("Failed to update pet information. Please try again.");
+        }
+      } else {
+        const errorData = await petsResponse.json();
+        console.error("Error fetching pets:", petsResponse.status, errorData);
+        alert("Failed to fetch pet information. Please try again.");
+      }
+    } catch (error) {
+      console.error("Failed to update pet information:", error);
+      alert("Failed to update pet information. Please try again.");
+    }
   };
   const maxCharacters = 50;
 
@@ -155,6 +205,9 @@ export default function EditAboutModal({
     if (bday === "") {
       setBdayErrorMsg("Pet birthday field cannot be empty.");
       setHasBdayError(true);
+    } else if (!/^\d{4}-\d{2}-\d{2}$/.test(bday)) {
+      setBdayErrorMsg("Must be in YYYY-MM-DD format (e.g., 2020-03-15).");
+      setHasBdayError(true);
     } else {
       setBdayErrorMsg("");
       setHasBdayError(false);
@@ -251,14 +304,18 @@ export default function EditAboutModal({
             <TextField
               sx={inputFieldStyle}
               variant="standard"
+              type="date"
               defaultValue={petInfo.bday}
+              value={bday}
               onChange={onBdayChange}
               slotProps={{
                 input: {
                   disableUnderline: true,
                   style: { color: "#675844" },
                 },
-                htmlInput: { maxLength: maxCharacters },
+                htmlInput: {
+                  pattern: "\\d{4}-\\d{2}-\\d{2}",
+                },
               }}
             />
             <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
