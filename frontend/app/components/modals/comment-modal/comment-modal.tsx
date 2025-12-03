@@ -181,11 +181,9 @@ export default function CommentModal({
               <div>
                 <img src="assets\icons\Message icon.svg" />
               </div>
-              {comments.length > 0 && (
-                <Typography variant="caption" sx={{ ml: 0.5 }}>
-                  {comments.length}
-                </Typography>
-              )}
+              <Typography variant="caption" sx={{ ml: 0.5 }}>
+                {comments.length}
+              </Typography>
             </Button>
           ) : (
             <Button sx={openButtonStyle}>
@@ -347,11 +345,9 @@ export default function CommentModal({
               <div>
                 <img src="assets\icons\Message icon.svg" />
               </div>
-              {comments.length > 0 && (
-                <Typography variant="caption" sx={{ ml: 0.5 }}>
-                  {comments.length}
-                </Typography>
-              )}
+              <Typography variant="caption" sx={{ ml: 0.5 }}>
+                {comments.length}
+              </Typography>
             </Button>
           ) : (
             <Button sx={openButtonStyle}>
