@@ -3,8 +3,9 @@ Database Seeding Script for Pet Social Media Application
 
 This script populates Firebase Authentication and Firestore with test data:
 - 5 users with Firebase Auth accounts and Firestore profiles
-- Up to 2 pets per user in the pets collection (6 pets total)
-- Posts with varying engagement in the posts collection (10 posts total)
+- 1-2 pets per user in the pets collection
+- At least 1 post per pet (max 10 posts total to match available images)
+- Strategic location distribution for diverse city/provincial rankings
 
 Run with: python seed_database.py
 """
@@ -18,53 +19,6 @@ from firebase_service import db
 # ============================================================================
 # CONFIGURATION CONSTANTS
 # ============================================================================
-
-# Canadian cities for user locations
-LOCATIONS = [
-    "Calgary, Alberta",
-    "Edmonton, Alberta",
-    "Vancouver, British Columbia",
-    "Winnipeg, Manitoba",
-    "Saint John, New Brunswick",
-    "Labrador City, Newfoundland and Labrador",
-    "Yellowknife, Northwest Territories",
-    "Halifax, Nova Scotia",
-    "Iqaluit, Nunavut",
-    "Toronto, Ontario",
-    "Ottawa, Ontario",
-    "Charlottetown, Prince Edward Island",
-    "Montreal, Quebec",
-    "Saskatoon, Saskatchewan",
-    "Whitehorse, Yukon",
-    "Athabasca, Alberta",
-    "Red Deer, Alberta",
-    "Lethbridge, Alberta"
-]
-
-# Dog breeds
-DOG_BREEDS = [
-    "Golden Retriever", "Labrador Retriever", "German Shepherd",
-    "French Bulldog", "Bulldog", "Poodle", "Beagle",
-    "Rottweiler", "Dachshund", "Pembroke Welsh Corgi",
-    "Australian Shepherd", "Siberian Husky", "Border Collie"
-]
-
-# Pet treats
-FAVOURITE_TREATS = [
-    "Peanut butter", "Chicken jerky", "Bacon strips",
-    "Cheese cubes", "Sweet potato chews", "Salmon treats",
-    "Freeze-dried liver", "Carrot sticks", "Apple slices",
-    "Blueberries", "Tuna flakes", "Turkey bites",
-    "Chilli flakes", "Beef strips"
-]
-
-# Pet toys (dog toys only)
-FAVOURITE_TOYS = [
-    "Tennis ball", "Rope toy", "Squeaky toy",
-    "Frisbee", "Plush toy", "Puzzle feeder",
-    "Kong toy", "Chew bone", "Crinkle ball",
-    "Puzzle Feeder", "Ball launcher"
-]
 
 # Firebase Storage image URLs
 FIREBASE_STORAGE_IMAGES = [
@@ -169,39 +123,60 @@ def create_firebase_user(email, password, display_name):
         print(f"  ✗ Error creating Firebase Auth user {email}: {e}")
         raise
 
-def generate_firestore_user(uid, user_data):
-    """Generate a Firestore user document"""
+def generate_firestore_user(uid, user_data, user_index):
+    """Generate a Firestore user document with strategic location assignment"""
+    # Strategic location assignment to create diverse rankings:
+    # User 1-2: Calgary, Alberta (same city, same province)
+    # User 3: Edmonton, Alberta (different city, same province)
+    # User 4-5: Vancouver, British Columbia (different province)
+    location_strategy = {
+        1: "Calgary, Alberta",
+        2: "Calgary, Alberta",
+        3: "Edmonton, Alberta",
+        4: "Vancouver, British Columbia",
+        5: "Vancouver, British Columbia"
+    }
+
     return {
         "uid": uid,
         "email": user_data["email"],
         "displayName": user_data["displayName"],
         "userName": user_data["userName"],
         "bio": user_data["bio"],
-        "location": random.choice(LOCATIONS),
+        "location": location_strategy[user_index],  # Fixed location for each user
         "createdAt": datetime.now()
     }
 
-def generate_pet(user_id):
-    """Generate a pet document"""
-    # Generate birthday (1 month to 15 years ago)
-    days_old = random.randint(30, 15 * 365)
-    birthday = (datetime.now() - timedelta(days=days_old)).strftime("%Y-%m-%d")
+# Fixed pet data (up to 10 unique pets with deterministic attributes)
+FIXED_PETS = [
+    {"name": "Bella", "breed": "Golden Retriever", "toy": "Tennis ball", "treat": "Peanut butter", "age_days": 730},
+    {"name": "Max", "breed": "German Shepherd", "toy": "Rope toy", "treat": "Chicken jerky", "age_days": 1095},
+    {"name": "Luna", "breed": "Siberian Husky", "toy": "Frisbee", "treat": "Salmon treats", "age_days": 365},
+    {"name": "Charlie", "breed": "Labrador Retriever", "toy": "Kong toy", "treat": "Bacon strips", "age_days": 1825},
+    {"name": "Lucy", "breed": "French Bulldog", "toy": "Squeaky toy", "treat": "Cheese cubes", "age_days": 548},
+    {"name": "Cooper", "breed": "Beagle", "toy": "Puzzle feeder", "treat": "Turkey bites", "age_days": 912},
+    {"name": "Daisy", "breed": "Pembroke Welsh Corgi", "toy": "Plush toy", "treat": "Sweet potato chews", "age_days": 1460},
+    {"name": "Milo", "breed": "Poodle", "toy": "Chew bone", "treat": "Apple slices", "age_days": 456},
+    {"name": "Bailey", "breed": "Australian Shepherd", "toy": "Crinkle ball", "treat": "Blueberries", "age_days": 1200},
+    {"name": "Buddy", "breed": "Border Collie", "toy": "Ball launcher", "treat": "Carrot sticks", "age_days": 2190}
+]
 
-    pet_names = [
-        "Bella", "Max", "Luna", "Charlie", "Lucy", "Cooper", "Daisy",
-        "Milo", "Bailey", "Buddy", "Sadie", "Rocky", "Molly", "Tucker",
-        "Coco", "Bear", "Lola", "Duke", "Zoe", "Jack", "Maggie", "Oliver",
-        "Ticker", "Shadow", "Pepper", "Rusty", "Ginger"
-    ]
+def generate_pet(user_id, pet_index):
+    """Generate a pet document with fixed attributes"""
+    # Use fixed pet data based on index
+    pet_template = FIXED_PETS[pet_index % len(FIXED_PETS)]
+
+    # Calculate birthday from fixed age
+    birthday = (datetime.now() - timedelta(days=pet_template["age_days"])).strftime("%Y-%m-%d")
 
     return {
         "userId": user_id,
-        "name": random.choice(pet_names),
-        "breed": random.choice(DOG_BREEDS),
+        "name": pet_template["name"],
+        "breed": pet_template["breed"],
         "about": fake.sentence(nb_words=12),
         "birthday": birthday,
-        "favouriteToy": random.choice(FAVOURITE_TOYS),
-        "favouriteTreat": random.choice(FAVOURITE_TREATS)
+        "favouriteToy": pet_template["toy"],
+        "favouriteTreat": pet_template["treat"]
     }
 
 def generate_post(user_id, pet_id, pet_name, post_index):
@@ -272,7 +247,7 @@ def seed_database():
         )
 
         # Generate Firestore user document
-        firestore_user_data = generate_firestore_user(uid, user_data)
+        firestore_user_data = generate_firestore_user(uid, user_data, i)
 
         # Store user reference with UID as document ID
         user_ref = db.collection('users').document(uid)
@@ -288,6 +263,8 @@ def seed_database():
     print("Creating pets...\n")
     pet_counter = 0
     post_counter = 0  # Separate counter for posts to cycle through images
+    MAX_POSTS = len(FIREBASE_STORAGE_IMAGES)  # Limit posts to available images (10)
+
     for user in all_users:
         num_pets = random.randint(1, 2)  # 1-2 pets per user
         user_pets = []
@@ -295,10 +272,10 @@ def seed_database():
         print(f"Creating {num_pets} pet(s) for {user['data']['displayName']}:")
 
         for _ in range(num_pets):
-            pet_counter += 1
-            pet_data = generate_pet(user["uid"])
+            pet_data = generate_pet(user["uid"], pet_counter)
             pet_ref = db.collection('pets').document()
             pet_id = pet_ref.id
+            pet_counter += 1
 
             user_pets.append({
                 "id": pet_id,
@@ -310,12 +287,20 @@ def seed_database():
 
         all_pets.extend(user_pets)
 
-        # Create 1-3 posts for this user (from their pets)
-        num_posts = random.randint(1, 3)
-        print(f"  Creating {num_posts} post(s)...")
+        # Create at least one post per pet, but don't exceed MAX_POSTS total
+        if post_counter >= MAX_POSTS:
+            print(f"  Maximum posts ({MAX_POSTS}) reached, skipping post creation\n")
+            continue
 
-        for post_idx in range(num_posts):
-            pet = random.choice(user_pets)
+        posts_remaining = MAX_POSTS - post_counter
+        # Ensure each pet gets at least 1 post, then add random extras
+        num_posts = min(len(user_pets), posts_remaining)
+        print(f"  Creating {num_posts} post(s) (1 per pet)...")
+
+        # Create one post for each pet first
+        for pet in user_pets:
+            if post_counter >= MAX_POSTS:
+                break
 
             post_data = generate_post(
                 user["uid"],
