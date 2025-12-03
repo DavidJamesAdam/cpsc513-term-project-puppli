@@ -1,31 +1,64 @@
 from firebase_service import db
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, status
+from fastapi.concurrency import run_in_threadpool
 from firebase_admin import auth
-import json
-import logging
 
 router = APIRouter()
-log = logging.getLogger(__name__)
 
-# Should also delete all pets and posts associated with user
-@router.delete("/users")
-async def delete_user(request: Request):
-    body = await request.json()
-
-    uid = body.get("uid")
-    if not uid:
-        raise HTTPException(status_code=400, detail="Missing 'uid' in request body")
-
-    collection_name = 'users'
-
-    doc_ref = db.collection(collection_name).document(uid)
+# Deletes a user and all of their associated data (posts, profile, subprofile, Firestore document, Firesbase Auth record)
+@router.delete("/users/{user_id}")
+async def delete_user(user_id: str):
 
     try:
-        # Delete from Firebase Authentication
-        auth.delete_user(uid)
-        # Delete from database
-        doc_ref.delete()
-        return {"deleted": uid}
+        # Make sure user exists
+        user_ref = db.collection('users').document(user_id)
+        user_doc = await run_in_threadpool(user_ref.get)
+
+        if not user_doc.exists:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail=f"User with ID {user_id} not found"
+            )
+
+        deletion_summary = {
+            "user_id": user_id,
+            "posts_deleted": 0,
+            "pets_deleted": 0
+        }
+
+        # Delete posts
+        posts_query = db.collection('posts').where('userId', '==', user_id)
+        posts = await run_in_threadpool(posts_query.stream)
+
+        for post in posts:
+            await run_in_threadpool(post.reference.delete)
+            deletion_summary["posts_deleted"] += 1
+
+        # Delete pets
+        pets_query = db.collection('pets').where('userId', '==', user_id)
+        pets = await run_in_threadpool(pets_query.stream)
+
+        for pet in pets:
+            await run_in_threadpool(pet.reference.delete)
+            deletion_summary["pets_deleted"] += 1
+
+        # Delete user document
+        await run_in_threadpool(user_ref.delete)
+
+        # Delete from Firebase Auth
+        try:
+            await run_in_threadpool(auth.delete_user, user_id)
+        except auth.UserNotFoundError:
+            pass
+        
+        return {
+            "message": f"User {user_id} and all associated data deleted successfully",
+            "summary": deletion_summary
+        }
+
+    except HTTPException:
+        raise
     except Exception as e:
-        # log.exception("Error deleting user %s", uid)
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error deleting user: {str(e)}"
+        )
