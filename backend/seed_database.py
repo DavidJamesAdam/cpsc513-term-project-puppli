@@ -66,10 +66,23 @@ FAVOURITE_TOYS = [
     "Puzzle Feeder", "Ball launcher"
 ]
 
-# Pet image placeholders
+# Firebase Storage image URLs
+FIREBASE_STORAGE_IMAGES = [
+    "https://firebasestorage.googleapis.com/v0/b/puppli-422db.firebasestorage.app/o/posts%2Fcute.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/puppli-422db.firebasestorage.app/o/posts%2Fcutie.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/puppli-422db.firebasestorage.app/o/posts%2Fdalm.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/puppli-422db.firebasestorage.app/o/posts%2Fdoggo.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/puppli-422db.firebasestorage.app/o/posts%2Fdoggy.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/puppli-422db.firebasestorage.app/o/posts%2Ffluffy.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/puppli-422db.firebasestorage.app/o/posts%2Fhuskie.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/puppli-422db.firebasestorage.app/o/posts%2Fhusky.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/puppli-422db.firebasestorage.app/o/posts%2Fpupp.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/puppli-422db.firebasestorage.app/o/posts%2Fpupper.jpg?alt=media"
+]
+
 def get_pet_image_url(index=0):
-    """Generate placeholder image URL for dogs"""
-    return f"https://placedog.net/500/500?id={index}"
+    """Get a Firebase Storage image URL for posts"""
+    return FIREBASE_STORAGE_IMAGES[index % len(FIREBASE_STORAGE_IMAGES)]
 
 # Post captions templates
 POST_CAPTIONS = [
@@ -274,6 +287,7 @@ def seed_database():
     # Create pets for each user (1-2 pets per user)
     print("Creating pets...\n")
     pet_counter = 0
+    post_counter = 0  # Separate counter for posts to cycle through images
     for user in all_users:
         num_pets = random.randint(1, 2)  # 1-2 pets per user
         user_pets = []
@@ -301,14 +315,13 @@ def seed_database():
         print(f"  Creating {num_posts} post(s)...")
 
         for post_idx in range(num_posts):
-            pet_counter += 1
             pet = random.choice(user_pets)
 
             post_data = generate_post(
                 user["uid"],
                 pet["id"],
                 pet["data"]["name"],
-                pet_counter
+                post_counter
             )
             post_ref = db.collection('posts').document()
 
@@ -316,6 +329,8 @@ def seed_database():
                 "ref": post_ref,
                 "data": post_data
             })
+
+            post_counter += 1
 
         print(f"  ✓ Created {num_posts} post(s)\n")
 
