@@ -1,19 +1,21 @@
 """
 Database Clearing Script for Pet Social Media Application
 
-This script clears data from Firestore collections.
+This script clears data from Firestore collections and Firebase Authentication.
 Use with caution - this operation cannot be undone!
 
 Usage:
-    python clear_database.py              # Clear all collections (with confirmation)
-    python clear_database.py users        # Clear only users collection
-    python clear_database.py users pets   # Clear users and pets collections
+    python clear_database.py              # Clear all collections + Firebase Auth (with confirmation)
+    python clear_database.py users        # Clear only users collection + Firebase Auth
+    python clear_database.py users pets   # Clear users and pets collections + Firebase Auth
     python clear_database.py --force      # Skip confirmation prompt
+    python clear_database.py --no-auth    # Skip Firebase Auth deletion
 
 Available collections: users, pets, posts
 """
 
 import sys
+from firebase_admin import auth
 from firebase_service import db
 
 # Available collections
