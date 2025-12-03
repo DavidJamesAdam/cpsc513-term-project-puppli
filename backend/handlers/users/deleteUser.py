@@ -19,8 +19,12 @@ async def delete_user(user_id: str):
                 status_code=status.HTTP_404_NOT_FOUND, detail=f"User with ID {user_id} not found"
             )
 
+        user_data = user_doc.to_dict()
+        user_name = user_data.get("displayName", "Unknown")
+
         deletion_summary = {
             "user_id": user_id,
+            "user_name": user_name,
             "posts_deleted": 0,
             "pets_deleted": 0
         }
