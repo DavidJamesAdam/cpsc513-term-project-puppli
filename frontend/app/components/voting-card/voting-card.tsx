@@ -253,10 +253,10 @@ export default function VotingCard({
             style={{
               display: "flex",
               flexDirection: "row",
-              width: "50%",
+              width: "80%",
               height: "20%",
               alignItems: "center",
-              justifyContent: "space-around",
+              justifyContent: "space-between",
             }}
           >
             <CommentModal
@@ -358,7 +358,7 @@ export default function VotingCard({
               width: "20%",
               height: "400px",
               alignItems: "center",
-              justifyContent: "space-evenly",
+              justifyContent: "space-between",
             }}
           >
             <CommentModal
