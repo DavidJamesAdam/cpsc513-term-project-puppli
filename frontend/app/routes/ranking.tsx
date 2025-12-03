@@ -274,14 +274,8 @@ export default function Ranking() {
           <TableBody>
             {data.map((row, index) => (
               <TableRow
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  padding: "0px 40px",
-                }}
                 key={index}
-                className={index % 2 === 0 ? "evenItem" : "oddItem"}
+                className={`rankItem ${index % 2 === 0 ? "evenItem" : "oddItem"}`}
               >
                 <TableCell className="badge">
                   {index + 1 < 4 ? (

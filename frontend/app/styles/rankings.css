@@ -98,3 +98,124 @@ p {
 .badge {
     align-content: center;
 }
+
+/* Mobile stuff */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 28px;
+    }
+
+    .rankings {
+        padding: 15px;
+    }
+
+    .rankings img {
+        width: 40px;
+        height: 40px;
+    }
+
+    #title {
+        padding-left: 10px;
+    }
+
+    .filterTab {
+        font-size: 22px;
+        min-width: unset;
+        padding: 8px 12px;
+    }
+
+    .oddItem,
+    .evenItem {
+        font-size: 21px;
+    }
+
+    .rankItem {
+        padding: 0px 15px;
+    }
+
+    .petItem {
+        gap: 10px;
+    }
+
+    .petItem img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .petItem h1 {
+        font-size: 20.7px;
+    }
+
+    #customBadge {
+        font-size: 20.7px;
+        width: 50px;
+        height: 50px;
+        border-width: 3px;
+    }
+
+    .badge img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 23px;
+    }
+
+    .rankings {
+        padding: 10px;
+    }
+
+    .rankings img {
+        width: 32px;
+        height: 32px;
+    }
+
+    #title {
+        padding-left: 8px;
+    }
+
+    .filterTab {
+        font-size: 20px;
+        padding: 6px 8px;
+    }
+
+    .oddItem,
+    .evenItem {
+        font-size: 18.4px;
+    }
+
+    .rankItem {
+        padding: 0px 10px;
+    }
+
+    .petItem {
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .petItem img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .petItem h1 {
+        font-size: 18.4px;
+        word-break: break-word;
+    }
+
+    #customBadge {
+        font-size: 18.4px;
+        width: 40px;
+        height: 40px;
+        border-width: 2px;
+    }
+
+    .badge img {
+        width: 40px;
+        height: 40px;
+    }
+}
