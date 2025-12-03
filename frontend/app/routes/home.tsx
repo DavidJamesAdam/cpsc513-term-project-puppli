@@ -214,7 +214,7 @@ export default function Home() {
                   authorized={authorized}
                   post={selectedPosts[0]}
                 />
-                <h1 style={{ fontSize: "5vh" }}>VS</h1>
+                <h1 style={{ fontSize: "5vh", textAlign: "center" }}>VS</h1>
                 <VotingCard
                   animateKey={animateKey}
                   onVote={handleAnyVote}

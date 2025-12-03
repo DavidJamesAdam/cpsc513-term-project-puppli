@@ -272,9 +272,7 @@ export default function VotingCard({
                   sx={{ gap: '0.5rem' }}
                 >
                   <img src="assets\icons\heart icon.svg" />
-                  {favouriteCount > 0 && (
-                    <Typography variant="caption">{favouriteCount}</Typography>
-                  )}
+                  <Typography variant="caption">{favouriteCount}</Typography>
                 </Button>
               ) : (
                 <Button id="favorite-button">
@@ -290,9 +288,7 @@ export default function VotingCard({
             {authorized ? (
               <Button id="vote-button" onClick={handleVoteButtonClick} sx={{ gap: '0.5rem' }}>
                 <img src="assets\icons\vote icon.svg" />
-                {voteCount > 0 && (
-                  <Typography variant="caption">{voteCount}</Typography>
-                )}
+                <Typography variant="caption">{voteCount}</Typography>
               </Button>
             ) : (
               <Button id="vote-button">

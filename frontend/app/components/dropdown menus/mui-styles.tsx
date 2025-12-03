@@ -22,6 +22,7 @@ export const menuItemStyle = {
   // padding: "10px",
   fontFamily: "Itim",
   fontSize: "clamp(1rem, 2.5vw, 3rem)",
+  color: "rgba(103, 88, 68, 1)",
 };
 
 export const mobileMenuItemStyle = {
@@ -32,7 +33,8 @@ export const mobileMenuItemStyle = {
   borderRadius: "20px",
   // padding: "10px",
   fontFamily: "Itim",
-  fontSize: "3em",
+  fontSize: "clamp(24px, 8vw, 40px)",
+  color: "rgba(103, 88, 68, 1)",
 };
 
 export const buttonStyle = {

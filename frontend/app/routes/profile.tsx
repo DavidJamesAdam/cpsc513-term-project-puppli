@@ -447,9 +447,9 @@ export default function Profile() {
   };
 
   return (
-    <>
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh", width: "100vw", overflow: "auto" }}>
       <Header />
-      <main style={{ backgroundColor: "var{--bg-color}" }}>
+      <main style={{ backgroundColor: "var(--bg-color)", flex: 1 }}>
         {!onMainProfile && (
           <div style={{ backgroundColor: "#e0cdb2" }}>
             <Button id="backButton" onClick={changeProfilePage}>
@@ -714,6 +714,6 @@ export default function Profile() {
           petName={currentPet.name}
         />
       </main>
-    </>
+    </div>
   );
 }
