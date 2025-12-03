@@ -245,52 +245,37 @@ def seed_database():
             "uid": uid
         })
 
-    # Create pets for each user (1-2 pets per user)
+    # Create exactly 10 pets (2 per user)
     pet_counter = 0
-    post_counter = 0  # Separate counter for posts to cycle through images
-    MAX_POSTS = len(FIREBASE_STORAGE_IMAGES)  # Limit posts to available images (10)
-
     for user in all_users:
-        num_pets = random.randint(1, 2)  # 1-2 pets per user
-        user_pets = []
-
-        for _ in range(num_pets):
+        for _ in range(2):  # Exactly 2 pets per user
             pet_data = generate_pet(user["uid"], pet_counter)
             pet_ref = db.collection('pets').document()
             pet_id = pet_ref.id
-            pet_counter += 1
 
-            user_pets.append({
+            all_pets.append({
                 "id": pet_id,
                 "data": pet_data,
-                "ref": pet_ref
+                "ref": pet_ref,
+                "user_id": user["uid"]
             })
 
-        all_pets.extend(user_pets)
+            pet_counter += 1
 
-        # Create at least one post per pet, but don't exceed MAX_POSTS total
-        if post_counter >= MAX_POSTS:
-            continue
+    # Create exactly 10 posts (1 per pet)
+    for i, pet in enumerate(all_pets):
+        post_data = generate_post(
+            pet["user_id"],
+            pet["id"],
+            pet["data"]["name"],
+            i
+        )
+        post_ref = db.collection('posts').document()
 
-        # Create one post for each pet first
-        for pet in user_pets:
-            if post_counter >= MAX_POSTS:
-                break
-
-            post_data = generate_post(
-                user["uid"],
-                pet["id"],
-                pet["data"]["name"],
-                post_counter
-            )
-            post_ref = db.collection('posts').document()
-
-            all_posts.append({
-                "ref": post_ref,
-                "data": post_data
-            })
-
-            post_counter += 1
+        all_posts.append({
+            "ref": post_ref,
+            "data": post_data
+        })
 
     # Write all data to Firestore
     for user in all_users:
