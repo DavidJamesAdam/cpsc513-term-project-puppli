@@ -712,6 +712,7 @@ export default function Profile() {
           open={deleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
           petName={currentPet.name}
+          petId={currentPet.id}
         />
       </main>
     </div>
