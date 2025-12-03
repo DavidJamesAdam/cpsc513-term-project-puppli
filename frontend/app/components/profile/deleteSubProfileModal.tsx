@@ -8,6 +8,7 @@ interface DeleteSubProfileModalProps {
   onOpen?: () => void;
   onClose?: () => void;
   petName: string;
+  petId: string;
 }
 
 export default function DeleteSubProfileModal({
@@ -15,6 +16,7 @@ export default function DeleteSubProfileModal({
   onOpen,
   onClose,
   petName,
+  petId,
 }: DeleteSubProfileModalProps) {
   // handles whether the modal is open or not
   const [internalOpen, setInternalOpen] = React.useState(false);
@@ -26,10 +28,28 @@ export default function DeleteSubProfileModal({
     if (!isControlled) setInternalOpen(false);
   };
   // handles what happens when user clicks DELETE in the modal
-  const handleDelete = () => {
-    // TODO: Send delete request to DB for the current pet
-    // redirect user to main profile page
-    window.location.href = "/profile";
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/pet/delete/${petId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        // Successfully deleted - redirect user to main profile page
+        window.location.href = "/profile";
+      } else {
+        const errorData = await response.json();
+        console.error("Error deleting pet:", response.status, errorData);
+        alert("Failed to delete pet profile. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error deleting pet:", error);
+      alert("An error occurred while deleting the pet profile.");
+    }
   };
 
   // bunch of styling in constants used for sx attributes
