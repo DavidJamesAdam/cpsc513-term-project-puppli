@@ -14,7 +14,8 @@ from handlers.pets.updatePet import update_pet as update_p
 from handlers.pets.getPetByID import get_pet as get_p
 from handlers.pets.deleteSubprofile import delete_pet as delete_p
 from handlers.auth.updateEmail import update_email, EmailUpdate
-from handlers.auth.updatePassword import update_password, PassUpdate
+from handlers.posts.getUserPosts import get_posts as get_user_posts
+from handlers.auth.updatePassword import update_password, PassUpdate 
 from fastapi import APIRouter, Request
 
 router = APIRouter()
@@ -66,6 +67,10 @@ async def posts_favourite(postId: str, request: Request):
 @router.post("/profile")
 async def post_profile(pet: PetCreate):
     return await create_subprofile(pet)
+
+@router.get("/user/posts")
+async def get_user_posts_route(request: Request):
+    return await get_user_posts(request)
 
 @router.patch("/user/update/{user_id}")
 async def update_user(user_id: str, updated_fields: dict):
