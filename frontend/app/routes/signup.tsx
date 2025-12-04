@@ -56,6 +56,7 @@ export default function SignUp() {
 
   // keep track of any errors on the entire page
   const [hasFormErrors, setHasFormErrors] = useState(false);
+  const [showErrors, setShowErrors] = useState(false);
 
   // track selected province / city names from LocationMenu
   const [provinceName, setProvinceName] = useState<string | null>(null);
@@ -188,6 +189,12 @@ export default function SignUp() {
   const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
   async function handleSignUp(): Promise<void> {
+    setShowErrors(true);
+
+    if (hasFormErrors) {
+      return;
+    }
+
     // create new account with the validated info
     const newAccount = {
       userName: username,
@@ -276,7 +283,7 @@ export default function SignUp() {
                 className="signupInput"
                 style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}
               >
-                {emailErrorMsg}
+                {showErrors ? emailErrorMsg : ""}
               </p>
               <br></br>
               <p className="signupInput">
@@ -300,7 +307,7 @@ export default function SignUp() {
                 className="signupInput"
                 style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}
               >
-                {usernameErrorMsg}
+                {showErrors ? usernameErrorMsg : ""}
               </p>
               <br></br>
               <p className="signupInput">
@@ -324,7 +331,7 @@ export default function SignUp() {
                 className="signupInput"
                 style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}
               >
-                {displayNameErrorMsg}
+                {showErrors ? displayNameErrorMsg : ""}
               </p>
               <br></br>
               <p className="signupInput">
@@ -359,7 +366,7 @@ export default function SignUp() {
                 className="signupInput"
                 style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}
               >
-                {passwordErrorMsg}
+                {showErrors ? passwordErrorMsg : ""}
               </p>
               <br></br>
               <LocationMenu onLocationChange={handleLocationChange} />
@@ -367,7 +374,7 @@ export default function SignUp() {
                 className="signupInput"
                 style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}
               >
-                {locationErrorMsg}
+                {showErrors ? locationErrorMsg : ""}
               </p>
             </CardContent>
             <CardActions className="buttons">
