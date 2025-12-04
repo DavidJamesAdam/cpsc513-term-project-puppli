@@ -56,8 +56,8 @@ async def post_update_pass(request: Request):
 # posts created by user routes
 
 @router.post("/posts/vote/{postId}")
-async def posts_vote(postId: str):
-    return await post_vote(postId)
+async def posts_vote(postId: str, request: Request):
+    return await post_vote(postId, request)
 
 @router.post("/posts/favourite/{postId}")
 async def posts_favourite(postId: str, request: Request):

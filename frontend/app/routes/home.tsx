@@ -60,9 +60,11 @@ export default function Home() {
           const postsData = await response.json();
           setPosts(postsData);
 
-          // pick two random posts to start
+          // Backend returns 2 random posts
           if (postsData.length >= 2) {
-            selectRandomPosts(postsData);
+            setSelectedPosts([postsData[0], postsData[1]]);
+          } else {
+            setSelectedPosts([null, null]);
           }
         } else {
           console.error("Error fetching posts:", response.status);
@@ -74,16 +76,6 @@ export default function Home() {
       }
     })();
   }, []);
-
-  const selectRandomPosts = (postsList: Post[]) => {
-    if (postsList.length < 2) {
-      setSelectedPosts([null, null]);
-      return;
-    }
-
-    const shuffled = [...postsList].sort(() => Math.random() - 0.5);
-    setSelectedPosts([shuffled[0], shuffled[1]]);
-  };
 
   if (authorized === null) {
     // Still checking; render nothing (avoids showing protected content).
@@ -104,15 +96,16 @@ export default function Home() {
       if (response.ok) {
         const postsData = await response.json();
         setPosts(postsData);
-        selectRandomPosts(postsData);
-      } else {
-        // Fallback to current posts if fetch fails
-        selectRandomPosts(posts);
+
+        // Backend returns 2 random posts
+        if (postsData.length >= 2) {
+          setSelectedPosts([postsData[0], postsData[1]]);
+        } else {
+          setSelectedPosts([null, null]);
+        }
       }
     } catch (error) {
       console.error("Failed to refresh posts:", error);
-      // Fallback to current posts if fetch fails
-      selectRandomPosts(posts);
     }
 
     // increment to retrigger animation in children
