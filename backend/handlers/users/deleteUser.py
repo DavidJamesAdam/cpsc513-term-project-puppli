@@ -45,6 +45,15 @@ async def delete_user(user_id: str):
             await run_in_threadpool(pet.reference.delete)
             deletion_summary["pets_deleted"] += 1
 
+        # Firestore doesn't delete subcollections inside documents, so first
+        # we must delete all documents in votedPosts subcollection first
+        voted_posts_ref = user_ref.collection('votedPosts')
+        voted_posts_docs = await run_in_threadpool(voted_posts_ref.stream)
+
+        voted_posts_list = [doc for doc in voted_posts_docs]
+        for voted_post_doc in voted_posts_list:
+            await run_in_threadpool(voted_post_doc.reference.delete)
+
         # Delete user document
         await run_in_threadpool(user_ref.delete)
 

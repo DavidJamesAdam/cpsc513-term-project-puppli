@@ -8,11 +8,9 @@ router = APIRouter()
 @router.post("/admin/award-medals")
 async def award_medals():
     """
-    Award gold, silver, and bronze medals to top posts based on voteCount.
-    Uses Olympic-style tie handling:
-    - If 1st place tie: multiple gold, skip silver, award bronze
-    - If 2nd place tie: one gold, multiple silver, skip bronze
-    - If 3rd place tie: one gold, one silver, multiple bronze
+    Award gold, silver, and bronze medals to top posts based on voteCount
+    Uses Olympic-style tie handling
+    - 1st place tie means 2 Gold, 1 Bronze. etc
 
     Also clears all users' votedPosts subcollections for the new day.
     """
@@ -100,13 +98,6 @@ async def award_medals():
             for voted_doc in voted_docs:
                 await run_in_threadpool(voted_doc.reference.delete)
                 cleared_count += 1
-
-        # TODO: Reset voteCount for all posts to 0 for new day
-        # Discuss with team before implementing
-        # Example code (commented out):
-        # for post in posts_list:
-        #     post_ref = db.collection('posts').document(post['id'])
-        #     await run_in_threadpool(post_ref.update, {'voteCount': 0})
 
         return {
             "message": "Medals awarded successfully",
