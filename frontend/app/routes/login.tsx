@@ -64,16 +64,22 @@ export default function Login() {
     handleLogIn(auth, email, password, navigate);
   }
 
+  function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    login();
+  }
+
   return (
     <>
       <LoginHeader />
       <main style={{ backgroundColor: "var{--bg-color}", paddingTop: "60px" }}>
         <div className="loginBox">
           <Card className="card" sx={{ maxWidth: 785, border: "1px solid rgba(255, 132, 164, 1)", }}>
-            <h1>Log-in</h1>
-            <p style={{ fontSize: "18px", color: "red", paddingLeft: "5px" }}>
-              {formErrorMsg}
-            </p>
+            <form onSubmit={handleSubmit}>
+              <h1>Log-in</h1>
+              <p style={{ fontSize: "18px", color: "red", paddingLeft: "5px" }}>
+                {formErrorMsg}
+              </p>
             <CardContent className="inputs">
               <p>Email</p>
               <TextField
@@ -115,17 +121,18 @@ export default function Login() {
                 }}
               />
             </CardContent>
-            <CardActions className="buttons">
-              <Button
-                size="medium"
-                variant="contained"
-                className="enterButton"
-                onClick={login}
-                sx = {{border: "1px solid rgba(147, 191, 191, 1)",}}
-              >
-                Enter
-              </Button>
-            </CardActions>
+              <CardActions className="buttons">
+                <Button
+                  size="medium"
+                  variant="contained"
+                  className="enterButton"
+                  type="submit"
+                  sx = {{border: "1px solid rgba(147, 191, 191, 1)",}}
+                >
+                  Enter
+                </Button>
+              </CardActions>
+            </form>
           </Card>
         </div>
         <p className="redirectLink">
