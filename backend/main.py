@@ -17,6 +17,7 @@ from handlers.pets.getPets import router as get_pets_router
 from handlers.pets.createSubprofile import router as create_pet_router
 from handlers.pets.updatePet import router as update_pet_router
 from handlers.users.deleteUser import router as delete_user_router
+from handlers.posts.awardMedals import router as award_medals_router
 from utils.authCheck import router as auth_check_router
 
 
@@ -56,6 +57,7 @@ app.include_router(get_pets_router)
 app.include_router(create_pet_router)
 app.include_router(update_pet_router)
 app.include_router(delete_user_router)
+app.include_router(award_medals_router)
 app.include_router(auth_check_router)
 
 
