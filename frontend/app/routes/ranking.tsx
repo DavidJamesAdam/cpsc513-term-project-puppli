@@ -42,24 +42,13 @@ export default function Ranking() {
   // fetches the last uploaded image for a specific pet
   const fetchLastPetImage = async (petId: string): Promise<string> => {
     try {
-      const response = await fetch("http://localhost:8000/posts", {
+      const response = await fetch(`http://localhost:8000/pet/${petId}/last-image`, {
         credentials: "include",
       });
 
       if (response.ok) {
-        const postsData = await response.json();
-
-        // Filter posts by petId and sort by createdAt in descending order
-        const petPosts = postsData
-          .filter((post: any) => post.petId === petId)
-          .sort((a: any, b: any) => {
-            const dateA = new Date(a.createdAt).getTime();
-            const dateB = new Date(b.createdAt).getTime();
-            return dateB - dateA; // Most recent first
-          });
-
-        // Return the imageUrl of the most recent post, or empty string if no posts
-        return petPosts.length > 0 ? petPosts[0].imageUrl : "";
+        const data = await response.json();
+        return data.imageUrl || "";
       }
     } catch (error) {
       console.error("Error fetching pet images:", error);
