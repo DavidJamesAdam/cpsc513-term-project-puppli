@@ -270,6 +270,7 @@ export default function SignUp() {
                 className="input"
                 variant="standard"
                 type="email"
+                placeholder="example@email.com"
                 onChange={onEmailChange}
                 sx={{ border: "1px solid rgba(120, 114, 111, 1)" }}
                 slotProps={{
@@ -293,6 +294,7 @@ export default function SignUp() {
               <TextField
                 className="input"
                 variant="standard"
+                placeholder="example123"
                 onChange={onUsernameChange}
                 sx={{ border: "1px solid rgba(120, 114, 111, 1)" }}
                 slotProps={{
@@ -317,6 +319,7 @@ export default function SignUp() {
               <TextField
                 className="input"
                 variant="standard"
+                placeholder="Your Name"
                 onChange={onDisplayNameChange}
                 sx={{ border: "1px solid rgba(120, 114, 111, 1)" }}
                 slotProps={{
@@ -382,7 +385,6 @@ export default function SignUp() {
                 size="medium"
                 variant="contained"
                 className="enterButton"
-                disabled={hasFormErrors}
                 onClick={handleSignUp}
                 sx={{ border: "1px solid rgba(147, 191, 191, 1)" }}
               >
