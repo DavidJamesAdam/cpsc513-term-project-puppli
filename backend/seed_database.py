@@ -66,35 +66,55 @@ TEST_USERS = [
         "password": "AlicePass123!",
         "displayName": "Alice Johnson",
         "userName": "alice.johnson",
-        "bio": "Dog lover and outdoor enthusiast. Living life one paw print at a time!"
+        "bio": "Dog lover and outdoor enthusiast",
+        "role": "admin",
+        "totalBronze": 5,
+        "totalSilver": 3,
+        "totalGold": 2
     },
     {
         "email": "bob.smith@example.com",
         "password": "BobPass123!",
         "displayName": "Bob Smith",
         "userName": "bob.smith",
-        "bio": "Proud dog dad. Software engineer by day, dog park regular by evening."
+        "bio": "Software engineer and proud dog dad",
+        "role": "user",
+        "totalBronze": 8,
+        "totalSilver": 4,
+        "totalGold": 1
     },
     {
         "email": "charlie.brown@example.com",
         "password": "CharliePass123!",
         "displayName": "Charlie Brown",
         "userName": "charlie.brown",
-        "bio": "Adventure seeker with my furry companions. Photography and hiking lover."
+        "bio": "Adventure seeker and photography lover",
+        "role": "user",
+        "totalBronze": 3,
+        "totalSilver": 2,
+        "totalGold": 0
     },
     {
         "email": "diana.prince@example.com",
         "password": "DianaPass123!",
         "displayName": "Diana Prince",
         "userName": "diana.prince",
-        "bio": "Rescue dog advocate. Every dog deserves a loving home and endless treats."
+        "bio": "Rescue dog advocate",
+        "role": "user",
+        "totalBronze": 10,
+        "totalSilver": 5,
+        "totalGold": 3
     },
     {
         "email": "ethan.hunt@example.com",
         "password": "EthanPass123!",
         "displayName": "Ethan Hunt",
         "userName": "ethan.hunt",
-        "bio": "Weekend warrior and full-time dog enthusiast. Life is better with dogs."
+        "bio": "Full-time dog enthusiast",
+        "role": "user",
+        "totalBronze": 6,
+        "totalSilver": 1,
+        "totalGold": 0
     }
 ]
 
@@ -139,6 +159,10 @@ def generate_firestore_user(uid, user_data, user_index):
         "userName": user_data["userName"],
         "bio": user_data["bio"],
         "location": location_strategy[user_index],  # Fixed location for each user
+        "role": user_data["role"],
+        "totalBronze": user_data["totalBronze"],
+        "totalSilver": user_data["totalSilver"],
+        "totalGold": user_data["totalGold"],
         "createdAt": datetime.now()
     }
 

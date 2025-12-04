@@ -33,3 +33,32 @@ async def get_pets(request: Request):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/pet/{pet_id}/last-image")
+async def get_last_pet_image(pet_id: str):
+    """
+    Retrieve the most recent post image URL for a specific pet
+    Returns the imageUrl of the most recent post, or empty string if no posts exist
+    """
+    try:
+        # Query posts collection filtered by petId
+        posts_query = db.collection('posts').where('petId', '==', pet_id)
+        docs = list(posts_query.stream())
+
+        # If no posts found, return empty string
+        if not docs:
+            return {"imageUrl": ''}
+
+        # Sort posts by createdAt in Python (to avoid needing a Firestore index)
+        sorted_posts = sorted(
+            docs,
+            key=lambda doc: doc.to_dict().get('createdAt', ''),
+            reverse=True
+        )
+
+        # Return the imageUrl of the most recent post
+        post_data = sorted_posts[0].to_dict()
+        return {"imageUrl": post_data.get('imageUrl', '')}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching pet image: {str(e)}")
