@@ -18,21 +18,14 @@ async def get_posts(request: Request):
         decoded = auth.verify_session_cookie(session_cookie, check_revoked=True)
         user_id = decoded.get("uid")
 
-        print("Session UID:", decoded["uid"])
-
         # Query posts collection filtered by userId
         docs = db.collection('posts').where('userId', '==', user_id).stream()
-
-        print("Fetched posts for user:", docs)
 
         results = []
         for doc in docs:
             post_data = doc.to_dict()
             post_data['id'] = doc.id
             results.append(post_data)
-            print("Post UID:", post_data.get("userId"))
-        
-        print(results)
 
         return results
     except HTTPException:
