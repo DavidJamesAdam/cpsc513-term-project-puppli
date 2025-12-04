@@ -85,6 +85,7 @@ export default function Login() {
               <TextField
                 className="input"
                 variant="standard"
+                placeholder="example@email.com"
                 onChange={onEmailChange}
                 sx = {{border: '1px solid rgba(120, 114, 111, 1)',}}
                 slotProps={{
