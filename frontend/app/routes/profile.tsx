@@ -18,6 +18,7 @@ import SaveAndCancelButtons from "~/components/saveAndCancelButtons";
 import UploadModal from "~/components/modals/upload-modal/upload-modal";
 import ProfileBanner from "~/components/profile/profileBanner";
 import DeleteSubProfileModal from "~/components/profile/deleteSubProfileModal";
+import PhotoGallery from "~/components/profile/photoGallery";
 import { authCheck } from "../utils/authCheck";
 
 export function meta({}: Route.MetaArgs) {
@@ -643,6 +644,7 @@ export default function Profile() {
                 </Button>
               </p>
             </div>
+            <PhotoGallery petIds={[petInfo1.id, petInfo2.id].filter(Boolean)} />
           </div>
         ) : (
           <>
