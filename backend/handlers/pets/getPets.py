@@ -62,3 +62,43 @@ async def get_last_pet_image(pet_id: str):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching pet image: {str(e)}")
+
+@router.get("/pet/{pet_id}/images")
+async def get_pet_images(pet_id: str):
+    """
+    Retrieve all post image URLs for a specific pet
+    Returns a list of image URLs sorted by createdAt (most recent first)
+    """
+    try:
+        # Query posts collection filtered by petId
+        posts_query = db.collection('posts').where('petId', '==', pet_id)
+        docs = list(posts_query.stream())
+
+        # If no posts found, return empty list
+        if not docs:
+            return {"images": []}
+
+        # Sort posts by createdAt (most recent first)
+        sorted_posts = sorted(
+            docs,
+            key=lambda doc: doc.to_dict().get('createdAt', ''),
+            reverse=True
+        )
+
+        # Return list of image URLs with comments
+        images = []
+        for doc in sorted_posts:
+            post_data = doc.to_dict()
+            if post_data.get('imageUrl'):
+                images.append({
+                    "id": doc.id,
+                    "imageUrl": post_data.get('imageUrl', ''),
+                    "caption": post_data.get('caption', ''),
+                    "createdAt": post_data.get('createdAt', ''),
+                    "comments": post_data.get('comments', [])
+                })
+
+        return {"images": images}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching pet images: {str(e)}")
