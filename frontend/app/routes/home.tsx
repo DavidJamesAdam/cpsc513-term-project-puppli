@@ -59,13 +59,7 @@ export default function Home() {
         if (response.ok) {
           const postsData = await response.json();
           setPosts(postsData);
-
-          // Backend returns 2 random posts
-          if (postsData.length >= 2) {
-            setSelectedPosts([postsData[0], postsData[1]]);
-          } else {
-            setSelectedPosts([null, null]);
-          }
+          setSelectedPosts(postsData.length === 2 ? postsData : [null, null]);
         } else {
           console.error("Error fetching posts:", response.status);
         }
@@ -96,13 +90,7 @@ export default function Home() {
       if (response.ok) {
         const postsData = await response.json();
         setPosts(postsData);
-
-        // Backend returns 2 random posts
-        if (postsData.length >= 2) {
-          setSelectedPosts([postsData[0], postsData[1]]);
-        } else {
-          setSelectedPosts([null, null]);
-        }
+        setSelectedPosts(postsData.length === 2 ? postsData : [null, null]);
       }
     } catch (error) {
       console.error("Failed to refresh posts:", error);
