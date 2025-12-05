@@ -19,6 +19,12 @@ export default function CreateSubProfileModal() {
     setBday("");
     setTreat("");
     setToy("");
+    // reset touched states
+    setPetNameTouched(false);
+    setBreedTouched(false);
+    setBdayTouched(false);
+    setTreatTouched(false);
+    setToyTouched(false);
   };
 
   // handles what happens when user clicks submit in the modal
@@ -151,6 +157,13 @@ export default function CreateSubProfileModal() {
   const [toyErrorMsg, setToyErrorMsg] = React.useState("");
   const [hasToyError, setHasToyError] = React.useState(false);
 
+  // keeps track of whether fields have been touched
+  const [petNameTouched, setPetNameTouched] = React.useState(false);
+  const [breedTouched, setBreedTouched] = React.useState(false);
+  const [bdayTouched, setBdayTouched] = React.useState(false);
+  const [treatTouched, setTreatTouched] = React.useState(false);
+  const [toyTouched, setToyTouched] = React.useState(false);
+
   // keep track of any errors on the entire page
   const [hasFormErrors, setHasFormErrors] = React.useState(false);
 
@@ -211,22 +224,27 @@ export default function CreateSubProfileModal() {
 
   // functions to update inputs being saved
   function onNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setPetNameTouched(true);
     setPetName(event.currentTarget.value);
   }
 
   function onBreedChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setBreedTouched(true);
     setBreed(event.currentTarget.value);
   }
 
   function onBdayChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setBdayTouched(true);
     setBday(event.currentTarget.value);
   }
 
   function onTreatChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setTreatTouched(true);
     setTreat(event.currentTarget.value);
   }
 
   function onToyChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setToyTouched(true);
     setToy(event.currentTarget.value);
   }
 
@@ -254,7 +272,7 @@ export default function CreateSubProfileModal() {
               fontSize: "32px",
             }}
           >
-            Create a new sub-profile!
+            Create a new pet profile!
           </h1>
           <CardContent sx={inputSectionStyle}>
             <p style={{ fontSize: "24px" }}>Pet name:</p>
@@ -271,9 +289,11 @@ export default function CreateSubProfileModal() {
                 htmlInput: { maxLength: maxCharacters },
               }}
             />
-            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
-              {petNameErrorMsg}
-            </p>
+            {petNameTouched && petNameErrorMsg && (
+              <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+                {petNameErrorMsg}
+              </p>
+            )}
             <br></br>
             <p style={{ fontSize: "24px" }}>Breed:</p>
             <TextField
@@ -289,9 +309,11 @@ export default function CreateSubProfileModal() {
                 htmlInput: { maxLength: maxCharacters },
               }}
             />
-            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
-              {breedErrorMsg}
-            </p>
+            {breedTouched && breedErrorMsg && (
+              <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+                {breedErrorMsg}
+              </p>
+            )}
             <br></br>
             <p style={{ fontSize: "24px" }}>Birthday:</p>
             <TextField
@@ -311,9 +333,11 @@ export default function CreateSubProfileModal() {
                 },
               }}
             />
-            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
-              {bdayErrorMsg}
-            </p>
+            {bdayTouched && bdayErrorMsg && (
+              <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+                {bdayErrorMsg}
+              </p>
+            )}
             <br></br>
             <p style={{ fontSize: "24px" }}>Favourite Treat:</p>
             <TextField
@@ -329,9 +353,11 @@ export default function CreateSubProfileModal() {
                 htmlInput: { maxLength: maxCharacters },
               }}
             />
-            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
-              {treatErrorMsg}
-            </p>
+            {treatTouched && treatErrorMsg && (
+              <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+                {treatErrorMsg}
+              </p>
+            )}
             <br></br>
             <p style={{ fontSize: "24px" }}>Favourite Toy:</p>
             <TextField
@@ -347,9 +373,11 @@ export default function CreateSubProfileModal() {
                 htmlInput: { maxLength: maxCharacters },
               }}
             />
-            <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
-              {toyErrorMsg}
-            </p>
+            {toyTouched && toyErrorMsg && (
+              <p style={{ fontSize: "14px", color: "red", paddingLeft: "5px" }}>
+                {toyErrorMsg}
+              </p>
+            )}
             <br></br>
           </CardContent>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>

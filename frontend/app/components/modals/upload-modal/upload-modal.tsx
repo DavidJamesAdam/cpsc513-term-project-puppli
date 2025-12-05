@@ -15,6 +15,7 @@ type UploadModalProps = {
   open?: boolean;
   onOpen?: () => void;
   onClose?: () => void;
+  onUploadSuccess?: () => void;
   hideTrigger?: boolean;
 };
 
@@ -22,6 +23,7 @@ export default function UploadModal({
   open: propOpen,
   onOpen,
   onClose,
+  onUploadSuccess,
   hideTrigger,
 }: UploadModalProps) {
   const matches = useMediaQuery("(min-width: 600px)");
@@ -127,15 +129,19 @@ export default function UploadModal({
       // Await the result (this will re-throw if the promise rejected)
       const result = await uploadPromise;
       console.log("Post created successfully:", result);
+
+      // Call the success callback if provided
+      if (onUploadSuccess) {
+        onUploadSuccess();
+      }
     } catch (error) {
       console.error("Upload failed:", error);
       alert(
         `Upload failed: ${error instanceof Error ? error.message : "Unknown error"}`
       );
+      return;
     }
 
-    console.log("Post created successfully:");
-    // alert("Photo uploaded successfully!");
     handleClose();
   };
 

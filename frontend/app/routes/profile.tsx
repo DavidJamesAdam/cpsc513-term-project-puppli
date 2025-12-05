@@ -105,6 +105,18 @@ export default function Profile() {
     return "";
   };
 
+  // refreshes pet images after upload
+  const refreshPetImages = async () => {
+    if (petInfo1.id) {
+      const lastImage1 = await fetchLastPetImage(petInfo1.id);
+      setPetInfo1((prev) => ({ ...prev, lastImageUrl: lastImage1 }));
+    }
+    if (petInfo2.id) {
+      const lastImage2 = await fetchLastPetImage(petInfo2.id);
+      setPetInfo2((prev) => ({ ...prev, lastImageUrl: lastImage2 }));
+    }
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -697,6 +709,7 @@ export default function Profile() {
         <UploadModal
           open={uploadOpen}
           onClose={() => setUploadOpen(false)}
+          onUploadSuccess={refreshPetImages}
           hideTrigger
         />
         <DeleteSubProfileModal
