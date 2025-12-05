@@ -120,12 +120,23 @@ export default function PhotoGallery({ petIds }: PhotoGalleryProps) {
       }
 
       setCommentText("");
-      // Refresh images to get updated comments
-      const updatedImages = await fetchAllImages();
-      // Update selected image with new comments from the freshly fetched data
-      const updatedImage = updatedImages.find(img => img.id === selectedImage.id);
-      if (updatedImage) {
-        setSelectedImage(updatedImage);
+      // Fetch the updated post directly by ID
+      const postResponse = await fetch(
+        `http://localhost:8000/posts/${selectedImage.id}`,
+        {
+          credentials: "include",
+        }
+      );
+
+      if (postResponse.ok) {
+        const updatedPost = await postResponse.json();
+        setSelectedImage(updatedPost);
+        // Also update the images array to keep it in sync
+        setImages(prevImages =>
+          prevImages.map(img =>
+            img.id === selectedImage.id ? updatedPost : img
+          )
+        );
       }
     } catch (err) {
       setError("Failed to add comment. Please try again.");
