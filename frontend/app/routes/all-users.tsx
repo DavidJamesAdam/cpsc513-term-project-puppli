@@ -91,10 +91,8 @@ export default function AllUsers() {
     }
 
     try {
-      const resp = await fetch("http://localhost:8000/users", {
+      const resp = await fetch(`http://localhost:8000/users/${uid}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ uid }),
       });
 
       if (!resp.ok) {

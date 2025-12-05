@@ -21,6 +21,7 @@ async def session_login(request: Request):
     """
     body = await request.json()
     id_token = body.get("idToken")
+    print(id_token)
     if not id_token:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Missing idToken in body")
