@@ -45,9 +45,6 @@ async def rank_province(user_location: str):
             
         #sort from highest to lowest number of votes
         results.sort(key=lambda x: x.get('voteCount', 0), reverse=True)
-        
-        #sort from highest to lowest number of votes
-        results.sort(key=lambda x: x.get('voteCount', 0), reverse=True)
 
         return results
     except Exception as e:
