@@ -93,16 +93,13 @@ export default function VotingCard({
     if (!post?.id) return;
 
     try {
-      const response = await fetch("http://localhost:8000/posts", {
+      const response = await fetch(`http://localhost:8000/posts/${post.id}`, {
         credentials: "include",
       });
 
       if (response.ok) {
-        const postsData = await response.json();
-        const updatedPost = postsData.find((p: Post) => p.id === post.id);
-        if (updatedPost) {
-          setCurrentPost(updatedPost);
-        }
+        const updatedPost = await response.json();
+        setCurrentPost(updatedPost);
       }
     } catch (error) {
       console.error("Error refreshing post:", error);
