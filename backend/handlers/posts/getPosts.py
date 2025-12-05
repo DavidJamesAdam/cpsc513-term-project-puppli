@@ -7,6 +7,35 @@ import random
 
 router = APIRouter()
 
+@router.get("/posts/{post_id}")
+async def get_post_by_id(post_id: str):
+    """
+    Retrieve a single post by its ID
+    Returns the post with its ID and comments
+    """
+    try:
+        # Get the specific document from 'posts' collection
+        doc_ref = db.collection('posts').document(post_id)
+        doc = doc_ref.get()
+
+        if not doc.exists:
+            raise HTTPException(status_code=404, detail="Post not found")
+
+        # Convert document to dictionary format
+        doc_data = doc.to_dict()
+        doc_data['id'] = doc.id  # Include document ID
+
+        # Ensure comments field exists (initialize as empty array if missing)
+        if 'comments' not in doc_data:
+            doc_data['comments'] = []
+
+        return doc_data
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching post: {str(e)}")
+
 @router.get("/posts")
 async def read_posts(request: Request):
     """
