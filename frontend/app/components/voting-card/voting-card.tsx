@@ -130,20 +130,18 @@ export default function VotingCard({
         const result = await response.json();
         const favourited = result.favourited;
 
-        // Fetch the updated post data from the database
-        const postsResponse = await fetch("http://localhost:8000/posts", {
+        // Fetch the updated post data directly by ID
+        const postResponse = await fetch(`http://localhost:8000/posts/${post.id}`, {
           credentials: "include",
         });
 
-        if (postsResponse.ok) {
-          const postsData = await postsResponse.json();
-          const updatedPost = postsData.find((p: Post) => p.id === post.id);
-          if (updatedPost) {
-            // Update with the latest count from the database
-            setFavouriteCount(updatedPost.favouriteCount);
-          }
+        if (postResponse.ok) {
+          const updatedPost = await postResponse.json();
+          // Update with the latest count from the database
+          setFavouriteCount(updatedPost.favouriteCount);
+          setCurrentPost(updatedPost);
         } else {
-          console.error("Error fetching posts:", postsResponse.status);
+          console.error("Error fetching post:", postResponse.status);
         }
 
         // Update liked state and show +1 when favourited
