@@ -43,3 +43,4 @@ in console, run npm run dev
 ### To run prod environment
 1. Make sure Docker is running
 2. While in the root directory, run 'docker compose -f docker-compose.prod.yml up --build -d'
+quick test
