@@ -1,8 +1,5 @@
 from fastapi import APIRouter
-from handlers.posts.getPosts import read_posts
 from handlers.root import read_root
-from handlers.users.getUser import read_users
-from handlers.users.postUser import create_user, User
 from handlers.posts.postVote import post_vote
 from handlers.posts.postFavourite import post_favourite
 from handlers.posts.rankGlobal import rank_global as rank_g
@@ -15,7 +12,7 @@ from handlers.pets.getPetByID import get_pet as get_p
 from handlers.pets.deleteSubprofile import delete_pet as delete_p
 from handlers.auth.updateEmail import update_email, EmailUpdate
 from handlers.posts.getUserPosts import get_posts as get_user_posts
-from handlers.auth.updatePassword import update_password, PassUpdate 
+from handlers.auth.updatePassword import update_password, PassUpdate
 from fastapi import APIRouter, Request
 
 router = APIRouter()
@@ -24,16 +21,6 @@ router = APIRouter()
 def get_root():
     return read_root()
 
-#user routes
-
-# @router.get("/users")
-# def get_users():
-#     return read_users()
-
-@router.post("/users")
-async def post_user(user: User):
-    return await create_user(user)
-
 '''
 for updating email and password, the JSON request body should have the following keys:
 {
@@ -41,12 +28,6 @@ for updating email and password, the JSON request body should have the following
     "new_email": "new email address"  # or "new_password": "new password"
 }
 '''
-
-@router.post("/user/update-email")
-async def post_update_email(request: Request):
-    data = await request.json()
-    update = EmailUpdate(**data)
-    return update_email(update)
 
 @router.post("/user/update-password")
 async def post_update_pass(request: Request):

@@ -9,6 +9,7 @@ class EmailUpdate(BaseModel):
     id_token: str
     new_email: str
 
+@router.post("/user/update-email")
 def update_email(update: EmailUpdate):
     try:
         #verify user identity token, must be a new one!!! (not days old)
@@ -18,7 +19,7 @@ def update_email(update: EmailUpdate):
         #update email in Firebase Auth
         auth.update_user(uid, email=update.new_email)
 
-        #update profile document in firestore 
+        #update profile document in firestore
         user_ref = db.collection("users").document(uid)
         user_ref.update({"email": update.new_email})
 
@@ -28,4 +29,3 @@ def update_email(update: EmailUpdate):
         raise HTTPException(status_code=400, detail="Email already in use")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
- 
